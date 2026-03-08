@@ -1,0 +1,10 @@
+# Abstract
+
+Experimental design for seismic imaging—the selection of source locations, receiver geometries, and acquisition parameters—remains a challenging problem in computational geophysics. Traditional approaches rely on manual expert tuning or classical optimization, both of which struggle with the high-dimensional, non-convex nature of the design space and the computational expense of PDE-constrained wave-equation solvers. We present **JUDIAgent**, an agentic framework that reformulates experimental design for wave-equation-based imaging as an autonomous decision-making problem. The agent leverages large language models (LLMs) augmented with retrieval-augmented generation (RAG) to interpret high-level user objectives, automatically configure acquisition geometries, and iteratively refine simulation parameters through feedback from the Julia Devito Inversion (JUDI) wave-equation solver.
+
+Unlike conventional optimization pipelines, JUDIAgent operates in a closed-loop paradigm: it reasons about task requirements, retrieves relevant documentation and code examples via semantic search, generates and validates Julia code for seismic simulations, and adapts configurations based on runtime diagnostics. This architecture decouples the domain-specific physics solver from the experiment design logic, enabling non-expert users to configure complex seismic workflows through natural language while preserving the fidelity of physics-based forward and adjoint solvers.
+
+We describe the agent's state-action formulation, its integration with JUDI's linear operator abstractions for forward modeling and inversion, and the evaluator-optimizer workflow that iteratively validates generated code. Preliminary results demonstrate that JUDIAgent can autonomously produce executable seismic modeling scripts—including model setup, geometry configuration, source injection, and data recording—reducing the barrier to entry for PDE-constrained seismic inversion experiments.
+
+**Keywords:** agent-based optimization, experimental design, PDE-constrained optimization, seismic imaging, wave-equation inversion, LLM agents, retrieval-augmented generation
+

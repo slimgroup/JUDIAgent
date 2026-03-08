@@ -1,0 +1,36 @@
+# Python dependencies for JUDIAgent Tutorial
+# This file ensures reproducible Python environment
+# 
+# Installation:
+#   pip install -r requirements.txt
+#   pip install -e ../  # Install JUDIAgent from parent directory
+
+# Core dependencies (minimal set for tutorial)
+# Note: JUDIAgent will install additional dependencies, but these are the essentials
+
+# LangChain ecosystem (required for JUDIAgent)
+langchain>=0.3.26
+langchain-core>=0.3.67
+langchain-community>=0.3.26
+langchain-openai>=0.3.27
+langchain-ollama>=0.3.3
+langgraph>=0.5.0
+
+# Core utilities
+pydantic>=2.11.7
+python-dotenv>=1.1.1
+rich>=14.1.0
+
+# Jupyter notebook support
+ipykernel>=6.29.5
+ipython>=9.4.0
+jupyter>=1.0.0
+notebook>=7.0.0
+
+# Optional: for running Julia code from Python (if needed)
+# PyJulia>=0.7.0
+
+# Note: After installing these, install JUDIAgent:
+#   pip install -e ../  # from parent JUDIAgent directory
+# Or if JUDIAgent is available via pip:
+#   pip install judiagent

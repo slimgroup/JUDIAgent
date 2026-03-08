@@ -1,0 +1,13 @@
+{
+  "dependencies": [
+    "."
+  ],
+  "graphs": {
+    "judiagent": {
+      "path": "./src/judiagent/agents/autonomous_agent.py:react_agent_graph",
+      "description": "JUDIAgent - An AI assistant for retrieving information and generating code for JUDI.jl seismic modeling and inversion."
+    }
+  },
+  "image_distro": "wolfi",
+  "env": ".env"
+}

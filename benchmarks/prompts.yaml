@@ -1,0 +1,281 @@
+# JUDIAgent Benchmark Prompts
+# Test and evaluation prompts for various JUDI.jl programming tasks
+
+# =============================================================================
+# Basic Modeling
+# =============================================================================
+
+basic_modeling:
+  - id: basic_2d_forward
+    difficulty: easy
+    category: forward_modeling
+    prompt: |
+      Write a simple 2D acoustic forward modeling example using JUDI.jl.
+      Create a two-layer velocity model (1.5 km/s on top, 3.5 km/s on bottom),
+      set up 5 sources and 100 receivers at the surface, and generate synthetic data.
+
+  - id: basic_3d_forward
+    difficulty: medium
+    category: forward_modeling
+    prompt: |
+      Create a 3D forward modeling script using JUDI.jl.
+      Use a simple gradient velocity model that increases with depth.
+      Set up a single shot with receivers on the surface.
+
+  - id: ricker_wavelet
+    difficulty: easy
+    category: forward_modeling
+    prompt: |
+      How do I create a Ricker wavelet in JUDI.jl with a peak frequency of 15 Hz
+      and a total recording time of 2 seconds?
+
+# =============================================================================
+# Acquisition Geometry
+# =============================================================================
+
+acquisition_geometry:
+  - id: marine_geometry
+    difficulty: medium
+    category: geometry
+    prompt: |
+      Set up a marine acquisition geometry in JUDI.jl with:
+      - 10 shots spaced 100m apart
+      - Streamer with 200 receivers, 12.5m spacing
+      - Source depth: 10m, Receiver depth: 15m
+      - Recording time: 4 seconds, sampling rate: 4ms
+
+  - id: obn_geometry
+    difficulty: hard
+    category: geometry
+    prompt: |
+      Create an Ocean Bottom Node (OBN) acquisition geometry where:
+      - Receivers are fixed on the seafloor (200m depth)
+      - Multiple sources at the surface
+      - Irregular receiver spacing
+
+  - id: land_geometry
+    difficulty: medium
+    category: geometry
+    prompt: |
+      Set up a land acquisition geometry with:
+      - Sources and receivers at the surface (z=0)
+      - Shot interval: 50m
+      - Receiver interval: 25m
+      - Maximum offset: 3000m
+
+# =============================================================================
+# Imaging
+# =============================================================================
+
+imaging:
+  - id: rtm_basic
+    difficulty: medium
+    category: imaging
+    prompt: |
+      Write a basic RTM (Reverse Time Migration) example using JUDI.jl.
+      Use a simple two-layer model and show how to compute the RTM image
+      using the adjoint of the Jacobian operator.
+
+  - id: lsrtm_example
+    difficulty: hard
+    category: imaging
+    prompt: |
+      Implement a least-squares RTM (LSRTM) using JUDI.jl.
+      Use the lsrtm_objective function and set up a simple gradient descent loop.
+
+  - id: rtm_illumination
+    difficulty: medium
+    category: imaging
+    prompt: |
+      How do I compute and apply source-side illumination compensation
+      for RTM in JUDI.jl?
+
+# =============================================================================
+# Inversion
+# =============================================================================
+
+inversion:
+  - id: fwi_basic
+    difficulty: medium
+    category: fwi
+    prompt: |
+      Write a simple Full Waveform Inversion (FWI) example using JUDI.jl.
+      Use a two-layer true model and a smooth starting model.
+      Run 10 iterations of gradient descent.
+
+  - id: fwi_nlopt
+    difficulty: hard
+    category: fwi
+    prompt: |
+      Implement FWI using NLopt.jl optimizer with JUDI.jl.
+      Use L-BFGS algorithm with box constraints on velocity.
+
+  - id: fwi_constraints
+    difficulty: hard
+    category: fwi
+    prompt: |
+      How do I implement FWI with bound constraints (minimum and maximum velocity)
+      and TV regularization using JUDI.jl?
+
+  - id: twri_example
+    difficulty: hard
+    category: fwi
+    prompt: |
+      Write an example of Wavefield Reconstruction Inversion (TWRI) using JUDI.jl.
+      Explain when TWRI is preferable to standard FWI.
+
+# =============================================================================
+# Data Handling
+# =============================================================================
+
+data_handling:
+  - id: segy_read
+    difficulty: easy
+    category: io
+    prompt: |
+      How do I read a SEGY file into JUDI.jl and extract the geometry information?
+
+  - id: segy_write
+    difficulty: easy
+    category: io
+    prompt: |
+      Write synthetic shot records to a SEGY file using JUDI.jl.
+
+  - id: data_filtering
+    difficulty: medium
+    category: processing
+    prompt: |
+      How can I apply a bandpass filter to seismic data in JUDI.jl?
+
+  - id: mute_direct
+    difficulty: medium
+    category: processing
+    prompt: |
+      How do I mute the direct arrival in shot records using JUDI.jl?
+
+# =============================================================================
+# Linear Operators
+# =============================================================================
+
+linear_operators:
+  - id: born_modeling
+    difficulty: medium
+    category: linearized
+    prompt: |
+      Explain how to perform Born (linearized) modeling in JUDI.jl.
+      Show the difference between F*q (nonlinear) and J*dm (linearized).
+
+  - id: jacobian_adjoint
+    difficulty: medium
+    category: linearized
+    prompt: |
+      How do I compute the adjoint of the Jacobian (J') in JUDI.jl
+      and verify it passes the dot test?
+
+  - id: projection_operators
+    difficulty: easy
+    category: operators
+    prompt: |
+      Explain the judiProjection operator in JUDI.jl.
+      How do Pr and Ps work for source injection and receiver extraction?
+
+# =============================================================================
+# Advanced Topics
+# =============================================================================
+
+advanced:
+  - id: elastic_modeling
+    difficulty: hard
+    category: physics
+    prompt: |
+      Write an elastic wave equation modeling example using JUDI.jl.
+      Include P-wave and S-wave velocities.
+
+  - id: tti_modeling
+    difficulty: hard
+    category: physics
+    prompt: |
+      Set up TTI (Tilted Transverse Isotropy) modeling in JUDI.jl
+      with Thomsen parameters epsilon, delta, and theta.
+
+  - id: checkpointing
+    difficulty: medium
+    category: performance
+    prompt: |
+      How do I use optimal checkpointing in JUDI.jl to reduce memory usage
+      during gradient computation?
+
+  - id: parallel_shots
+    difficulty: medium
+    category: performance
+    prompt: |
+      How does JUDI.jl handle parallel computation across multiple shots?
+      How can I control the number of workers?
+
+  - id: gpu_modeling
+    difficulty: hard
+    category: performance
+    prompt: |
+      How do I run JUDI.jl simulations on GPU?
+      What backends are supported?
+
+# =============================================================================
+# Debugging and Error Handling
+# =============================================================================
+
+debugging:
+  - id: cfl_error
+    difficulty: medium
+    category: errors
+    prompt: |
+      My JUDI simulation is giving unstable results. How do I check
+      and adjust the CFL condition?
+
+  - id: memory_error
+    difficulty: medium
+    category: errors
+    prompt: |
+      I'm getting out-of-memory errors when running FWI. What strategies
+      can I use in JUDI.jl to reduce memory usage?
+
+  - id: geometry_mismatch
+    difficulty: easy
+    category: errors
+    prompt: |
+      I'm getting a geometry mismatch error between my source and data.
+      How do I debug this in JUDI.jl?
+
+# =============================================================================
+# Complete Workflows
+# =============================================================================
+
+workflows:
+  - id: end_to_end_fwi
+    difficulty: hard
+    category: workflow
+    prompt: |
+      Create a complete FWI workflow in JUDI.jl that:
+      1. Loads velocity model from file
+      2. Sets up acquisition geometry
+      3. Generates synthetic observed data
+      4. Creates a smooth starting model
+      5. Runs FWI with gradient descent
+      6. Saves the final inverted model
+
+  - id: field_data_processing
+    difficulty: hard
+    category: workflow
+    prompt: |
+      Write a workflow to process field SEGY data with JUDI.jl:
+      1. Read SEGY file
+      2. Extract geometry
+      3. Apply preprocessing (filtering, muting)
+      4. Run RTM imaging
+      5. Save the image
+
+  - id: sensitivity_analysis
+    difficulty: hard
+    category: workflow
+    prompt: |
+      Create a script that computes and visualizes the sensitivity kernel
+      (Fréchet derivative) for a single shot in JUDI.jl.
