@@ -10,8 +10,8 @@ from langchain_core.vectorstores import VectorStoreRetriever
 
 # from langchain_core.documents import BaseDocumentCompressor
 from judiagent.configuration import BaseConfiguration
+from judiagent.core.models import resolve_provider_and_model as get_provider_and_model
 from judiagent.rag.retriever_specs import RetrieverSpec
-from judiagent.utils import resolve_provider_and_model as get_provider_and_model
 
 
 class RetrievalParams(TypedDict):
@@ -21,19 +21,16 @@ class RetrievalParams(TypedDict):
 
 def make_text_encoder(model: str) -> Embeddings:
     """Connect to the configured text encoder."""
-    provider, model = model.split(":", maxsplit=1)
-    match provider:
-        case "openai":
-            from langchain_openai import OpenAIEmbeddings
+    provider, model = get_provider_and_model(model)
+    if provider == "openai":
+        from langchain_openai import OpenAIEmbeddings
 
-            return OpenAIEmbeddings(model=model)
-        case "ollama":
-            from langchain_ollama import OllamaEmbeddings
+        return OpenAIEmbeddings(model=model)
+    if provider == "ollama":
+        from langchain_ollama import OllamaEmbeddings
 
-            return OllamaEmbeddings(model=model)
-
-        case _:
-            raise ValueError(f"Unsupported embedding provider: {provider}")
+        return OllamaEmbeddings(model=model)
+    raise ValueError(f"Unsupported embedding provider: {provider}")
 
 
 def _load_and_split_docs(spec: RetrieverSpec) -> list:

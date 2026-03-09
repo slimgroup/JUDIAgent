@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" fill="none">
+  <rect width="1200" height="720" fill="#08111F"/>
+  <rect x="54" y="48" width="1092" height="624" rx="24" fill="#0E1B2F" stroke="#1D4ED8" stroke-width="3"/>
+  <rect x="54" y="48" width="1092" height="52" rx="24" fill="#0B1628"/>
+  <circle cx="92" cy="74" r="8" fill="#EF4444"/>
+  <circle cx="118" cy="74" r="8" fill="#F59E0B"/>
+  <circle cx="144" cy="74" r="8" fill="#10B981"/>
+  <text x="180" y="81" fill="#93C5FD" font-family="monospace" font-size="24">JUDIAgent Console</text>
+
+  <text x="116" y="180" fill="#67E8F9" font-family="monospace" font-size="58" font-weight="700">JUDIAgent</text>
+  <text x="116" y="220" fill="#E2E8F0" font-family="monospace" font-size="24">Seismic coding copilot for JUDI.jl</text>
+
+  <rect x="112" y="278" width="976" height="116" rx="18" fill="#111F35" stroke="#2563EB"/>
+  <text x="140" y="320" fill="#60A5FA" font-family="monospace" font-size="22">workflow</text>
+  <text x="140" y="356" fill="#E2E8F0" font-family="monospace" font-size="24">retrieve examples  -&gt; generate Julia  -&gt; validate  -&gt; refine</text>
+
+  <rect x="112" y="430" width="460" height="162" rx="18" fill="#0A172A" stroke="#0EA5E9"/>
+  <text x="138" y="470" fill="#67E8F9" font-family="monospace" font-size="22">tools</text>
+  <text x="138" y="512" fill="#E2E8F0" font-family="monospace" font-size="22">search_judi_examples</text>
+  <text x="138" y="548" fill="#E2E8F0" font-family="monospace" font-size="22">lookup_function_docs</text>
+  <text x="138" y="584" fill="#E2E8F0" font-family="monospace" font-size="22">execute_julia_snippet</text>
+
+  <rect x="628" y="430" width="460" height="162" rx="18" fill="#0A172A" stroke="#F97316"/>
+  <text x="654" y="470" fill="#FDBA74" font-family="monospace" font-size="22">outputs</text>
+  <text x="654" y="512" fill="#E2E8F0" font-family="monospace" font-size="22">scripts/forward_2layer.jl</text>
+  <text x="654" y="548" fill="#E2E8F0" font-family="monospace" font-size="22">outputs/figures/...</text>
+  <text x="654" y="584" fill="#E2E8F0" font-family="monospace" font-size="22">outputs/data/...</text>
+</svg>

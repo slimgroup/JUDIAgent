@@ -12,14 +12,14 @@ from langchain_core.runnables import RunnableConfig
 
 from judiagent.cli import colorscheme, print_to_console
 from judiagent.configuration import BaseConfiguration, cli_mode
-from judiagent.julia import execute_and_capture, format_runtime_error, perform_lint_analysis
-from judiagent.state import AgentState
-from judiagent.utils import (
+from judiagent.core.julia_code import (
     normalize_julia_imports,
     parse_julia_code_block,
     reduce_simulation_steps,
     wrap_julia_fence,
 )
+from judiagent.julia import execute_and_capture, format_runtime_error, perform_lint_analysis
+from judiagent.state import AgentState
 
 
 def _run_lint_check(code: str, show_code: bool = True) -> tuple[str, bool]:

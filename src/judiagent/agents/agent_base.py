@@ -20,14 +20,7 @@ from typing import Any, Callable, List, Literal, Optional, Sequence, Union, cast
 
 from langchain_core.language_models import BaseChatModel, LanguageModelLike
 from langchain_core.language_models.base import LanguageModelInput
-from langchain_core.messages import (
-    AIMessage,
-    BaseMessage,
-    HumanMessage,
-    SystemMessage,
-    ToolMessage,
-    trim_messages,
-)
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.runnables import (
     Runnable,
     RunnableBinding,
@@ -42,9 +35,10 @@ from langgraph.utils.runnable import RunnableCallable
 import judiagent.state as state_mod
 from judiagent.cli import colorscheme, show_startup_screen, stream_to_console
 from judiagent.configuration import LLM_TEMPERATURE, PROJECT_ROOT, RECURSION_LIMIT
+from judiagent.core.history import compact_message_history, strip_orphaned_tool_messages
+from judiagent.core.models import instantiate_chat_model, resolve_provider_and_model
 from judiagent.globals import console
 from judiagent.state import AgentState
-from judiagent.utils import resolve_provider_and_model
 
 
 class AgentCore(ABC):
@@ -127,24 +121,11 @@ class AgentCore(ABC):
         sequences, and pre-bound models.
         """
         if isinstance(model, str):
-            try:
-                from langchain.chat_models import init_chat_model
-            except ImportError:
-                raise ImportError(
-                    "langchain is required for string-based model resolution"
-                )
-
-            provider, model_name = resolve_provider_and_model(model)
-
-            init_kwargs: dict[str, Any] = {
-                "temperature": LLM_TEMPERATURE,
-                "streaming": True,
-            }
-            if provider == "ollama" and model_name == "qwen3:14b":
-                init_kwargs["reasoning"] = True
-
-            chat_model = init_chat_model(
-                model_name, model_provider=provider, **init_kwargs
+            resolve_provider_and_model(model)
+            chat_model = instantiate_chat_model(
+                model,
+                temperature=LLM_TEMPERATURE,
+                streaming=True,
             )
             model = cast(BaseChatModel, chat_model)
 
@@ -291,28 +272,12 @@ class AgentCore(ABC):
         model: Union[BaseChatModel, Runnable[LanguageModelInput, BaseMessage]],
     ) -> Sequence[BaseMessage]:
         """Trim conversation to fit token budget, then fix orphaned tool messages."""
-        try:
-            trimmed = trim_messages(
-                messages,
-                max_tokens=40000,
-                strategy="last",
-                token_counter=model,
-                include_system=False,
-                allow_partial=True,
-            )
-        except NotImplementedError:
-            def _char_counter(msgs: Sequence[BaseMessage]) -> int:
-                return sum(len(str(m.content)) for m in msgs) // 4
-
-            trimmed = trim_messages(
-                messages,
-                max_tokens=40000,
-                strategy="last",
-                token_counter=_char_counter,
-                include_system=False,
-                allow_partial=True,
-            )
-        return self._strip_orphaned_tool_messages(trimmed)
+        return compact_message_history(
+            messages,
+            model,
+            include_system=False,
+            drop_orphaned_tool_messages=True,
+        )
 
     @staticmethod
     def _strip_orphaned_tool_messages(
@@ -325,27 +290,7 @@ class AgentCore(ABC):
         ToolMessages that reference a now-missing AIMessage.  The OpenAI API
         rejects such sequences, so we prune them.
         """
-        msgs = list(messages)
-        first_valid = 0
-
-        for i, msg in enumerate(msgs):
-            if isinstance(msg, ToolMessage):
-                tc_id = getattr(msg, "tool_call_id", None)
-                has_parent = False
-                for j in range(i - 1, -1, -1):
-                    prev = msgs[j]
-                    if isinstance(prev, AIMessage) and prev.tool_calls:
-                        if any(tc.get("id") == tc_id for tc in prev.tool_calls):
-                            has_parent = True
-                            break
-                if not has_parent:
-                    first_valid = i + 1
-                else:
-                    break
-            else:
-                break
-
-        return msgs[first_valid:]
+        return strip_orphaned_tool_messages(messages)
 
     def _verify_tool_message_integrity(
         self, messages: Sequence[BaseMessage]

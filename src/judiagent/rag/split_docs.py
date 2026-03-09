@@ -7,7 +7,10 @@ from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
 )
 
-from judiagent.utils import deduplicate_documents as remove_duplicate_chunks, get_document_source as get_file_source
+from judiagent.core.documents import (
+    deduplicate_documents as remove_duplicate_chunks,
+    get_document_source as get_file_source,
+)
 
 
 def split_docs(

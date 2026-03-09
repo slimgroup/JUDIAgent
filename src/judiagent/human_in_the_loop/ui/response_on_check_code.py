@@ -6,7 +6,10 @@ from langgraph.prebuilt.interrupt import (
 )
 from langgraph.types import interrupt
 
-from judiagent.utils import wrap_julia_fence as add_julia_context, unwrap_julia_fence as remove_julia_context
+from judiagent.core.julia_code import (
+    unwrap_julia_fence as remove_julia_context,
+    wrap_julia_fence as add_julia_context,
+)
 
 
 def response_on_check_code(code: str) -> tuple[bool, str, str]:

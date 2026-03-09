@@ -1,17 +1,9 @@
 """
-CLI Color Scheme Configuration for JUDIAgent.
+CLI color scheme for JUDIAgent.
 
-This module defines the visual theme used throughout the CLI interface.
-JUDIAgent uses a distinctive amber/gold + deep purple palette inspired by
-seismic data visualization - warm earth tones representing the subsurface.
-
-Color Philosophy:
-- Primary: Amber/Gold - evokes geological data, warm and distinctive
-- Secondary: Deep purple/violet - complementary accent, professional
-- Agent: Orchid/magenta - AI responses stand out
-- Success: Emerald green
-- Warning: Orange (not yellow - stays in warm palette)
-- Error: Coral red
+The current theme uses a cooler seismic-console palette: cyan, steel blue,
+slate, and signal orange. The goal is to give JUDIAgent a visual identity
+that feels distinct from the older amber-heavy styling.
 """
 
 from dataclasses import dataclass
@@ -36,25 +28,25 @@ class ColorScheme:
         highlight: Color for emphasized content
         muted: Color for less important text
     """
-    # Core colors - Amber/Gold theme
-    normal: str = "bright_yellow"      # Warm amber for main elements
-    primary: str = "yellow"            # Gold primary accent
-    secondary: str = "deep_pink"       # Deep pink/magenta secondary
+    # Core colors
+    normal: str = "bright_cyan"
+    primary: str = "cyan"
+    secondary: str = "slate_blue1"
     
     # Status colors
-    error: str = "bright_red"          # Coral red for errors
-    success: str = "green"             # Emerald for success
-    warning: str = "orange1"           # Orange for warnings (warm palette)
+    error: str = "bright_red"
+    success: str = "green3"
+    warning: str = "orange1"
     
     # UI element colors
-    message: str = "orchid"            # Orchid/magenta for AI messages
-    agent_border: str = "medium_purple3"  # Purple border for agent panels
-    highlight: str = "bright_white"    # High contrast for emphasis
-    muted: str = "dim white"           # De-emphasized text
+    message: str = "steel_blue3"
+    agent_border: str = "deep_sky_blue4"
+    highlight: str = "bright_white"
+    muted: str = "grey70"
     
     # Interaction colors
-    human_interaction: str = "gold1"   # Gold for human input prompts
-    tool_border: str = "dark_orange"   # Orange for tool panels
+    human_interaction: str = "bright_cyan"
+    tool_border: str = "dark_orange"
 
 
 # Global color scheme instance - can be customized by users

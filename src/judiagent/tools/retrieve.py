@@ -14,9 +14,9 @@ import judiagent.rag.retrieval as retrieval
 import judiagent.rag.split_examples as split_examples
 from judiagent.cli import colorscheme, print_to_console
 from judiagent.configuration import PROJECT_ROOT, BaseConfiguration, cli_mode
+from judiagent.core.documents import get_document_source
 from judiagent.julia import fetch_docstrings_for_functions
 from judiagent.rag.retriever_specs import RETRIEVER_SPECS
-from judiagent.utils import get_document_source
 
 
 # -----------------------------------------------------------------------

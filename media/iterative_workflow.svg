@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" fill="none">
+  <rect width="1200" height="520" fill="#07111F"/>
+  <text x="70" y="72" fill="#67E8F9" font-family="monospace" font-size="36" font-weight="700">IterativeCodeAgent Workflow</text>
+
+  <rect x="74" y="164" width="210" height="96" rx="18" fill="#10203A" stroke="#38BDF8" stroke-width="3"/>
+  <text x="124" y="220" fill="#E2E8F0" font-family="monospace" font-size="28">user_input</text>
+
+  <rect x="354" y="164" width="210" height="96" rx="18" fill="#10203A" stroke="#38BDF8" stroke-width="3"/>
+  <text x="430" y="220" fill="#E2E8F0" font-family="monospace" font-size="28">llm</text>
+
+  <rect x="634" y="164" width="210" height="96" rx="18" fill="#10203A" stroke="#F97316" stroke-width="3"/>
+  <text x="662" y="220" fill="#E2E8F0" font-family="monospace" font-size="28">tool_executor</text>
+
+  <rect x="914" y="164" width="210" height="96" rx="18" fill="#10203A" stroke="#22C55E" stroke-width="3"/>
+  <text x="932" y="220" fill="#E2E8F0" font-family="monospace" font-size="26">code_validator</text>
+
+  <path d="M284 212H354" stroke="#67E8F9" stroke-width="5"/>
+  <path d="M564 212H634" stroke="#F97316" stroke-width="5"/>
+  <path d="M844 212H914" stroke="#22C55E" stroke-width="5"/>
+  <path d="M739 308C739 380 520 380 520 276" stroke="#60A5FA" stroke-width="5"/>
+  <polygon points="526,285 520,272 514,285" fill="#60A5FA"/>
+  <text x="704" y="360" fill="#93C5FD" font-family="monospace" font-size="20">tool_result -&gt; llm</text>
+
+  <rect x="494" y="372" width="214" height="88" rx="18" fill="#0C172A" stroke="#A78BFA" stroke-width="3"/>
+  <text x="548" y="424" fill="#E2E8F0" font-family="monospace" font-size="26">complete</text>
+  <path d="M1019 260V372H708" stroke="#A78BFA" stroke-width="5"/>
+</svg>

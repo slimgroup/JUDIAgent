@@ -43,7 +43,7 @@ from dotenv import load_dotenv
 from langchain_core.runnables import RunnableConfig, ensure_config
 from pydantic import BaseModel, ConfigDict
 
-from judiagent import prompts
+import judiagent.prompts as prompts
 
 
 # =============================================================================

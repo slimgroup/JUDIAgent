@@ -25,6 +25,8 @@ from langgraph.prebuilt import ToolNode
 
 from judiagent.agents.agent_base import AgentCore
 from judiagent.configuration import BaseConfiguration, cli_mode, mcp_mode
+from judiagent.core.julia_code import parse_julia_code_block
+from judiagent.core.messages import get_message_text
 from judiagent.nodes import verify_code_output
 from judiagent.state import AgentState, MCPInputState, MCPOutputState
 from judiagent.tools import (
@@ -35,9 +37,6 @@ from judiagent.tools import (
     search_judi_examples,
     write_to_file,
 )
-from judiagent.utils import get_message_text, parse_julia_code_block
-
-
 class IterativeCodeAgent(AgentCore):
     """
     Evaluator-optimizer agent for JUDI.jl code generation.

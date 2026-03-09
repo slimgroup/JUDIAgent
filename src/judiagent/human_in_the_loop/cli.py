@@ -5,9 +5,9 @@ from rich.table import Table
 
 import judiagent.cli.cli_utils as utils
 from judiagent.cli.cli_colorscheme import colorscheme
+from judiagent.core.julia_code import wrap_julia_fence as add_julia_context
 from judiagent.globals import console
 from judiagent.rag.utils import modify_doc_content
-from judiagent.utils import wrap_julia_fence as add_julia_context
 
 
 def response_on_rag(

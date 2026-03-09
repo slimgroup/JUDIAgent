@@ -1,15 +1,11 @@
 # Custom
 graph.png
-paper_summary/
 agent_graph.png
 multi_agent_graph.png
-*.cast
 
 # Agent-generated outputs (code files, images, data)
 outputs/
-outputs_backup/
 scripts/
-judiagent_workspaces/
 src/judiagent/rag/retriever_store/*
 !src/judiagent/rag/retriever_store/__init__.py
 src/judiagent/rag/loaded_store/*

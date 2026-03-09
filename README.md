@@ -1,18 +1,20 @@
 # JUDIAgent
 
-An AI-powered assistant for JUDI.jl seismic modeling and inversion!
+JUDIAgent is a seismic coding copilot for JUDI.jl. It combines retrieval,
+Julia code generation, validation, and a JUDI-specific workflow contract so
+that generated code is grounded in the package's actual APIs and examples.
 
-![CLI example](media/JUDIAgent_CLI.png "CLI example")
+![JUDIAgent CLI](media/judiagent_cli.svg "JUDIAgent CLI")
 
 ## Overview
 
 JUDIAgent is an intelligent coding assistant specialized in helping users work with the JUDI.jl (Julia Devito Inversion) package. It leverages large language models combined with retrieval-augmented generation (RAG) to provide accurate, context-aware code generation for seismic modeling and inversion tasks.
 
-**Key Features:**
+**Key Features**
 - Retrieval-augmented code generation using JUDI.jl examples
 - Automatic code validation (linting + execution)
 - Human-in-the-loop refinement workflow
-- Multiple interfaces: CLI, REST API, VSCode integration
+- Multiple interfaces: CLI and VSCode integration via LangGraph/MCP
 
 ## Getting Started
 
@@ -39,7 +41,7 @@ Clone the repository and set up the Python environment:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/JUDIAgent.git
+git clone https://github.com/haoyunl2/JUDIAgent.git
 cd JUDIAgent/
 ```
 
@@ -88,12 +90,22 @@ Edit `.env` to provide:
 - `OPENAI_API_KEY`: Your OpenAI API key
 - `LANGSMITH_API_KEY`: Required for UI/debugging features
 
+The agent will create `scripts/`, `outputs/figures/`, and `outputs/data/`
+on demand when it saves generated Julia code or artifacts. Those paths are
+treated as runtime outputs rather than tracked source directories.
+
 ### Step 4: Test the Installation
 
 Run the agent to verify everything works:
 
 ```bash
 uv run examples/agent.py
+```
+
+To run the autonomous agent instead:
+
+```bash
+uv run examples/autonomous_agent.py
 ```
 
 ## Usage
@@ -104,7 +116,7 @@ JUDIAgent provides two agent variants optimized for different use cases:
 
 The standard agent follows an evaluator-optimizer workflow where code is first generated and then validated. Recommended for smaller models or specific tasks like simulation setup.
 
-![Evaluator Optimizer](media/Evaluator_optimizer.png "Evaluator Optimizer")
+![Iterative workflow](media/iterative_workflow.svg "Iterative workflow")
 
 ```bash
 uv run examples/agent.py
@@ -114,7 +126,7 @@ uv run examples/agent.py
 
 The autonomous agent has extended tool access and can interact with the environment more freely. Provides a Copilot-like experience with sufficiently capable LLMs.
 
-![Autonomous Agent](media/Autonomous_Agent.png "Autonomous Agent")
+![Autonomous workflow](media/react_workflow.svg "Autonomous workflow")
 
 ```bash
 uv run examples/autonomous_agent.py
@@ -198,15 +210,18 @@ To use the GUI:
 
 ```
 JUDIAgent/
-├── src/judiagent/         # Main package
-│   ├── agents/            # Agent implementations
-│   ├── cli/               # CLI utilities and theming
-│   ├── julia/             # Julia code execution
-│   ├── nodes/             # LangGraph nodes
-│   ├── rag/               # RAG system and retrieval
-│   ├── tools/             # Agent tools
-│   └── configuration.py   # Settings
-├── examples/              # Usage examples
+├── src/judiagent/
+│   ├── agents/            # Agent variants and workflow graphs
+│   ├── cli/               # Console views, menus, branding, streaming
+│   ├── core/              # Shared runtime helpers
+│   ├── julia/             # Python-Julia execution bridge
+│   ├── nodes/             # Validation and graph nodes
+│   ├── prompting/         # Prompt components and prompt composition
+│   ├── rag/               # Retrieval and JUDI source material
+│   ├── tools/             # Tool surface exposed to the agents
+│   └── configuration.py   # Runtime settings
+├── media/                 # README assets
+├── examples/              # Launch scripts
 ├── judiagent_tutorial/    # Tutorial materials
 └── tests/                 # Test suite
 ```
@@ -228,3 +243,4 @@ See [LICENSE](LICENSE) for details.
 - [JUDI.jl](https://github.com/slimgroup/JUDI.jl) - Julia Devito Inversion framework
 - [Devito](https://www.devitoproject.org/) - Symbolic finite difference DSL
 - [LangGraph](https://github.com/langchain-ai/langgraph) - Agent orchestration framework
+- [JutulGPT](https://github.com/SINTEF-agentlab/JutulGPT) - upstream inspiration for the original agent framing

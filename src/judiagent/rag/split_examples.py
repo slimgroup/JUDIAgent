@@ -3,7 +3,10 @@ from typing import List
 
 from langchain_core.documents import Document
 
-from judiagent.utils import deduplicate_documents as remove_duplicate_chunks, get_document_source as get_file_source
+from judiagent.core.documents import (
+    deduplicate_documents as remove_duplicate_chunks,
+    get_document_source as get_file_source,
+)
 
 
 def split_examples(document: Document, header_to_split_on: int = 2) -> List[Document]:

@@ -13,8 +13,8 @@ from langchain_core.tools import tool
 from pydantic import BaseModel, Field
 
 from judiagent.cli import colorscheme, print_to_console
+from judiagent.core.julia_code import normalize_julia_imports, reduce_simulation_steps
 from judiagent.nodes.check_code import _run_code_execution, _run_lint_check
-from judiagent.utils import normalize_julia_imports, reduce_simulation_steps
 
 
 # -----------------------------------------------------------------------
@@ -122,6 +122,19 @@ def execute_shell_command(command: str) -> str:
 # Directory / workspace tools
 # -----------------------------------------------------------------------
 
+def _prepare_project_output_dirs(base_directory: str) -> dict[str, Path]:
+    """Ensure the standard JUDIAgent output folders exist."""
+    root = Path(base_directory)
+    layout = {
+        "scripts": root / "scripts",
+        "outputs": root / "outputs",
+        "figures": root / "outputs" / "figures",
+        "data": root / "outputs" / "data",
+    }
+    for directory in layout.values():
+        directory.mkdir(parents=True, exist_ok=True)
+    return layout
+
 @tool
 def list_directory_contents(directory_path: str) -> str:
     """List items in a directory (files and subdirectories)."""
@@ -167,7 +180,7 @@ def switch_working_directory(directory_path: str) -> str:
 @tool
 def scaffold_julia_workspace(task_name: str, base_directory: Optional[str] = None) -> str:
     """
-    Create a timestamped ``.jl`` file inside a ``judiagent_workspaces/`` folder.
+    Create a timestamped ``.jl`` file inside the project ``scripts/`` folder.
 
     Args:
         task_name: Short descriptor used in the filename.
@@ -176,19 +189,21 @@ def scaffold_julia_workspace(task_name: str, base_directory: Optional[str] = Non
     base_directory = base_directory or os.getcwd()
     safe = re.sub(r"[^a-zA-Z0-9_\-]", "_", task_name.lower())
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    ws = Path(base_directory) / "judiagent_workspaces"
-    ws.mkdir(parents=True, exist_ok=True)
-    jl = ws / f"{safe}_{ts}.jl"
+    layout = _prepare_project_output_dirs(base_directory)
+    jl = layout["scripts"] / f"{safe}_{ts}.jl"
 
     print_to_console(
-        text=f"Scaffolding workspace: {jl}",
-        title="Tool: Scaffold Workspace",
+        text=f"Scaffolding Julia script: {jl}",
+        title="Tool: Scaffold Script",
         border_style=colorscheme.message,
     )
     try:
         jl.write_text(
             f"# {task_name}\n"
             f"# Created: {datetime.now():%Y-%m-%d %H:%M:%S}\n\n"
+            f"for dir in [\"scripts\", \"outputs/figures\", \"outputs/data\"]\n"
+            f"    isdir(dir) || mkpath(dir)\n"
+            f"end\n\n"
         )
         return str(jl)
     except Exception as exc:
@@ -211,14 +226,16 @@ def save_julia_code(code: str, file_path: str, append: bool = False) -> str:
         border_style=colorscheme.message,
     )
     try:
-        with open(file_path, "a" if append else "w") as fh:
+        destination = Path(file_path)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with open(destination, "a" if append else "w") as fh:
             if append:
                 fh.write("\n")
             fh.write(code)
             if not code.endswith("\n"):
                 fh.write("\n")
         verb = "appended to" if append else "written to"
-        return f"Successfully {verb} {file_path}"
+        return f"Successfully {verb} {destination}"
     except Exception as exc:
         return f"ERROR: {exc}"
 

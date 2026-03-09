@@ -21,6 +21,8 @@ from langgraph.prebuilt import ToolNode
 
 from judiagent.agents.agent_base import AgentCore
 from judiagent.configuration import BaseConfiguration, cli_mode, mcp_mode
+from judiagent.core.julia_code import parse_julia_code_block
+from judiagent.core.messages import get_message_text
 from judiagent.state import AgentState, MCPInputState, MCPOutputState
 from judiagent.tools import (
     execute_shell_command,
@@ -34,9 +36,6 @@ from judiagent.tools import (
     lint_julia_code,
     write_to_file,
 )
-from judiagent.utils import get_message_text, parse_julia_code_block
-
-
 class ReActAgent(AgentCore):
     """
     Tool-augmented autonomous agent following a ReAct (Reason + Act) loop.
