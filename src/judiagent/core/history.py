@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Callable, List, Sequence, Union
+from typing import Callable, List, Sequence, TypeAlias, Union
 
 from langchain_core.language_models import BaseChatModel
 from langchain_core.language_models.base import LanguageModelInput
@@ -11,6 +11,11 @@ from langchain_core.runnables import Runnable
 
 
 MESSAGE_TOKEN_BUDGET = 40_000
+TokenCounter: TypeAlias = Union[
+    BaseChatModel,
+    Runnable[LanguageModelInput, BaseMessage],
+    Callable[[Sequence[BaseMessage]], int],
+]
 
 
 def estimate_messages_as_tokens(messages: Sequence[BaseMessage]) -> int:
@@ -24,11 +29,7 @@ def estimate_messages_as_tokens(messages: Sequence[BaseMessage]) -> int:
 def _trim_with_counter(
     messages: Sequence[BaseMessage],
     *,
-    token_counter: Union[
-        BaseChatModel,
-        Runnable[LanguageModelInput, BaseMessage],
-        Callable[[Sequence[BaseMessage]], int],
-    ],
+    token_counter: TokenCounter,
     max_tokens: int = MESSAGE_TOKEN_BUDGET,
     include_system: bool = False,
 ) -> Sequence[BaseMessage]:
@@ -39,6 +40,37 @@ def _trim_with_counter(
         token_counter=token_counter,
         include_system=include_system,
         allow_partial=True,
+    )
+
+
+def _trim_with_model_counter(
+    messages: Sequence[BaseMessage],
+    model: Union[BaseChatModel, Runnable[LanguageModelInput, BaseMessage]],
+    *,
+    max_tokens: int,
+    include_system: bool,
+) -> Sequence[BaseMessage]:
+    """Attempt token-aware trimming using the backend model itself."""
+    return _trim_with_counter(
+        messages,
+        token_counter=model,
+        max_tokens=max_tokens,
+        include_system=include_system,
+    )
+
+
+def _trim_with_estimated_counter(
+    messages: Sequence[BaseMessage],
+    *,
+    max_tokens: int,
+    include_system: bool,
+) -> Sequence[BaseMessage]:
+    """Fallback trim path when the backend cannot count tokens directly."""
+    return _trim_with_counter(
+        messages,
+        token_counter=estimate_messages_as_tokens,
+        max_tokens=max_tokens,
+        include_system=include_system,
     )
 
 
@@ -91,16 +123,18 @@ def compact_message_history(
     character-based estimate so the agent can still proceed.
     """
     try:
-        trimmed = _trim_with_counter(
+        trimmed = _trim_with_model_counter(
             messages,
-            token_counter=model,
             max_tokens=max_tokens,
             include_system=include_system,
+            model=model,
         )
     except Exception:
-        trimmed = _trim_with_counter(
+        # Some providers do not expose token counting to LangChain's
+        # ``trim_messages(...)`` helper. Rather than fail the turn, switch
+        # to a simple character-based estimate that keeps history bounded.
+        trimmed = _trim_with_estimated_counter(
             messages,
-            token_counter=estimate_messages_as_tokens,
             max_tokens=max_tokens,
             include_system=include_system,
         )

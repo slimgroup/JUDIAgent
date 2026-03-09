@@ -11,12 +11,12 @@ from langchain_core.tools import BaseTool, InjectedToolArg, tool
 from pydantic import BaseModel, Field
 
 import judiagent.rag.retrieval as retrieval
-import judiagent.rag.split_examples as split_examples
+from judiagent.rag.catalog import RAG_CATALOG
+from judiagent.rag.chunking.examples import format_example_chunk, format_example_context
 from judiagent.cli import colorscheme, print_to_console
 from judiagent.configuration import PROJECT_ROOT, BaseConfiguration, cli_mode
 from judiagent.core.documents import get_document_source
 from judiagent.julia import fetch_docstrings_for_functions
-from judiagent.rag.retriever_specs import RETRIEVER_SPECS
 
 
 # -----------------------------------------------------------------------
@@ -64,8 +64,8 @@ def _build_retrieval_tool(
 
         with retrieval.make_retriever(
             config=config,
-            spec=RETRIEVER_SPECS[doc_key]["examples"],
-            retrieval_params=retrieval.RetrievalParams(
+            spec=RAG_CATALOG[doc_key]["examples"],
+            retrieval_params=retrieval.RetrievalPlan(
                 search_type=configuration.examples_search_type,
                 search_kwargs=configuration.examples_search_kwargs,
             ),
@@ -83,7 +83,7 @@ def _build_retrieval_tool(
                     docs=retrieved,
                     get_file_source=get_document_source,
                     get_section_path=_section_path,
-                    format_doc=partial(split_examples.format_doc, within_julia_context=False),
+                    format_doc=partial(format_example_chunk, within_julia_context=False),
                     action_name=f"Filter {doc_label} examples",
                     edit_julia_file=True,
                 )
@@ -93,11 +93,11 @@ def _build_retrieval_tool(
                     retrieved,
                     get_file_source=get_document_source,
                     get_section_path=_section_path,
-                    format_doc=split_examples.format_doc,
+                    format_doc=format_example_chunk,
                     action_name=f"Filter {doc_label} examples",
                 )
 
-        formatted = split_examples.format_examples(retrieved)
+        formatted = format_example_context(retrieved)
         return formatted if formatted else "(empty)"
 
     return _retrieval_tool

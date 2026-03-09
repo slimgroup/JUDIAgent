@@ -1,161 +1,30 @@
 """
-Configuration Management for JUDIAgent.
+Runtime configuration schema for JUDIAgent.
 
-This module defines all configurable parameters for the JUDIAgent system,
-including LLM model selection, RAG settings, and human-in-the-loop controls.
-
-Configuration Hierarchy:
-    1. Environment variables (.env file)
-    2. Static module-level settings (cli_mode, LOCAL_MODELS, etc.)
-    3. BaseConfiguration dataclass (runtime-adjustable settings)
-
-Usage:
-    # Access configuration in code
-    from judiagent.configuration import BaseConfiguration, LLM_MODEL_NAME
-    
-    # Create configuration from LangGraph runtime config
-    config = BaseConfiguration.from_runnable_config(runnable_config)
-    model_name = config.agent_model
-
-Environment Variables Required:
-    - OPENAI_API_KEY: API key for OpenAI models
-    - LANGSMITH_API_KEY: API key for LangSmith (optional, for UI/tracing)
-    
-Module Constants:
-    - cli_mode: Enable CLI interface
-    - mcp_mode: Enable MCP server for VSCode
-    - LOCAL_MODELS: Use local Ollama models instead of OpenAI
-    - LLM_MODEL_NAME: Default LLM model
-    - EMBEDDING_MODEL_NAME: Default embedding model
-    - RECURSION_LIMIT: Max graph recursion steps
+This module exposes the configurable dataclasses used by the agent graph.
+Static defaults and environment bootstrap now live in `judiagent.settings`
+and are re-exported here for backwards compatibility.
 """
 
 from __future__ import annotations
 
-import getpass
-import logging
-import os
 from dataclasses import dataclass, field, fields
-from pathlib import Path
 from typing import Annotated, Any, Literal, Optional, Type, TypeVar
 
-from dotenv import load_dotenv
 from langchain_core.runnables import RunnableConfig, ensure_config
 from pydantic import BaseModel, ConfigDict
 
 import judiagent.prompts as prompts
-
-
-# =============================================================================
-# Static Mode Configuration
-# =============================================================================
-# These settings control the overall mode of operation.
-# Only one mode should be active at a time.
-
-cli_mode: bool = True   # Interactive terminal interface
-mcp_mode: bool = False  # VSCode Copilot integration via MCP protocol
-
-# Validation: modes are mutually exclusive
-assert not (cli_mode and mcp_mode), "cli_mode and mcp_mode cannot both be True"
-
-
-# =============================================================================
-# Model Configuration
-# =============================================================================
-# Control whether to use local (Ollama) or hosted cloud models.
-# Local models are free but require local GPU resources.
-# Hosted models have stronger performance but require API costs.
-#
-# ======================== SUPPORTED MODEL PROVIDERS ========================
-#
-# OpenAI Models (requires OPENAI_API_KEY):
-#   - "openai:o1" / "openai:o3-mini"  - Best reasoning, slow, expensive
-#   - "openai:gpt-4o"                  - Best overall, multimodal, fast (RECOMMENDED)
-#   - "openai:gpt-4.1"                 - Good coding, slightly cheaper
-#   - "openai:gpt-4o-mini"             - Fast & cheap, good for most tasks
-#
-# Anthropic Claude Models (requires ANTHROPIC_API_KEY):
-#   - "anthropic:claude-3-7-sonnet-20250219"  - Latest Sonnet, best coding (RECOMMENDED)
-#   - "anthropic:claude-3-5-sonnet-20241022"  - Claude 3.5 Sonnet, excellent coding
-#   - "anthropic:claude-3-opus-20240229"      - Most capable, slower, expensive
-#
-# DeepSeek Models (requires DEEPSEEK_API_KEY):
-#   - "deepseek:deepseek-chat"       - General purpose, very cost-effective
-#   - "deepseek:deepseek-reasoner"   - Best reasoning (R1), great for complex tasks
-#
-# Local Ollama Models (requires Ollama installed):
-#   - "ollama:qwen2.5:7b"            - Good balance of quality and speed
-#   - "ollama:llama3.1:8b"           - Meta's latest open model
-#   - "ollama:codellama:13b"         - Specialized for code
-#
-# Embedding Model Options:
-#   - "openai:text-embedding-3-large"  - Best quality, higher cost
-#   - "openai:text-embedding-3-small"  - Good balance (recommended)
-#
-# ======================== HOW TO CHANGE MODELS ========================
-# Option 1: Change LLM_MODEL_NAME below
-# Option 2: Set in .env file: LLM_MODEL_NAME=anthropic:claude-3-7-sonnet-20250219
-# Option 3: Pass at runtime: config = {"configurable": {"agent_model": "deepseek:deepseek-reasoner"}}
-#
-# ======================== API KEYS ========================
-# Add to your .env file:
-#   OPENAI_API_KEY=sk-...
-#   ANTHROPIC_API_KEY=sk-ant-...
-#   DEEPSEEK_API_KEY=sk-...
-
-LOCAL_MODELS = False
-
-if LOCAL_MODELS:
-    # Local model defaults (requires Ollama installation)
-    # qwen2.5:7b is a good balance of quality and resource usage
-    LLM_MODEL_NAME = "ollama:qwen2.5:7b"
-    EMBEDDING_MODEL_NAME = "ollama:nomic-embed-text"
-else:
-    # Hosted model defaults
-    # Change this to use different providers:
-    # - "openai:gpt-4o"                          - Good overall
-    # - "anthropic:claude-sonnet-4-20250514"     - Latest Claude Sonnet 4
-    # - "anthropic:claude-3-5-sonnet-20241022"   - Claude 3.5 Sonnet
-    # - "deepseek:deepseek-chat"                 - DeepSeek V3.2 (latest, cost-effective)
-    # - "deepseek:deepseek-reasoner"             - DeepSeek R1 (best reasoning)
-    LLM_MODEL_NAME = "deepseek:deepseek-chat"  # Using DeepSeek V3.2
-    EMBEDDING_MODEL_NAME = "openai:text-embedding-3-small"
-
-# Graph execution limits
-RECURSION_LIMIT = 200  # Maximum recursion depth before error
-LLM_TEMPERATURE = 0    # Deterministic outputs for reproducibility
-
-
-# =============================================================================
-# Environment Setup
-# =============================================================================
-
-def _set_env(var: str) -> None:
-    """
-    Prompt for an environment variable if not set.
-    
-    Used during initialization to ensure required API keys are available.
-    
-    Args:
-        var: Name of the environment variable to check/set
-    """
-    if not os.environ.get(var):
-        os.environ[var] = getpass.getpass(f"{var}: ")
-
-
-# Project paths
-PROJECT_ROOT = Path(__file__).resolve().parent
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Ensure required API keys are available
-_set_env("OPENAI_API_KEY")
-_set_env("LANGSMITH_API_KEY")
-
-# Reduce logging noise from HTTP clients
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logging.getLogger("faiss").setLevel(logging.WARNING)
+from judiagent.settings import (
+    EMBEDDING_MODEL_NAME,
+    LLM_MODEL_NAME,
+    LLM_TEMPERATURE,
+    LOCAL_MODELS,
+    PROJECT_ROOT,
+    RECURSION_LIMIT,
+    cli_mode,
+    mcp_mode,
+)
 
 
 # =============================================================================

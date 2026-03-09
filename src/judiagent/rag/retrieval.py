@@ -1,267 +1,58 @@
-import os
-from contextlib import contextmanager
-from typing import Generator, TypedDict
+"""Retriever orchestration for JUDIAgent RAG corpora."""
 
-# from langchain.retrievers import ContextualCompressionRetriever
-# from langchain.retrievers.document_compressors import FlashrankRerank
-from langchain_core.embeddings import Embeddings
+from __future__ import annotations
+
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from typing import Any, Generator
+
 from langchain_core.runnables import RunnableConfig
 from langchain_core.vectorstores import VectorStoreRetriever
 
-# from langchain_core.documents import BaseDocumentCompressor
 from judiagent.configuration import BaseConfiguration
-from judiagent.core.models import resolve_provider_and_model as get_provider_and_model
-from judiagent.rag.retriever_specs import RetrieverSpec
+from judiagent.rag.catalog import CorpusSpec
+from judiagent.rag.embeddings import build_embedding_backend
+from judiagent.rag.vector_index import open_vector_retriever
 
 
-class RetrievalParams(TypedDict):
-    search_type: str
-    search_kwargs: dict
+@dataclass(frozen=True)
+class RetrievalPlan:
+    """Search controls for a single retrieval request."""
 
-
-def make_text_encoder(model: str) -> Embeddings:
-    """Connect to the configured text encoder."""
-    provider, model = get_provider_and_model(model)
-    if provider == "openai":
-        from langchain_openai import OpenAIEmbeddings
-
-        return OpenAIEmbeddings(model=model)
-    if provider == "ollama":
-        from langchain_ollama import OllamaEmbeddings
-
-        return OllamaEmbeddings(model=model)
-    raise ValueError(f"Unsupported embedding provider: {provider}")
-
-
-def _load_and_split_docs(spec: RetrieverSpec) -> list:
-    import pickle
-
-    from langchain_community.document_loaders import DirectoryLoader, TextLoader
-
-    # Load or cache documents
-    if isinstance(spec.filetype, str):
-        filetypes = [spec.filetype]
-    else:
-        filetypes = spec.filetype
-
-    loaders = []
-    for filetype in filetypes:
-        loader = DirectoryLoader(
-            path=spec.dir_path,
-            glob=f"**/*.{filetype}",
-            show_progress=True,
-            loader_cls=TextLoader,
-        )
-        loaders.append(loader)
-
-    if os.path.exists(spec.cache_path):
-        with open(spec.cache_path, "rb") as f:
-            docs = pickle.load(f)
-    else:
-        docs = []
-        for loader in loaders:
-            docs.extend(loader.load())
-
-        with open(spec.cache_path, "wb") as f:
-            pickle.dump(docs, f)
-
-    # Split documents
-    chunks = []
-    for doc in docs:
-        chunks.extend(spec.split_func(doc))
-    return chunks
-
-
-@contextmanager
-def make_faiss_retriever(
-    configuration: BaseConfiguration,
-    spec: RetrieverSpec,
-    embedding_model: Embeddings,
-    search_type: str,
-    search_kwargs: dict,
-) -> Generator[VectorStoreRetriever, None, None]:
-    """
-    Create or load a FAISS retriever, saving the index locally to avoid re-indexing.
-    Uses configuration to determine file paths and splitting functions.
-    """
-    import os
-
-    from langchain_community.vectorstores import FAISS
-
-    # Get the persist path by checking what is the specified embedding model
-    persist_path = spec.persist_path(
-        get_provider_and_model(configuration.embedding_model)[0]
-    )
-
-    # Load or create FAISS index
-    if os.path.exists(persist_path):
-        vectorstore = FAISS.load_local(
-            persist_path,
-            embedding_model,
-            allow_dangerous_deserialization=True,
-        )
-    else:
-        print(f"Creating new FAISS index at {spec.persist_path}")
-        docs = _load_and_split_docs(spec)
-        vectorstore = FAISS.from_documents(
-            documents=docs,
-            embedding=embedding_model,
-        )
-        vectorstore.save_local(persist_path)
-
-    yield vectorstore.as_retriever(
-        search_type=search_type,
-        search_kwargs={**search_kwargs},
+    search_type: str = "mmr"
+    search_kwargs: dict[str, Any] = field(
+        default_factory=lambda: {"k": 3, "fetch_k": 15, "lambda_mult": 0.5}
     )
 
 
-@contextmanager
-def make_chroma_retriever(
-    configuration: BaseConfiguration,
-    spec: RetrieverSpec,
-    embedding_model: Embeddings,
-    search_type: str,
-    search_kwargs: dict,
-) -> Generator[VectorStoreRetriever, None, None]:
-    """
-    Create or load a Chroma retriever, saving the index locally to avoid re-indexing.
-    Uses configuration to determine file paths and splitting functions.
-    
-    Automatically handles corrupted ChromaDB indices by deleting and recreating them.
-    """
-    import os
-    import shutil
-
-    from langchain_chroma import Chroma
-
-    # Get the persist path by checking what is the specified embedding model
-    persist_path = spec.persist_path(
-        get_provider_and_model(configuration.embedding_model)[0]
-    )
-
-    # Load or create Chroma index
-    vectorstore = None
-    if os.path.exists(persist_path):
-        try:
-            vectorstore = Chroma(
-                embedding_function=embedding_model,
-                persist_directory=persist_path,
-                collection_name=spec.collection_name,
-            )
-            # Try to access the collection to verify it's not corrupted
-            _ = vectorstore._collection  # This will raise an error if corrupted
-        except (Exception, RuntimeError) as e:
-            # Check if this is a ChromaDB/SQLite panic error
-            error_str = str(e)
-            error_type = type(e).__name__
-            
-            if "PanicException" in error_type or "range start index" in error_str or "out of range for slice" in error_str:
-                print(f"⚠️  Detected corrupted ChromaDB index at {persist_path}")
-                print(f"   Error: {error_type}: {error_str[:100]}")
-                print(f"   🔧 Deleting corrupted index and rebuilding...")
-                
-                # Delete corrupted database
-                try:
-                    if os.path.isdir(persist_path):
-                        shutil.rmtree(persist_path)
-                    elif os.path.exists(persist_path):
-                        os.remove(persist_path)
-                    print(f"   ✓ Deleted corrupted index")
-                    vectorstore = None  # Reset to force recreation
-                except Exception as del_error:
-                    print(f"   ⚠️  Warning: Could not delete corrupted index: {del_error}")
-                    vectorstore = None  # Reset to force recreation
-            else:
-                # Re-raise if it's a different error
-                raise
-    
-    # Create new index if it doesn't exist or was corrupted
-    if vectorstore is None or not os.path.exists(persist_path):
-        if not os.path.exists(persist_path):
-            print(f"Creating new Chroma index at {persist_path}")
-        docs = _load_and_split_docs(spec)
-
-        vectorstore = Chroma.from_documents(
-            documents=docs,
-            embedding=embedding_model,
-            persist_directory=persist_path,
-            collection_name=spec.collection_name,
-        )
-        print(f"✓ Successfully created Chroma index")
-
-    yield vectorstore.as_retriever(
-        search_type=search_type,
-        search_kwargs={**search_kwargs},
-    )
-
-
-# def apply_flash_reranker(
-#     configuration: BaseConfiguration, retriever: VectorStoreRetriever
-# ):
-#     compressor = FlashrankRerank(**configuration.rerank_kwargs)
-#
-#     return ContextualCompressionRetriever(
-#         base_compressor=compressor, base_retriever=retriever
-#     )
+RetrievalParams = RetrievalPlan
 
 
 @contextmanager
 def make_retriever(
     config: RunnableConfig,
-    spec: RetrieverSpec,
-    retrieval_params: RetrievalParams = RetrievalParams(
-        search_type="mmr",
-        search_kwargs={"k": 3, "fetch_k": 15, "lambda_mult": 0.5},
-    ),
+    spec: CorpusSpec,
+    retrieval_params: RetrievalPlan | None = None,
 ) -> Generator[VectorStoreRetriever, None, None]:
-    """
-    Create a retriever for the agent, based on the current configuration.
-
-    Args:
-        config: The runnable configuration
-        spec: The retriever specification
-        **retrieval_overrides: Override any retrieval parameters (search_type, search_kwargs, etc.)
-    """
+    """Open a retriever for the requested corpus under the active runtime config."""
     configuration = BaseConfiguration.from_runnable_config(config)
+    retrieval_plan = retrieval_params or RetrievalPlan()
+    embedding_backend = build_embedding_backend(configuration.embedding_model)
 
-    embedding_model = make_text_encoder(configuration.embedding_model)
+    with open_vector_retriever(
+        provider=configuration.retriever_provider,
+        spec=spec,
+        embedding_model_ref=configuration.embedding_model,
+        embedding_backend=embedding_backend,
+        search_type=retrieval_plan.search_type,
+        search_kwargs=retrieval_plan.search_kwargs,
+    ) as retriever:
+        if configuration.rerank_provider == "None":
+            yield retriever
+            return
 
-    # Get the retriever
-    selected_retriever = None
-    match configuration.retriever_provider:
-        case "faiss":
-            with make_faiss_retriever(
-                configuration,
-                spec,
-                embedding_model,
-                retrieval_params["search_type"],
-                retrieval_params["search_kwargs"],
-            ) as retriever:
-                selected_retriever = retriever
-        case "chroma":
-            with make_chroma_retriever(
-                configuration,
-                spec,
-                embedding_model,
-                retrieval_params["search_type"],
-                retrieval_params["search_kwargs"],
-            ) as retriever:
-                selected_retriever = retriever
-
-        case _:
-            raise ValueError(
-                "Unrecognized retriever_provider in configuration. "
-                f"Expected one of: {', '.join(BaseConfiguration.__annotations__['retriever_provider'].__args__)}\n"
-                f"Got: {configuration.retriever_provider}"
-            )
-
-    # Apply the reranker
-    match configuration.rerank_provider:
-        case "None":
-            yield selected_retriever
-        case _:
-            raise ValueError(
-                "Unrecognized rerank_provider in configuration. "
-                f"Expected one of: {', '.join(BaseConfiguration.__annotations__['rerank_provider'].__args__)}\n"
-                f"Got: {configuration.rerank_provider}"
-            )
+    raise ValueError(
+        "Unrecognized rerank_provider in configuration. "
+        f"Expected one of: {', '.join(BaseConfiguration.__annotations__['rerank_provider'].__args__)}\n"
+        f"Got: {configuration.rerank_provider}"
+    )
