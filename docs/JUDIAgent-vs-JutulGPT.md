@@ -34,3 +34,9 @@ The system prompts in `src/judiagent/prompts.py` (geometry rules, golden templat
 - Use of RAG (vector store + retriever), human-in-the-loop hooks, and MCP for VSCode.
 
 These are common patterns in agent frameworks; the **implementation, naming, and domain content** are sufficiently different to treat JUDIAgent as an independent project that acknowledges JutulGPT as inspiration.
+
+## 5. Publication and attribution
+
+- **Your contributions** (domain, RAG content, JUDI-specific prompts, workspace rules, naming and structural refactor, Julia execution and retry implementation) are **substantial and original**. They are more than “cosmetic”: they change what the system does (JUDI vs JutulDarcy) and how it is implemented.
+- **To avoid plagiarism concerns**: Always **cite JutulGPT** (SINTEF-agentlab) as the inspiration or base architecture for the agent framework. In the paper, state clearly that JUDIAgent adapts/extends that architecture for JUDI.jl and describe your own contributions (domain adaptation, RAG, prompts, refactor, evaluation, etc.).
+- **Whether it is “enough” for a paper** depends on the venue and how you frame it. A paper that positions JUDIAgent as *“an AI assistant for JUDI.jl”* with clear novelty (workflow design, retrieval, prompts, integration, and possibly benchmarks or case studies) and honest attribution to JutulGPT is standard practice. If the bulk of the narrative and experiments are about JUDI workflows and your design choices (not about re-publishing JutulGPT’s ideas as yours), you are in a defensible position. When in doubt, disclose more rather than less and give JutulGPT explicit credit.

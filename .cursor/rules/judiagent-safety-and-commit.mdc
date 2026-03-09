@@ -28,7 +28,7 @@ alwaysApply: true
 
 ## Codebase-specific expectations
 
-- **Python/Julia boundary**: Preserve the contract between `src/judiagent/julia/*.py` and the `.jl` driver scripts; do not change subprocess calling conventions or script paths without good reason and user awareness.
+- **Python/Julia boundary**: Preserve the **interface and calling conventions** between `src/judiagent/julia/*.py` and the `.jl` driver scripts (i.e. how Python invokes Julia, which script paths and arguments are used, and what stdout/stderr mean); do not change subprocess calling conventions or script paths without good reason and user awareness.
 - **RAG and prompts**: Changes to `src/judiagent/rag/`, `src/judiagent/prompts.py`, or `rag/judi/` content affect retrieval and agent behaviour; prefer additive or clearly scoped edits and avoid silently removing JUDI-specific prompt sections.
 - **Agent entry points**: Keep `examples/agent.py` and `examples/autonomous_agent.py` (and their imports from `judiagent`) working; any rename or move of the main agents should update these and `langgraph.json`.
 - When reorganizing code or config, preserve existing behaviour unless the user explicitly asks for a breaking change; document any intentional breakage.
