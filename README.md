@@ -35,6 +35,8 @@ Optional:
 
 > NOTE: See [Installing python](https://docs.astral.sh/uv/guides/install-python/) for installing Python using `uv`.
 
+For **shared clusters / login-node development** (e.g. PACE): how to keep fast tests and syncing off expensive allocations is documented in [docs/devel-pace.md](docs/devel-pace.md).
+
 ### Step 1: Python Setup
 
 Clone the repository and set up the Python environment:
