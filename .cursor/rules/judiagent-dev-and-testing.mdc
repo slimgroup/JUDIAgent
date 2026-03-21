@@ -1,0 +1,29 @@
+---
+description: General Python dev layout, testing, and refactor workflow for JUDIAgent
+alwaysApply: true
+---
+
+# JUDIAgent – development and testing
+
+## Layout
+
+- **Source**: `src/judiagent/` — library code only; avoid one-off experiments here (use `examples/` or a scratch branch).
+- **Examples**: `examples/` — thin entry scripts that import `judiagent`; keep them runnable after refactors.
+- **Tests**: `tests/` — pytest; mirror package structure where it helps (e.g. `tests/unit_tests/test_core_*.py` for `judiagent.core`).
+
+## When changing behaviour
+
+- Prefer **unit tests** for pure helpers (`core/`, parsing, config resolution) — fast, no network.
+- Use **integration / smoke tests** for imports, graph wiring, and “does the app still load” checks (`tests/integration_tests/`).
+- If a change touches Julia subprocesses, real LLM calls, or large RAG indexes, keep tests **mocked or optional** unless the user asks for live runs.
+
+## Test style
+
+- Name tests `test_<behaviour>()`; one main assertion idea per test when possible.
+- Use `tmp_path` for filesystem side effects; do not write under real `outputs/` or `scripts/` in tests unless intentional.
+- After non-trivial edits, run `uv run pytest` and fix failures before handing off.
+
+## Refactors
+
+- Preserve **public entry points** (`examples/*.py`, `langgraph.json` targets) unless the user wants a breaking change.
+- Use **compatibility shims** (thin re-export modules) when splitting files so imports stay stable across the transition.
