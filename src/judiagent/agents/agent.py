@@ -1,12 +1,13 @@
 """
-Iterative code-generation agent (evaluator-optimizer pattern).
+Iterative code-generation agent with dual-stage scientific evaluation.
 
 This agent follows a generate → validate → refine loop:
 
 1. The LLM produces Julia code based on the user query and retrieved examples.
-2. The code is validated (static analysis + runtime execution).
-3. On failure the diagnostics are fed back and the LLM retries.
-4. On success the interaction completes.
+2. The code is validated for correctness (static analysis + runtime execution).
+3. Imaging/inversion-style code is also reviewed for JUDI-specific scientific completeness.
+4. On failure the diagnostics are fed back and the LLM retries.
+5. On success the interaction completes.
 
 The simpler workflow makes this agent well-suited for smaller models or
 focused tasks such as setting up a single JUDI simulation.
@@ -39,7 +40,7 @@ from judiagent.tools import (
 )
 class IterativeCodeAgent(AgentCore):
     """
-    Evaluator-optimizer agent for JUDI.jl code generation.
+    Iterative JUDI.jl code agent with a dual-stage evaluation loop.
 
     The workflow graph is:
 

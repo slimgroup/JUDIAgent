@@ -68,6 +68,37 @@ class HumanInteraction(BaseModel):
     )
 
 
+class DomainValidation(BaseModel):
+    """
+    Configuration for JUDI-specific scientific evaluation.
+
+    The domain evaluator complements lint/runtime checks by assessing whether
+    generated Julia code contains the expected ingredients for seismic imaging
+    or inversion workflows.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    mode: Literal["off", "auto", "strict"] = field(
+        default="auto",
+        metadata={
+            "description": (
+                "'off' disables the JUDI domain evaluator, 'auto' enables it for "
+                "imaging/inversion-style code, and 'strict' requires it every time."
+            )
+        },
+    )
+    minimum_score: float = field(
+        default=0.6,
+        metadata={
+            "description": (
+                "Minimum scientific-readiness score required when the domain "
+                "evaluator is active."
+            )
+        },
+    )
+
+
 # =============================================================================
 # Main Configuration Class
 # =============================================================================
@@ -120,6 +151,15 @@ class BaseConfiguration:
             "description": (
                 "Controls human intervention points during agent execution. "
                 "Includes options for RAG query review, code approval, and error handling."
+            )
+        },
+    )
+    domain_validation: DomainValidation = field(
+        default_factory=DomainValidation,
+        metadata={
+            "description": (
+                "Settings for the JUDI-specific evaluator that checks whether "
+                "generated code reflects a sound seismic imaging or inversion workflow."
             )
         },
     )

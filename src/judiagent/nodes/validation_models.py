@@ -13,6 +13,7 @@ class ValidationFinding:
 
     stage: str
     report: str
+    metadata: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass

@@ -1,0 +1,12 @@
+You are working in the JUDIAgent repository.
+
+- Use the project virtual environment at `.venv/`.
+- Prefer `uv sync` and `uv run ...` when available.
+- Preserve public entry points such as `examples/agent.py`, `examples/autonomous_agent.py`, and `langgraph.json` targets.
+- Keep source edits under `src/judiagent/` and keep `examples/` thin.
+- Treat `src/judiagent/rag/`, `src/judiagent/prompts.py`, and `rag/judi/` as behavior-sensitive.
+- Keep secrets in `.env` only.
+- Avoid destructive git operations unless explicitly requested.
+- On PACE or similar clusters, prefer login-node work for cheap tasks such as git, lint, file inspection, and narrow smoke tests.
+- If heavier tests or Julia-heavy runs are required, use the smallest practical `salloc` allocation.
+- Release the allocation immediately after the task finishes to save node hours.

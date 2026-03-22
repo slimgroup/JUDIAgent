@@ -14,6 +14,7 @@ from judiagent.nodes.validation_review import (
     request_post_validation_review,
     request_pre_validation_review,
 )
+from judiagent.nodes.validation_quality import run_domain_validation
 from judiagent.nodes.validation_runtime import (
     prepare_validation_code,
     run_runtime_validation,
@@ -54,7 +55,10 @@ def _review_generated_code(
     return request_pre_validation_review(code, cli_mode=cli_mode)
 
 
-def _run_validation_stages(conversation: ValidationConversation) -> None:
+def _run_validation_stages(
+    conversation: ValidationConversation,
+    configuration: BaseConfiguration,
+) -> None:
     try:
         lint_finding = run_static_validation(conversation.working_code, show_code=False)
     except Exception:
@@ -66,7 +70,14 @@ def _run_validation_stages(conversation: ValidationConversation) -> None:
         lint_finding = None
 
     runtime_finding = run_runtime_validation(conversation.working_code, show_code=False)
-    for finding in (lint_finding, runtime_finding):
+    domain_finding = None
+    if runtime_finding is None:
+        domain_finding = run_domain_validation(
+            conversation.working_code,
+            configuration.domain_validation,
+        )
+
+    for finding in (lint_finding, runtime_finding, domain_finding):
         if finding is not None:
             conversation.findings.append(finding)
 
@@ -117,7 +128,7 @@ def verify_code_output(
         )
 
     conversation.working_code = prepare_validation_code(conversation.working_code)
-    _run_validation_stages(conversation)
+    _run_validation_stages(conversation, configuration)
 
     if not conversation.has_findings:
         return {"error": False, "messages": conversation.messages}

@@ -46,6 +46,7 @@ VALIDATION_REFINEMENT = """
 - Test edge cases and realistic parameter combinations.
 - Keep improving the code until validation errors are resolved.
 - If validation or execution fails, use the failure output as a debugging signal.
+- For seismic imaging or inversion workflows, include at least one quality-assessment hook such as residual checks, image diagnostics, or a domain metric.
 - Explain your strategy briefly, then deliver the complete Julia solution.
 """
 

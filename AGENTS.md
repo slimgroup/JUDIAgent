@@ -24,6 +24,12 @@ This repository contains a Python + Julia agent stack. When working here with Co
 - Use `tmp_path` for filesystem side effects in tests.
 - Do not write test artifacts into real `outputs/` or `scripts/` unless the task explicitly needs that.
 
+## Cluster cost control
+
+- On PACE or similar shared clusters, prefer login-node work for git, linting, file inspection, and narrow smoke tests.
+- If heavier tests or Julia-heavy runs are needed, request the smallest practical `salloc` allocation first.
+- End the allocation immediately after the task completes to save node hours.
+
 ## Refactor guardrails
 
 - Preserve public entry points such as `examples/agent.py`, `examples/autonomous_agent.py`, and `langgraph.json` targets unless the user requests a breaking change.
