@@ -20,6 +20,9 @@ src/ui/pnpm-lock.yaml
 
 # Julia-specific
 Manifest.toml
+.julia-depot/
+.condapkg-env/
+.uv-cache/
 
 # The presentation
 presentation/*
@@ -169,6 +172,8 @@ celerybeat.pid
 .envrc
 .venv
 env/
+!env/
+!env/*.sh
 venv/
 ENV/
 env.bak/

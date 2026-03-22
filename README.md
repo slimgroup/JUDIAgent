@@ -12,7 +12,7 @@ JUDIAgent is an intelligent coding assistant specialized in helping users work w
 
 **Key Features**
 - Retrieval-augmented code generation using JUDI.jl examples
-- Automatic code validation (linting + execution)
+- Dual-stage validation: code correctness plus JUDI-specific scientific review
 - Human-in-the-loop refinement workflow
 - Multiple interfaces: CLI and VSCode integration via LangGraph/MCP
 
@@ -24,7 +24,7 @@ This project requires both **Python** and **Julia**, along with some system-leve
 
 - `git`: See [git downloads](https://git-scm.com/downloads)
 - `Python3 >=3.12`: See [Download Python](https://www.python.org/downloads/)
-- `Julia`: Package tested on version 1.11.6. See [Installing Julia](https://julialang.org/install/)
+- `Julia`: Package tested on version 1.11.x. See [Installing Julia](https://julialang.org/install/)
 - `build-essential`
 - `graphviz` and `graphviz-dev`: See [Graphviz download](https://graphviz.org/download/)
 
@@ -37,28 +37,80 @@ Optional:
 
 For **shared clusters / login-node development** (e.g. PACE): how to keep fast tests and syncing off expensive allocations is documented in [docs/devel-pace.md](docs/devel-pace.md).
 
-### Step 1: Python Setup
+For **Codex-based development** in this repository: repo-local agent guidance lives in [AGENTS.md](AGENTS.md), and reusable setup notes live in [docs/codex-setup.md](docs/codex-setup.md).
 
-Clone the repository and set up the Python environment:
+### Choose Your Environment
+
+JUDIAgent supports two common setup modes.
+
+#### Option A: PACE or another shared cluster
+
+Use this when you are working over SSH on a login node plus interactive compute allocations.
+
+1. On the login node, do the cheap setup only:
 
 ```bash
-# Clone the repository
 git clone https://github.com/haoyunl2/JUDIAgent.git
-cd JUDIAgent/
-```
-
-If you are using `uv`, initialize the environment:
-
-```bash
-# Initialize the environment
+cd JUDIAgent
 uv venv
 source .venv/bin/activate
+uv sync
+source env/pace-local.sh
+cp .env.example .env
+./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+```
 
-# Install packages
+2. When you are ready for Julia/JUDI initialization or a real agent run, move to an interactive compute node:
+
+```bash
+salloc ...
+srun --pty bash
+cd /path/to/JUDIAgent
+source .venv/bin/activate
+source env/pace-local.sh
+module load julia/1.11.3
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
+```
+
+Notes:
+
+- `env/pace-local.sh` keeps Julia packages in `.julia-depot/`, the CondaPkg environment in `.condapkg-env/`, and uv downloads in `.uv-cache/` inside the repository clone.
+- This is useful on shared systems where home-directory quota is limited or where you want all JUDI-related state to stay with the clone.
+- Avoid running the first heavy `Pkg.instantiate()` or large `Pkg.precompile()` pass on the login node; that work belongs on an interactive compute node.
+
+#### Option B: Desktop or workstation with Julia installed directly
+
+Use this on your laptop, desktop, or a dedicated machine where `julia` is already on `PATH`.
+
+```bash
+git clone https://github.com/haoyunl2/JUDIAgent.git
+cd JUDIAgent
+uv venv
+source .venv/bin/activate
+uv sync
+source env/desktop-local.sh
+cp .env.example .env
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
+./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+```
+
+Notes:
+
+- `env/desktop-local.sh` uses the same repo-local `.julia-depot/`, `.condapkg-env/`, and `.uv-cache/` layout, but does not assume a cluster module system.
+- If you prefer to use your default global Julia depot on a personal machine, you can skip sourcing `env/desktop-local.sh`.
+
+### Python Setup
+
+The project Python environment is expected to live in `.venv/`.
+
+```bash
+uv venv
+source .venv/bin/activate
 uv sync
 ```
 
 If encountering an error due to the `pygraphviz` package, try:
+
 ```bash
 # Note: Adjust for your OS/package manager
 brew install graphviz  # macOS
@@ -68,19 +120,19 @@ uv add --config-settings="--global-option=build_ext" \
             pygraphviz
 ```
 
-### Step 2: Julia Setup
+### Julia Setup
 
-Set up the Julia project with JUDI.jl dependencies:
+The Julia project should be initialized from the repository root:
 
 ```bash
-julia
-# In Julia REPL
-julia> import Pkg; Pkg.activate("."); Pkg.instantiate()
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
 
-This will install all necessary packages listed in `Project.toml`.
+This installs the Julia packages from `Project.toml`. In this repository, JUDI may also trigger CondaPkg-managed Python-side dependencies, which are stored in `.condapkg-env/` when you source one of the local env helper scripts.
 
-### Step 3: Environment Configuration
+On a desktop or workstation, running this directly is fine. On PACE or another shared cluster, do the first heavy Julia/JUDI initialization on an interactive compute node rather than on the login node.
+
+### Environment Configuration
 
 Generate and configure the `.env` file:
 
@@ -89,26 +141,36 @@ cp .env.example .env
 ```
 
 Edit `.env` to provide:
+
 - `OPENAI_API_KEY`: Your OpenAI API key
-- `LANGSMITH_API_KEY`: Required for UI/debugging features
+- `LANGSMITH_API_KEY`: Required for GUI/debugging features; can be left blank for CLI-only usage
+- `LANGSMITH_PROJECT`: Optional tracing project name
+- `LANGSMITH_TRACING_V2`: Enable if you want LangSmith tracing
+- `EDITOR`: Your preferred CLI editor, such as `vim`, `nvim`, or `nano`
 
-The agent will create `scripts/`, `outputs/figures/`, and `outputs/data/`
-on demand when it saves generated Julia code or artifacts. Those paths are
-treated as runtime outputs rather than tracked source directories.
+The agent will create `scripts/`, `outputs/figures/`, and `outputs/data/` on demand when it saves generated Julia code or artifacts. Those paths are treated as runtime outputs rather than tracked source directories.
 
-### Step 4: Test the Installation
+### Verify the Installation
 
-Run the agent to verify everything works:
+For a low-cost smoke check:
+
+```bash
+./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+```
+
+For the standard agent:
 
 ```bash
 uv run examples/agent.py
 ```
 
-To run the autonomous agent instead:
+For the autonomous agent:
 
 ```bash
 uv run examples/autonomous_agent.py
 ```
+
+On PACE or another shared cluster, prefer running the full agent on an interactive compute allocation rather than on the login node. The login node should mainly be used for editing, syncing, and low-cost smoke checks.
 
 ## Usage
 
@@ -116,7 +178,7 @@ JUDIAgent provides two agent variants optimized for different use cases:
 
 ### Standard Agent
 
-The standard agent follows an evaluator-optimizer workflow where code is first generated and then validated. Recommended for smaller models or specific tasks like simulation setup.
+The standard agent follows a staged scientific coding workflow where code is first generated, then checked for technical correctness, and finally reviewed for JUDI-specific scientific completeness when the task looks like imaging or inversion. Recommended for smaller models or specific tasks like simulation setup.
 
 ![Iterative workflow](media/iterative_workflow.svg "Iterative workflow")
 

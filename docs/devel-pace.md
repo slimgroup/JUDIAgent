@@ -1,6 +1,6 @@
 # Developing and testing on shared clusters (e.g. PACE)
 
-This note is for working on **login nodes** or **interactive/batch jobs** without wasting **allocated compute hours** when you only need editing, syncing, or fast tests.
+This note is for working on **login nodes** or **interactive/batch jobs** without wasting **allocated compute hours** when you only need editing, syncing, or fast tests. Heavy Julia/JUDI initialization should be treated as compute-node work, not login-node work.
 
 Policies differ by site; always follow your cluster’s current usage rules.
 
@@ -20,10 +20,10 @@ Never commit `.venv` (it is gitignored). Do commit `uv.lock` when dependencies c
 | `uv sync`, `uv run pytest` (unit/integration, no live LLM) | Login node | Short CPU; keeps tests fast and cheap |
 | First-time heavy `pip`/`uv` resolve (rare) | Login or job | If it thrashes disk/CPU for a long time, use an interactive job |
 | Run `examples/agent.py` / autonomous agent with real API calls | Prefer **`salloc` / `srun --pty`** (interactive job) or batch | Long-running, may need stable session; counts as allocated time, not login abuse |
-| Julia `Pkg.instantiate()`, big precompilation | Interactive job if login is slow or disallowed | Same reasoning |
+| Julia `Pkg.instantiate()`, JUDI build, CondaPkg resolution, big precompilation | Interactive job | Heavy CPU, disk, and artifact work; avoid doing the first full pass on the login node |
 | GPU or many cores | Batch or interactive partition | Required by policy |
 
-**Practical rule:** treat the **login node** as a **thin workstation**: sync, test, commit. Treat **compute nodes** as where you **run the agent for real** if runs are long or resource-heavy.
+**Practical rule:** treat the **login node** as a **thin workstation**: sync, light tests, commit. Treat **compute nodes** as where you do Julia/JUDI first-time setup, big precompilation, and real agent runs.
 
 ## SSH, Cursor/VS Code, and the Python environment
 
@@ -38,6 +38,32 @@ If home directory quota is tight, point caches to scratch/work (names depend on 
 - `UV_CACHE` — uv download cache  
 - `JULIA_DEPOT_PATH` — Julia artifacts (if you use Julia on the cluster)
 
+For this repository, you can also keep Julia and uv state local to the clone by sourcing `env/pace-local.sh`:
+
+```bash
+source env/pace-local.sh
+```
+
+That helper keeps the Julia depot in `.julia-depot/`, the CondaPkg environment in `.condapkg-env/`, and the uv cache in `.uv-cache/` under the repository root, which is useful when JUDI pulls Python-side dependencies through CondaPkg.
+
+Recommended split:
+
+```bash
+# Login node: cheap setup and smoke checks
+source .venv/bin/activate
+source env/pace-local.sh
+./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+
+# Interactive compute node: first Julia/JUDI setup
+source .venv/bin/activate
+source env/pace-local.sh
+module load julia/1.11.3
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
+```
+
+- `UV_CACHE` — uv download cache  
+- `JULIA_DEPOT_PATH` — Julia artifacts (if you use Julia on the cluster)
+
 Check your center’s documentation for recommended paths (`$WORK`, `$SCRATCH`, etc.).
 
 ## Secrets
@@ -47,9 +73,19 @@ Check your center’s documentation for recommended paths (`$WORK`, `$SCRATCH`, 
 
 ## Quick verification (minimal cost)
 
+On the login node:
+
 ```bash
 uv sync
-uv run pytest
+./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+```
+
+On an interactive compute node, you can then do the first Julia setup and any real agent run:
+
+```bash
+module load julia/1.11.3
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
+uv run examples/agent.py
 ```
 
 For a smoke check of entrypoints without a long agent loop, rely on tests under `tests/` first; use full `examples/agent.py` when you intentionally spend time/API quota on an interactive node or approved session.
