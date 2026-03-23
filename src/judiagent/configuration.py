@@ -97,6 +97,15 @@ class DomainValidation(BaseModel):
             )
         },
     )
+    benchmark_task_id: str = field(
+        default="",
+        metadata={
+            "description": (
+                "Optional benchmark task identifier such as basic_2d_forward, "
+                "rtm_basic, or fwi_basic. When set, task-specific metric guidance is used."
+            )
+        },
+    )
 
 
 # =============================================================================

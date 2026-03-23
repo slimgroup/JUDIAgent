@@ -48,3 +48,22 @@ def test_domain_validation_accepts_richer_imaging_workflow():
     """
 
     assert run_domain_validation(code, settings) is None
+
+
+
+def test_domain_validation_uses_task_specific_metric_guidance():
+    settings = DomainValidation(
+        mode="strict",
+        minimum_score=0.95,
+        benchmark_task_id="rtm_basic",
+    )
+    code = """
+    using JUDI
+    image = rtm(model, q, d_obs)
+    """
+
+    finding = run_domain_validation(code, settings)
+
+    assert finding is not None
+    assert "image_residual_norm" in finding.metadata["recommended_metrics"]
+    assert "illumination_balance" in finding.metadata["recommended_metrics"]

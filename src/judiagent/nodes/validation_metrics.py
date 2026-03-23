@@ -1,4 +1,4 @@
-"""Lightweight metric recommendations for paper-friendly JUDI evaluation."""
+"""Lightweight metric plans for paper-friendly JUDI evaluation."""
 
 from __future__ import annotations
 
@@ -10,6 +10,14 @@ class MetricRecommendation:
     name: str
     workflow: str
     rationale: str
+
+
+@dataclass(frozen=True)
+class TaskMetricPlan:
+    task_id: str
+    workflow: str
+    headline: str
+    metrics: tuple[MetricRecommendation, ...]
 
 
 METRIC_CATALOG: dict[str, tuple[MetricRecommendation, ...]] = {
@@ -52,6 +60,28 @@ METRIC_CATALOG: dict[str, tuple[MetricRecommendation, ...]] = {
 }
 
 
+TASK_METRIC_PLANS: dict[str, TaskMetricPlan] = {
+    "basic_2d_forward": TaskMetricPlan(
+        task_id="basic_2d_forward",
+        workflow="forward_modeling",
+        headline="Use a cheap sanity-check bundle for simple 2D acoustic forward modeling.",
+        metrics=METRIC_CATALOG["forward_modeling"],
+    ),
+    "rtm_basic": TaskMetricPlan(
+        task_id="rtm_basic",
+        workflow="imaging",
+        headline="Use image-space metrics that quickly indicate whether RTM produced a meaningful migration result.",
+        metrics=METRIC_CATALOG["imaging"],
+    ),
+    "fwi_basic": TaskMetricPlan(
+        task_id="fwi_basic",
+        workflow="fwi",
+        headline="Use optimization-progress metrics that show whether the inversion loop is numerically healthy.",
+        metrics=METRIC_CATALOG["fwi"],
+    ),
+}
+
+
 WORKFLOW_HINTS: dict[str, tuple[str, ...]] = {
     "forward_modeling": ("forward", "wavelet", "synthetic data", "born"),
     "imaging": ("rtm", "lsrtm", "migration", "illumination", "image"),
@@ -67,7 +97,16 @@ def infer_workflow_family(text: str) -> str | None:
     return None
 
 
-def recommend_metrics(text: str) -> tuple[MetricRecommendation, ...]:
+def get_task_metric_plan(task_id: str) -> TaskMetricPlan | None:
+    return TASK_METRIC_PLANS.get(task_id)
+
+
+def recommend_metrics(text: str, task_id: str = "") -> tuple[MetricRecommendation, ...]:
+    if task_id:
+        plan = get_task_metric_plan(task_id)
+        if plan is not None:
+            return plan.metrics
+
     workflow = infer_workflow_family(text)
     if workflow is None:
         return ()

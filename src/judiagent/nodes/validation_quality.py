@@ -113,7 +113,10 @@ def run_domain_validation(
 
     matched_text = ", ".join(matched_categories) if matched_categories else "none"
     missing_text = ", ".join(missing_categories)
-    recommended_metrics = recommend_metrics(code)
+    recommended_metrics = recommend_metrics(
+        code,
+        task_id=settings.benchmark_task_id,
+    )
     metric_lines = ""
     if recommended_metrics:
         metric_lines = "\n- Recommended lightweight metrics: " + ", ".join(
