@@ -1,0 +1,51 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="36" fill="#F7F3EA"/>
+  <text x="800" y="92" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1F2933">JUDIAgent Standard Workflow</text>
+  <text x="800" y="138" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#52606D">Iterative coding loop with correctness and domain-specific review</text>
+
+  <rect x="90" y="258" width="238" height="118" rx="24" fill="#E6EEF5" stroke="#243B53" stroke-width="3"/>
+  <text x="209" y="318" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#102A43">User Query</text>
+  <text x="209" y="354" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#486581">JUDI task or debugging goal</text>
+
+  <rect x="392" y="216" width="298" height="202" rx="26" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="541" y="276" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">Retrieve + Plan</text>
+  <text x="541" y="322" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">JUDI docs and examples</text>
+  <text x="541" y="356" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">workspace context</text>
+  <text x="541" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">task decomposition</text>
+
+  <rect x="754" y="216" width="298" height="202" rx="26" fill="#E9EEF8" stroke="#243B53" stroke-width="3"/>
+  <text x="903" y="276" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">Generate Code</text>
+  <text x="903" y="322" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">Julia synthesis</text>
+  <text x="903" y="356" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">imports and workflow logic</text>
+  <text x="903" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">candidate repair target</text>
+
+  <rect x="1124" y="178" width="306" height="142" rx="26" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="1277" y="238" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#102A43">Correctness Gate</text>
+  <text x="1277" y="282" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">lint + runtime validation</text>
+
+  <rect x="1124" y="358" width="306" height="158" rx="26" fill="#F2E8F5" stroke="#243B53" stroke-width="3"/>
+  <text x="1277" y="418" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#102A43">Domain Review</text>
+  <text x="1277" y="462" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">workflow completeness</text>
+  <text x="1277" y="496" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">task-aware metric guidance</text>
+
+  <rect x="1224" y="612" width="108" height="90" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="1278" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#102A43">PASS</text>
+
+  <rect x="1012" y="612" width="148" height="90" rx="20" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="1086" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">REFINE</text>
+
+  <path d="M328 317 L392 317" stroke="#243B53" stroke-width="4"/>
+  <polygon points="392,317 377,309 377,325" fill="#243B53"/>
+  <path d="M690 317 L754 317" stroke="#243B53" stroke-width="4"/>
+  <polygon points="754,317 739,309 739,325" fill="#243B53"/>
+  <path d="M1052 317 L1124 250" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1124,250 1110,252 1118,264" fill="#243B53"/>
+  <path d="M1052 317 L1124 437" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1124,437 1112,428 1108,441" fill="#243B53"/>
+  <path d="M1277 516 L1277 612" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1277,612 1269,597 1285,597" fill="#243B53"/>
+  <path d="M1124 437 C1038 462 980 520 980 612 L1086 612" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
+  <polygon points="1086,612 1071,604 1071,620" fill="#B26A00"/>
+
+  <text x="800" y="790" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#7C5E10">Failed validation returns targeted diagnostics and metric hints to the next repair iteration.</text>
+</svg>
