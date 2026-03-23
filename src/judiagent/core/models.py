@@ -7,7 +7,6 @@ from typing import Any
 from langchain.chat_models import init_chat_model
 from langchain_core.language_models import BaseChatModel
 
-
 _MODEL_HINTS = {
     "openai": "Ensure the model name is correct and OPENAI_API_KEY is set.",
     "anthropic": (

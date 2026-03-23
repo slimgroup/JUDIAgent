@@ -1,32 +1,32 @@
 <svg width="1400" height="560" viewBox="0 0 1400 560" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="1400" height="560" rx="28" fill="#F7F4EC"/>
-  <text x="700" y="66" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="700" fill="#2D3436">JUDIAgent Standard Workflow</text>
-  <text x="700" y="98" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#5C6B7A">Dual-stage scientific coding loop for focused JUDI tasks</text>
+  <text x="700" y="66" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="700" fill="#2D3436">JUDIAgent Standard Workflow</text>
+  <text x="700" y="98" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#5C6B7A">Dual-stage scientific coding loop for focused JUDI tasks</text>
 
   <rect x="66" y="216" width="170" height="92" rx="22" fill="#E8EEF4" stroke="#2D3436" stroke-width="2"/>
-  <text x="151" y="254" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#2D3436">User Query</text>
-  <text x="151" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#5C6B7A">JUDI coding request</text>
+  <text x="151" y="254" text-anchor="middle" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#2D3436">User Query</text>
+  <text x="151" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">JUDI coding request</text>
 
   <rect x="304" y="188" width="222" height="148" rx="24" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="415" y="226" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#2D3436">Retrieve + Plan</text>
-  <text x="415" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">JUDI docs and examples</text>
-  <text x="415" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">task decomposition</text>
-  <text x="415" y="312" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#5C6B7A">RAG + workspace context</text>
+  <text x="415" y="226" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">Retrieve + Plan</text>
+  <text x="415" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">JUDI docs and examples</text>
+  <text x="415" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">task decomposition</text>
+  <text x="415" y="312" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">RAG + workspace context</text>
 
   <rect x="596" y="188" width="222" height="148" rx="24" fill="#E8EEF4" stroke="#2D3436" stroke-width="2"/>
-  <text x="707" y="226" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#2D3436">Generate Code</text>
-  <text x="707" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">Julia synthesis</text>
-  <text x="707" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">imports + workflow logic</text>
-  <text x="707" y="312" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#5C6B7A">iterative repair target</text>
+  <text x="707" y="226" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">Generate Code</text>
+  <text x="707" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">Julia synthesis</text>
+  <text x="707" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">imports + workflow logic</text>
+  <text x="707" y="312" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">iterative repair target</text>
 
   <rect x="888" y="136" width="212" height="102" rx="24" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="994" y="173" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#2D3436">Correctness Gate</text>
-  <text x="994" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#2D3436">lint + runtime execution</text>
+  <text x="994" y="173" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Correctness Gate</text>
+  <text x="994" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">lint + runtime execution</text>
 
   <rect x="888" y="262" width="212" height="102" rx="24" fill="#F4E8F6" stroke="#2D3436" stroke-width="2"/>
-  <text x="994" y="299" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#2D3436">Domain Review</text>
-  <text x="994" y="329" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#2D3436">scientific completeness</text>
-  <text x="994" y="349" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#5C6B7A">task-specific metric hints</text>
+  <text x="994" y="299" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Domain Review</text>
+  <text x="994" y="329" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">scientific completeness</text>
+  <text x="994" y="349" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">task-specific metric hints</text>
 
   <path d="M1186 226 L1240 226 L1240 171 L1296 171" stroke="#2D3436" stroke-width="3" fill="none"/>
   <polygon points="1296,171 1284,165 1284,177" fill="#2D3436"/>
@@ -34,12 +34,12 @@
   <polygon points="1296,369 1284,363 1284,375" fill="#2D3436"/>
 
   <rect x="1302" y="126" width="56" height="56" rx="14" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="1330" y="162" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#2D3436">✓</text>
-  <text x="1330" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#2D3436">accept</text>
+  <text x="1330" y="162" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">✓</text>
+  <text x="1330" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">accept</text>
 
   <rect x="1302" y="324" width="56" height="56" rx="14" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="1330" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#2D3436">↺</text>
-  <text x="1330" y="403" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#2D3436">refine</text>
+  <text x="1330" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">↺</text>
+  <text x="1330" y="403" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">refine</text>
 
   <path d="M236 262 L304 262" stroke="#2D3436" stroke-width="3"/>
   <polygon points="304,262 292,256 292,268" fill="#2D3436"/>
@@ -52,5 +52,5 @@
 
   <path d="M1328 408 C1328 474 1120 506 860 506 C640 506 454 488 454 420" stroke="#8A6F3E" stroke-width="3" stroke-dasharray="10 10" fill="none"/>
   <polygon points="454,420 461,432 468,422" fill="#8A6F3E"/>
-  <text x="876" y="536" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#8A6F3E">diagnostics + metric guidance feed the next repair iteration</text>
+  <text x="876" y="536" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#8A6F3E">diagnostics + metric guidance feed the next repair iteration</text>
 </svg>

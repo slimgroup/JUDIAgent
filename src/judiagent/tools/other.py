@@ -12,7 +12,6 @@ from judiagent.cli import colorscheme, print_to_console
 from judiagent.configuration import cli_mode
 from judiagent.globals import console
 
-
 # -----------------------------------------------------------------------
 # Read file
 # -----------------------------------------------------------------------

@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 __all__ = ["iterative_agent", "react_agent"]
+
+if TYPE_CHECKING:
+    from judiagent.agents.agent import iterative_agent
+    from judiagent.agents.autonomous_agent import react_agent
 
 
 def __getattr__(name: str) -> Any:

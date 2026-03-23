@@ -1,37 +1,37 @@
 <svg width="1400" height="560" viewBox="0 0 1400 560" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="1400" height="560" rx="28" fill="#F7F4EC"/>
-  <text x="700" y="66" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34" font-weight="700" fill="#2D3436">JUDIAgent Autonomous Workflow</text>
-  <text x="700" y="98" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#5C6B7A">Tool-augmented ReAct loop for open-ended JUDI assistance</text>
+  <text x="700" y="66" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="700" fill="#2D3436">JUDIAgent Autonomous Workflow</text>
+  <text x="700" y="98" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#5C6B7A">Tool-augmented ReAct loop for open-ended JUDI assistance</text>
 
   <rect x="72" y="216" width="176" height="92" rx="22" fill="#E8EEF4" stroke="#2D3436" stroke-width="2"/>
-  <text x="160" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#2D3436">User Goal</text>
-  <text x="160" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#5C6B7A">question, task, or bug</text>
+  <text x="160" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#2D3436">User Goal</text>
+  <text x="160" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">question, task, or bug</text>
 
   <rect x="320" y="186" width="224" height="150" rx="24" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="432" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#2D3436">Reason + Plan</text>
-  <text x="432" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">choose next action</text>
-  <text x="432" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">decide which tools to call</text>
-  <text x="432" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#5C6B7A">LangGraph ReAct node</text>
+  <text x="432" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#2D3436">Reason + Plan</text>
+  <text x="432" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">choose next action</text>
+  <text x="432" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">decide which tools to call</text>
+  <text x="432" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">LangGraph ReAct node</text>
 
   <rect x="616" y="120" width="234" height="112" rx="22" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="733" y="157" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#2D3436">Retrieval Tools</text>
-  <text x="733" y="186" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#2D3436">examples, docs, code search</text>
-  <text x="733" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#5C6B7A">RAG + local workspace</text>
+  <text x="733" y="157" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Retrieval Tools</text>
+  <text x="733" y="186" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">examples, docs, code search</text>
+  <text x="733" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">RAG + local workspace</text>
 
   <rect x="616" y="248" width="234" height="112" rx="22" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="733" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#2D3436">Execution Tools</text>
-  <text x="733" y="314" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#2D3436">Julia run, lint, shell, files</text>
-  <text x="733" y="336" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#5C6B7A">active environment interaction</text>
+  <text x="733" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Execution Tools</text>
+  <text x="733" y="314" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">Julia run, lint, shell, files</text>
+  <text x="733" y="336" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">active environment interaction</text>
 
   <rect x="920" y="186" width="226" height="150" rx="24" fill="#F4E8F6" stroke="#2D3436" stroke-width="2"/>
-  <text x="1033" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#2D3436">Observe + Update</text>
-  <text x="1033" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">read tool outputs</text>
-  <text x="1033" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#2D3436">decide whether to continue</text>
-  <text x="1033" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#5C6B7A">multi-step agent loop</text>
+  <text x="1033" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#2D3436">Observe + Update</text>
+  <text x="1033" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">read tool outputs</text>
+  <text x="1033" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">decide whether to continue</text>
+  <text x="1033" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">multi-step agent loop</text>
 
   <rect x="1214" y="216" width="128" height="92" rx="22" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="1278" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#2D3436">Answer</text>
-  <text x="1278" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" fill="#5C6B7A">code or guidance</text>
+  <text x="1278" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Answer</text>
+  <text x="1278" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">code or guidance</text>
 
   <path d="M248 262 L320 262" stroke="#2D3436" stroke-width="3"/>
   <polygon points="320,262 308,256 308,268" fill="#2D3436"/>
@@ -48,5 +48,5 @@
 
   <path d="M1033 336 C1033 462 528 468 432 336" stroke="#8A6F3E" stroke-width="3" stroke-dasharray="10 10" fill="none"/>
   <polygon points="432,336 438,348 446,339" fill="#8A6F3E"/>
-  <text x="760" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#8A6F3E">tool observations, failures, and new context keep the loop going until the agent is satisfied</text>
+  <text x="760" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#8A6F3E">tool observations, failures, and new context keep the loop going until the agent is satisfied</text>
 </svg>

@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from judiagent.cli import colorscheme, print_to_console
 from judiagent.core.julia_code import normalize_julia_imports, reduce_simulation_steps
-from judiagent.julia import execute_and_capture, format_runtime_error, perform_lint_analysis
+from judiagent.julia import (
+    execute_and_capture,
+    format_runtime_error,
+    perform_lint_analysis,
+)
 from judiagent.nodes.validation_models import ValidationFinding
 
 

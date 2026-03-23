@@ -18,7 +18,6 @@ Usage:
 
 from rich.console import Console
 
-
 # Shared console instance for all terminal output
 # Using a single instance ensures consistent styling and avoids conflicts
 console = Console()

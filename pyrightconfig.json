@@ -4,6 +4,11 @@
     "tests",
     "examples"
   ],
+  "exclude": [
+    "**/*.ipynb",
+    "src/judiagent/rag/judi/examples"
+  ],
+  "pythonVersion": "3.12",
   "venvPath": ".",
   "venv": ".venv",
   "extraPaths": [

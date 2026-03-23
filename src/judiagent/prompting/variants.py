@@ -4,9 +4,9 @@ from judiagent.prompting.domain_rules import (
     DEBUG_PLAYBOOK,
     GEOMETRY_RULES,
     GOLDEN_TEMPLATE,
+    JUDI_FOUNDATIONS,
     JULIA_CODING_STANDARDS,
     JULIA_SYNTAX_WARNING,
-    JUDI_FOUNDATIONS,
 )
 from judiagent.prompting.shared import (
     CRITICAL_REMINDERS,
@@ -21,7 +21,6 @@ from judiagent.prompting.workspace_rules import (
     VISUALIZATION_SECTION,
     WORKSPACE_MANAGEMENT,
 )
-
 
 ITERATIVE_DEVELOPMENT = """
 ---

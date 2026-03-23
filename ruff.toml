@@ -1,4 +1,8 @@
+exclude = [
+    "*.ipynb",
+    "src/judiagent/rag/judi/examples",
+]
+
 [lint]
 select = ["I", "F"]
 extend-select = ["I", "F"]
-

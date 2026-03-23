@@ -9,6 +9,8 @@ from langchain_core.documents import Document
 
 from judiagent.core.documents import (
     deduplicate_documents as remove_duplicate_chunks,
+)
+from judiagent.core.documents import (
     get_document_source as get_file_source,
 )
 
