@@ -1,52 +1,49 @@
-<svg width="1400" height="560" viewBox="0 0 1400 560" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1400" height="560" rx="28" fill="#F7F4EC"/>
-  <text x="700" y="66" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="700" fill="#2D3436">JUDIAgent Autonomous Workflow</text>
-  <text x="700" y="98" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#5C6B7A">Tool-augmented ReAct loop for open-ended JUDI assistance</text>
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="36" fill="#F7F3EA"/>
+  <text x="800" y="92" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1F2933">JUDIAgent Autonomous Workflow</text>
+  <text x="800" y="138" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#52606D">ReAct-style tool loop for open-ended JUDI development assistance</text>
 
-  <rect x="72" y="216" width="176" height="92" rx="22" fill="#E8EEF4" stroke="#2D3436" stroke-width="2"/>
-  <text x="160" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#2D3436">User Goal</text>
-  <text x="160" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">question, task, or bug</text>
+  <rect x="88" y="326" width="236" height="118" rx="24" fill="#E6EEF5" stroke="#243B53" stroke-width="3"/>
+  <text x="206" y="386" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#102A43">User Goal</text>
+  <text x="206" y="422" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#486581">question, task, or bug</text>
 
-  <rect x="320" y="186" width="224" height="150" rx="24" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="432" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#2D3436">Reason + Plan</text>
-  <text x="432" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">choose next action</text>
-  <text x="432" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">decide which tools to call</text>
-  <text x="432" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">LangGraph ReAct node</text>
+  <rect x="384" y="284" width="292" height="202" rx="26" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="530" y="344" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">Reason + Plan</text>
+  <text x="530" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">choose the next action</text>
+  <text x="530" y="424" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">decide which tools to call</text>
+  <text x="530" y="458" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">LangGraph ReAct node</text>
 
-  <rect x="616" y="120" width="234" height="112" rx="22" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="733" y="157" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Retrieval Tools</text>
-  <text x="733" y="186" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">examples, docs, code search</text>
-  <text x="733" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">RAG + local workspace</text>
+  <rect x="738" y="206" width="316" height="138" rx="24" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="896" y="264" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#102A43">Retrieval Tools</text>
+  <text x="896" y="306" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">examples, docs, code search</text>
 
-  <rect x="616" y="248" width="234" height="112" rx="22" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="733" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Execution Tools</text>
-  <text x="733" y="314" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">Julia run, lint, shell, files</text>
-  <text x="733" y="336" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">active environment interaction</text>
+  <rect x="738" y="390" width="316" height="138" rx="24" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="896" y="448" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#102A43">Execution Tools</text>
+  <text x="896" y="490" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">Julia, shell, files, lint</text>
 
-  <rect x="920" y="186" width="226" height="150" rx="24" fill="#F4E8F6" stroke="#2D3436" stroke-width="2"/>
-  <text x="1033" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#2D3436">Observe + Update</text>
-  <text x="1033" y="258" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">read tool outputs</text>
-  <text x="1033" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">decide whether to continue</text>
-  <text x="1033" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">multi-step agent loop</text>
+  <rect x="1120" y="284" width="298" height="202" rx="26" fill="#F2E8F5" stroke="#243B53" stroke-width="3"/>
+  <text x="1269" y="344" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">Observe + Update</text>
+  <text x="1269" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">interpret tool outputs</text>
+  <text x="1269" y="424" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">decide whether to continue</text>
+  <text x="1269" y="458" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">multi-step control loop</text>
 
-  <rect x="1214" y="216" width="128" height="92" rx="22" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="1278" y="252" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Answer</text>
-  <text x="1278" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">code or guidance</text>
+  <rect x="1220" y="618" width="98" height="88" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="1269" y="672" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">DONE</text>
 
-  <path d="M248 262 L320 262" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="320,262 308,256 308,268" fill="#2D3436"/>
-  <path d="M544 262 L616 176" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="616,176 604,180 612,188" fill="#2D3436"/>
-  <path d="M544 262 L616 304" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="616,304 604,304 610,295" fill="#2D3436"/>
-  <path d="M850 176 L920 230" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="920,230 908,229 915,220" fill="#2D3436"/>
-  <path d="M850 304 L920 292" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="920,292 909,286 911,298" fill="#2D3436"/>
-  <path d="M1146 262 L1214 262" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="1214,262 1202,256 1202,268" fill="#2D3436"/>
+  <path d="M324 385 L384 385" stroke="#243B53" stroke-width="4"/>
+  <polygon points="384,385 369,377 369,393" fill="#243B53"/>
+  <path d="M676 385 L738 275" stroke="#243B53" stroke-width="4"/>
+  <polygon points="738,275 725,280 733,291" fill="#243B53"/>
+  <path d="M676 385 L738 459" stroke="#243B53" stroke-width="4"/>
+  <polygon points="738,459 724,455 731,444" fill="#243B53"/>
+  <path d="M1054 275 L1120 346" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1120,346 1106,341 1118,332" fill="#243B53"/>
+  <path d="M1054 459 L1120 424" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1120,424 1104,423 1111,436" fill="#243B53"/>
+  <path d="M1269 486 L1269 618" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1269,618 1261,603 1277,603" fill="#243B53"/>
+  <path d="M1180 526 C1098 670 748 706 592 538" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
+  <polygon points="592,538 598,553 609,543" fill="#B26A00"/>
 
-  <path d="M1033 336 C1033 462 528 468 432 336" stroke="#8A6F3E" stroke-width="3" stroke-dasharray="10 10" fill="none"/>
-  <polygon points="432,336 438,348 446,339" fill="#8A6F3E"/>
-  <text x="760" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#8A6F3E">tool observations, failures, and new context keep the loop going until the agent is satisfied</text>
+  <text x="800" y="790" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#7C5E10">Tool observations and failures feed back into reasoning until the agent decides the task is complete.</text>
 </svg>

@@ -1,56 +1,51 @@
-<svg width="1400" height="560" viewBox="0 0 1400 560" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1400" height="560" rx="28" fill="#F7F4EC"/>
-  <text x="700" y="66" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="700" fill="#2D3436">JUDIAgent Standard Workflow</text>
-  <text x="700" y="98" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#5C6B7A">Dual-stage scientific coding loop for focused JUDI tasks</text>
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" rx="36" fill="#F7F3EA"/>
+  <text x="800" y="92" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1F2933">JUDIAgent Standard Workflow</text>
+  <text x="800" y="138" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#52606D">Iterative coding loop with correctness and domain-specific review</text>
 
-  <rect x="66" y="216" width="170" height="92" rx="22" fill="#E8EEF4" stroke="#2D3436" stroke-width="2"/>
-  <text x="151" y="254" text-anchor="middle" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#2D3436">User Query</text>
-  <text x="151" y="284" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">JUDI coding request</text>
+  <rect x="90" y="258" width="238" height="118" rx="24" fill="#E6EEF5" stroke="#243B53" stroke-width="3"/>
+  <text x="209" y="318" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#102A43">User Query</text>
+  <text x="209" y="354" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#486581">JUDI task or debugging goal</text>
 
-  <rect x="304" y="188" width="222" height="148" rx="24" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="415" y="226" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">Retrieve + Plan</text>
-  <text x="415" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">JUDI docs and examples</text>
-  <text x="415" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">task decomposition</text>
-  <text x="415" y="312" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">RAG + workspace context</text>
+  <rect x="392" y="216" width="298" height="202" rx="26" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="541" y="276" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">Retrieve + Plan</text>
+  <text x="541" y="322" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">JUDI docs and examples</text>
+  <text x="541" y="356" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">workspace context</text>
+  <text x="541" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">task decomposition</text>
 
-  <rect x="596" y="188" width="222" height="148" rx="24" fill="#E8EEF4" stroke="#2D3436" stroke-width="2"/>
-  <text x="707" y="226" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">Generate Code</text>
-  <text x="707" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">Julia synthesis</text>
-  <text x="707" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#2D3436">imports + workflow logic</text>
-  <text x="707" y="312" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#5C6B7A">iterative repair target</text>
+  <rect x="754" y="216" width="298" height="202" rx="26" fill="#E9EEF8" stroke="#243B53" stroke-width="3"/>
+  <text x="903" y="276" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">Generate Code</text>
+  <text x="903" y="322" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">Julia synthesis</text>
+  <text x="903" y="356" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">imports and workflow logic</text>
+  <text x="903" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">candidate repair target</text>
 
-  <rect x="888" y="136" width="212" height="102" rx="24" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="994" y="173" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Correctness Gate</text>
-  <text x="994" y="203" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">lint + runtime execution</text>
+  <rect x="1124" y="178" width="306" height="142" rx="26" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="1277" y="238" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#102A43">Correctness Gate</text>
+  <text x="1277" y="282" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">lint + runtime validation</text>
 
-  <rect x="888" y="262" width="212" height="102" rx="24" fill="#F4E8F6" stroke="#2D3436" stroke-width="2"/>
-  <text x="994" y="299" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2D3436">Domain Review</text>
-  <text x="994" y="329" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">scientific completeness</text>
-  <text x="994" y="349" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#5C6B7A">task-specific metric hints</text>
+  <rect x="1124" y="358" width="306" height="158" rx="26" fill="#F2E8F5" stroke="#243B53" stroke-width="3"/>
+  <text x="1277" y="418" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#102A43">Domain Review</text>
+  <text x="1277" y="462" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">workflow completeness</text>
+  <text x="1277" y="496" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">task-aware metric guidance</text>
 
-  <path d="M1186 226 L1240 226 L1240 171 L1296 171" stroke="#2D3436" stroke-width="3" fill="none"/>
-  <polygon points="1296,171 1284,165 1284,177" fill="#2D3436"/>
-  <path d="M1186 314 L1240 314 L1240 369 L1296 369" stroke="#2D3436" stroke-width="3" fill="none"/>
-  <polygon points="1296,369 1284,363 1284,375" fill="#2D3436"/>
+  <rect x="1224" y="612" width="108" height="90" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="1278" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#102A43">PASS</text>
 
-  <rect x="1302" y="126" width="56" height="56" rx="14" fill="#E8F4EE" stroke="#2D3436" stroke-width="2"/>
-  <text x="1330" y="162" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">✓</text>
-  <text x="1330" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">accept</text>
+  <rect x="1012" y="612" width="148" height="90" rx="20" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="1086" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">REFINE</text>
 
-  <rect x="1302" y="324" width="56" height="56" rx="14" fill="#FBE6D4" stroke="#2D3436" stroke-width="2"/>
-  <text x="1330" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#2D3436">↺</text>
-  <text x="1330" y="403" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#2D3436">refine</text>
+  <path d="M328 317 L392 317" stroke="#243B53" stroke-width="4"/>
+  <polygon points="392,317 377,309 377,325" fill="#243B53"/>
+  <path d="M690 317 L754 317" stroke="#243B53" stroke-width="4"/>
+  <polygon points="754,317 739,309 739,325" fill="#243B53"/>
+  <path d="M1052 317 L1124 250" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1124,250 1110,252 1118,264" fill="#243B53"/>
+  <path d="M1052 317 L1124 437" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1124,437 1112,428 1108,441" fill="#243B53"/>
+  <path d="M1277 516 L1277 612" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1277,612 1269,597 1285,597" fill="#243B53"/>
+  <path d="M1124 437 C1038 462 980 520 980 612 L1086 612" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
+  <polygon points="1086,612 1071,604 1071,620" fill="#B26A00"/>
 
-  <path d="M236 262 L304 262" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="304,262 292,256 292,268" fill="#2D3436"/>
-  <path d="M526 262 L596 262" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="596,262 584,256 584,268" fill="#2D3436"/>
-  <path d="M818 262 L888 187" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="888,187 877,190 885,198" fill="#2D3436"/>
-  <path d="M818 262 L888 313" stroke="#2D3436" stroke-width="3"/>
-  <polygon points="888,313 876,312 883,303" fill="#2D3436"/>
-
-  <path d="M1328 408 C1328 474 1120 506 860 506 C640 506 454 488 454 420" stroke="#8A6F3E" stroke-width="3" stroke-dasharray="10 10" fill="none"/>
-  <polygon points="454,420 461,432 468,422" fill="#8A6F3E"/>
-  <text x="876" y="536" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#8A6F3E">diagnostics + metric guidance feed the next repair iteration</text>
+  <text x="800" y="790" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#7C5E10">Failed validation returns targeted diagnostics and metric hints to the next repair iteration.</text>
 </svg>
