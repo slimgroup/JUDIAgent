@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 from judiagent.configuration import DomainValidation
 from judiagent.nodes.validation_quality import (
     run_domain_validation,
@@ -30,7 +32,8 @@ def test_domain_validation_reports_missing_scientific_elements():
 
     assert finding is not None
     assert finding.stage == "domain_quality"
-    assert finding.metadata["score"] < 0.8
+    score = cast(float, finding.metadata["score"])
+    assert score < 0.8
 
 
 
@@ -65,5 +68,6 @@ def test_domain_validation_uses_task_specific_metric_guidance():
     finding = run_domain_validation(code, settings)
 
     assert finding is not None
-    assert "image_residual_norm" in finding.metadata["recommended_metrics"]
-    assert "illumination_balance" in finding.metadata["recommended_metrics"]
+    recommended = cast(list[Any], finding.metadata["recommended_metrics"])
+    assert "image_residual_norm" in recommended
+    assert "illumination_balance" in recommended

@@ -1,13 +1,23 @@
+from typing import Any, cast
+
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 
 from judiagent.core.history import compact_message_history, strip_orphaned_tool_messages
 from judiagent.core.models import resolve_provider_and_model
 
 
+class _FallbackModel:
+    """Minimal stand-in that forces compact_message_history onto its fallback path."""
+
+    pass
+
+
+
 def test_resolve_provider_and_model_supports_provider_model_strings():
     provider, model = resolve_provider_and_model("ollama:qwen3:14b")
     assert provider == "ollama"
     assert model == "qwen3:14b"
+
 
 
 def test_strip_orphaned_tool_messages_removes_leading_unpaired_tool_messages():
@@ -18,6 +28,7 @@ def test_strip_orphaned_tool_messages_removes_leading_unpaired_tool_messages():
     cleaned = strip_orphaned_tool_messages(messages)
     assert len(cleaned) == 1
     assert isinstance(cleaned[0], HumanMessage)
+
 
 
 def test_compact_message_history_falls_back_when_model_cannot_count_tokens():
@@ -33,7 +44,7 @@ def test_compact_message_history_falls_back_when_model_cannot_count_tokens():
 
     trimmed = compact_message_history(
         messages,
-        model=object(),  # Forces the fallback token counter path.
+        model=cast(Any, _FallbackModel()),
         max_tokens=400,
         drop_orphaned_tool_messages=False,
     )
