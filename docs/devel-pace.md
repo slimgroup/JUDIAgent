@@ -84,8 +84,10 @@ On an interactive compute node, you can then do the first Julia setup and any re
 
 ```bash
 module load julia/1.11.3
-julia --project=. -e 'import Pkg; Pkg.instantiate()'
-uv run examples/agent.py
+export JUDIAgent_PACE_SHARED_DEPOT=off
+source env/pace-local.sh
+julia --project=. -e 'import Pkg; Pkg.Registry.update(); Pkg.instantiate()'
+./.venv/bin/python examples/agent.py
 ```
 
 For a smoke check of entrypoints without a long agent loop, rely on tests under `tests/` first; use full `examples/agent.py` when you intentionally spend time/API quota on an interactive node or approved session.

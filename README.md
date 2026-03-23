@@ -67,9 +67,11 @@ salloc ...
 srun --pty bash
 cd /path/to/JUDIAgent
 source .venv/bin/activate
+export JUDIAgent_PACE_SHARED_DEPOT=off
 source env/pace-local.sh
 module load julia/1.11.3
-julia --project=. -e 'import Pkg; Pkg.instantiate()'
+julia --project=. -e 'import Pkg; Pkg.Registry.update(); Pkg.instantiate()'
+./.venv/bin/python examples/agent.py
 ```
 
 Notes:
@@ -128,7 +130,7 @@ The Julia project should be initialized from the repository root:
 julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
 
-This installs the Julia packages from `Project.toml`. In this repository, JUDI may also trigger CondaPkg-managed Python-side dependencies. On PACE, `env/pace-local.sh` stores them in `~/condapkg-env-judiagent` and uses a dedicated `~/julia-depot-judiagent` layered over `~/julia-depot` when available.
+This installs the Julia packages from `Project.toml`. In this repository, JUDI may also trigger CondaPkg-managed Python-side dependencies. On PACE, `env/pace-local.sh` stores them in `~/condapkg-env-judiagent` and uses a dedicated `~/julia-depot-judiagent`. If an old shared depot causes registry conflicts, set `JUDIAgent_PACE_SHARED_DEPOT=off` before sourcing the helper.
 
 On a desktop or workstation, running this directly is fine. On PACE or another shared cluster, do the first heavy Julia/JUDI initialization on an interactive compute node rather than on the login node.
 
@@ -161,13 +163,13 @@ For a low-cost smoke check:
 For the standard agent:
 
 ```bash
-uv run examples/agent.py
+./.venv/bin/python examples/agent.py
 ```
 
 For the autonomous agent:
 
 ```bash
-uv run examples/autonomous_agent.py
+./.venv/bin/python examples/autonomous_agent.py
 ```
 
 On PACE or another shared cluster, prefer running the full agent on an interactive compute allocation rather than on the login node. The login node should mainly be used for editing, syncing, and low-cost smoke checks.
@@ -183,7 +185,7 @@ The standard agent follows a staged scientific coding workflow where code is fir
 ![Iterative workflow](media/iterative_workflow.svg "Iterative workflow")
 
 ```bash
-uv run examples/agent.py
+./.venv/bin/python examples/agent.py
 ```
 
 ### Autonomous Agent
@@ -193,7 +195,7 @@ The autonomous agent has extended tool access and can interact with the environm
 ![Autonomous workflow](media/react_workflow.svg "Autonomous workflow")
 
 ```bash
-uv run examples/autonomous_agent.py
+./.venv/bin/python examples/autonomous_agent.py
 ```
 
 ## Configuration

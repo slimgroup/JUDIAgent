@@ -16,3 +16,8 @@ This figure should be used for the paper's main workflow diagram of the iterativ
 ## Why this figure matters
 
 This is the clearest visual summary of the paper's central contribution. If you only keep one workflow figure in the main paper, this should probably be it.
+
+
+## Asset note
+
+Use the newer `paper_*.svg` files in this folder for the paper. The older PNG files are legacy exports kept for reference only.

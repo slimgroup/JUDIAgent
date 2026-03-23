@@ -16,3 +16,8 @@ The old experimental-design loop should be reframed. The current codebase is bet
 ## Recommended caption
 
 **Figure Z.** Domain-guided seismic workflow loop. JUDIAgent does not merely execute generated Julia. It evaluates whether the workflow contains the scientific ingredients expected for modeling, migration, or inversion, and returns metric-aware guidance for iterative refinement.
+
+
+## Asset note
+
+Use the newer `paper_*.svg` files in this folder for the paper. The older PNG files are legacy exports kept for reference only.

@@ -27,8 +27,8 @@
   <text x="1280" y="432" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#243B53">decide whether to continue</text>
   <text x="1280" y="470" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#486581">multi-step control loop</text>
 
-  <rect x="1230" y="634" width="108" height="88" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
-  <text x="1284" y="688" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">DONE</text>
+  <rect x="1224" y="628" width="122" height="94" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="1285" y="686" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#102A43">DONE</text>
 
   <path d="M324 385 L384 385" stroke="#243B53" stroke-width="4"/>
   <polygon points="384,385 369,377 369,393" fill="#243B53"/>
@@ -40,8 +40,8 @@
   <polygon points="1110,338 1096,336 1106,327" fill="#243B53"/>
   <path d="M1054 459 L1110 432" stroke="#243B53" stroke-width="4"/>
   <polygon points="1110,432 1094,430 1102,442" fill="#243B53"/>
-  <path d="M1280 502 L1280 634" stroke="#243B53" stroke-width="4"/>
-  <polygon points="1280,634 1272,619 1288,619" fill="#243B53"/>
+  <path d="M1280 502 L1280 628" stroke="#243B53" stroke-width="4"/>
+  <polygon points="1280,628 1272,613 1288,613" fill="#243B53"/>
   <path d="M1190 542 C1090 700 760 726 602 552" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
   <polygon points="602,552 608,567 619,557" fill="#B26A00"/>
 

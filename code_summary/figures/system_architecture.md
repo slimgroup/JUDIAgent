@@ -29,3 +29,8 @@ The architecture story should be presented as a layered system rather than as a 
 ## Recommended caption
 
 **Figure Y.** JUDIAgent system architecture. The framework combines a LangGraph-based agent layer with retrieval, correctness validation, domain-aware workflow validation, and a Julia bridge to JUDI.jl. The architecture supports both a strict iterative coding path and a more open-ended ReAct-style tool path.
+
+
+## Asset note
+
+Use the newer `paper_*.svg` files in this folder for the paper. The older PNG files are legacy exports kept for reference only.

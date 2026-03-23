@@ -31,8 +31,8 @@
   <rect x="1224" y="612" width="108" height="90" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
   <text x="1278" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#102A43">PASS</text>
 
-  <rect x="1012" y="612" width="148" height="90" rx="20" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
-  <text x="1086" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#102A43">REFINE</text>
+  <rect x="984" y="612" width="196" height="90" rx="20" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="1082" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#102A43">REFINE</text>
 
   <path d="M328 317 L392 317" stroke="#243B53" stroke-width="4"/>
   <polygon points="392,317 377,309 377,325" fill="#243B53"/>
@@ -44,8 +44,8 @@
   <polygon points="1124,437 1112,428 1108,441" fill="#243B53"/>
   <path d="M1277 516 L1277 612" stroke="#243B53" stroke-width="4"/>
   <polygon points="1277,612 1269,597 1285,597" fill="#243B53"/>
-  <path d="M1124 437 C1038 462 980 520 980 612 L1086 612" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
-  <polygon points="1086,612 1071,604 1071,620" fill="#B26A00"/>
+  <path d="M1124 437 C1060 470 1008 516 1000 560 C994 592 1018 612 1062 612" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
+  <polygon points="1062,612 1048,603 1048,621" fill="#B26A00"/>
 
   <text x="800" y="790" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#7C5E10">Failed validation returns targeted diagnostics and metric hints to the next repair iteration.</text>
 </svg>
