@@ -2,5 +2,6 @@
   "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
   "python.terminal.activateEnvironment": true,
   "python.analysis.venvPath": "${workspaceFolder}",
-  "python.analysis.venv": ".venv"
+  "python.analysis.venv": ".venv",
+  "remote.autoForwardPortsFallback": 0
 }
