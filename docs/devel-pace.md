@@ -44,7 +44,7 @@ For this repository, you can also keep Julia and uv state local to the clone by 
 source env/pace-local.sh
 ```
 
-That helper keeps the Julia depot in `.julia-depot/`, the CondaPkg environment in `.condapkg-env/`, and the uv cache in `.uv-cache/` under the repository root, which is useful when JUDI pulls Python-side dependencies through CondaPkg.
+That helper uses a dedicated persistent depot at `~/julia-depot-judiagent`, reuses `~/julia-depot` as a fallback layer when it exists, keeps the JUDIAgent CondaPkg environment at `~/condapkg-env-judiagent`, and leaves the uv cache in `.uv-cache/`. This keeps JUDI isolated without throwing away reusable Julia packages you already have.
 
 Recommended split:
 

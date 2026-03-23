@@ -74,7 +74,7 @@ julia --project=. -e 'import Pkg; Pkg.instantiate()'
 
 Notes:
 
-- `env/pace-local.sh` keeps Julia packages in `.julia-depot/`, the CondaPkg environment in `.condapkg-env/`, and uv downloads in `.uv-cache/` inside the repository clone.
+- `env/pace-local.sh` uses a dedicated persistent depot at `~/julia-depot-judiagent`, reuses `~/julia-depot` as a fallback layer when present, keeps the JUDIAgent CondaPkg environment at `~/condapkg-env-judiagent`, and still stores uv downloads in `.uv-cache/`.
 - This is useful on shared systems where home-directory quota is limited or where you want all JUDI-related state to stay with the clone.
 - Avoid running the first heavy `Pkg.instantiate()` or large `Pkg.precompile()` pass on the login node; that work belongs on an interactive compute node.
 
@@ -128,7 +128,7 @@ The Julia project should be initialized from the repository root:
 julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
 
-This installs the Julia packages from `Project.toml`. In this repository, JUDI may also trigger CondaPkg-managed Python-side dependencies, which are stored in `.condapkg-env/` when you source one of the local env helper scripts.
+This installs the Julia packages from `Project.toml`. In this repository, JUDI may also trigger CondaPkg-managed Python-side dependencies. On PACE, `env/pace-local.sh` stores them in `~/condapkg-env-judiagent` and uses a dedicated `~/julia-depot-judiagent` layered over `~/julia-depot` when available.
 
 On a desktop or workstation, running this directly is fine. On PACE or another shared cluster, do the first heavy Julia/JUDI initialization on an interactive compute node rather than on the login node.
 
