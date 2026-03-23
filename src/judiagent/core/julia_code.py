@@ -6,7 +6,6 @@ import re
 
 from judiagent.state import JuliaCodeBlock
 
-
 _JULIA_FENCE_RE = re.compile(r"```julia\s*([\s\S]*?)```", re.IGNORECASE)
 
 
@@ -137,7 +136,7 @@ def _shorten_first_positional(code: str, target_fns: list[str]) -> str:
     for function_name in target_fns:
         pattern = rf"({function_name}\s*\()\s*([^,)\s]+)(.*?\))"
 
-        def _replace(match: re.Match) -> str:
+        def _replace(match: re.Match[str]) -> str:
             return f"{match.group(1)}{match.group(2)}[1:1]{match.group(3)}"
 
         code = re.sub(pattern, _replace, code, flags=re.DOTALL)
@@ -149,7 +148,7 @@ def _narrow_named_arg(code: str, arg_name: str, target_fns: list[str]) -> str:
     for function_name in target_fns:
         pattern = rf"({function_name}\s*\(.*?)(\b{arg_name}\b)(.*?\))"
 
-        def _replace(match: re.Match) -> str:
+        def _replace(match: re.Match[str]) -> str:
             return f"{match.group(1)}{arg_name}[1:1]{match.group(3)}"
 
         code = re.sub(pattern, _replace, code, flags=re.DOTALL)

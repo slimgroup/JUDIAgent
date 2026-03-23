@@ -4,20 +4,20 @@ from __future__ import annotations
 
 import subprocess
 from functools import partial
-from typing import Annotated, List, Optional
+from typing import Annotated, cast
 
+from langchain_core.documents import Document
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import BaseTool, InjectedToolArg, tool
 from pydantic import BaseModel, Field
 
 import judiagent.rag.retrieval as retrieval
-from judiagent.rag.catalog import RAG_CATALOG
-from judiagent.rag.chunking.examples import format_example_chunk, format_example_context
 from judiagent.cli import colorscheme, print_to_console
 from judiagent.configuration import PROJECT_ROOT, BaseConfiguration, cli_mode
 from judiagent.core.documents import get_document_source
 from judiagent.julia import fetch_docstrings_for_functions
-
+from judiagent.rag.catalog import RAG_CATALOG
+from judiagent.rag.chunking.examples import format_example_chunk, format_example_context
 
 # -----------------------------------------------------------------------
 # Generic RAG tool factory
@@ -27,7 +27,7 @@ def _build_retrieval_tool(
     tool_name: str,
     doc_key: str,
     doc_label: str,
-    input_schema: type,
+    input_schema: type[BaseModel],
 ) -> BaseTool:
     """
     Factory that creates a domain-specific RAG retrieval tool.
@@ -70,10 +70,10 @@ def _build_retrieval_tool(
                 search_kwargs=configuration.examples_search_kwargs,
             ),
         ) as rag_retriever:
-            retrieved = rag_retriever.invoke(query)
+            retrieved = cast(list[Document], rag_retriever.invoke(query))
 
         if configuration.human_interaction.retrieved_examples:
-            def _section_path(doc):
+            def _section_path(doc: Document) -> str:
                 heading = doc.metadata.get("heading", "")
                 return heading if heading else get_document_source(doc)
 
@@ -111,10 +111,6 @@ class JudiQueryInput(BaseModel):
     query: str = Field(description="Semantic query for JUDI.jl examples and docs.")
 
 
-class FimbulQueryInput(BaseModel):
-    query: str = Field(description="Semantic query for Fimbul documentation.")
-
-
 search_judi_examples = _build_retrieval_tool(
     tool_name="search_judi_examples",
     doc_key="judi",
@@ -122,20 +118,12 @@ search_judi_examples = _build_retrieval_tool(
     input_schema=JudiQueryInput,
 )
 
-search_fimbul_docs = _build_retrieval_tool(
-    tool_name="search_fimbul_docs",
-    doc_key="fimbul",
-    doc_label="Fimbul",
-    input_schema=FimbulQueryInput,
-)
-
-
 # -----------------------------------------------------------------------
 # Function documentation lookup
 # -----------------------------------------------------------------------
 
 class FunctionDocInput(BaseModel):
-    function_names: List[str] = Field(
+    function_names: list[str] = Field(
         description="Julia function names whose docstrings should be retrieved."
     )
 
@@ -146,9 +134,10 @@ class FunctionDocInput(BaseModel):
     args_schema=FunctionDocInput,
 )
 def lookup_function_docs(
-    function_names: List[str],
+    function_names: list[str],
     config: Annotated[RunnableConfig, InjectedToolArg],
 ) -> str:
+    _ = config
     _, docstrings = fetch_docstrings_for_functions(func_names=function_names)
     return docstrings or "No documentation found for the given function names."
 
@@ -161,11 +150,11 @@ class CodeSearchInput(BaseModel):
     query: str = Field(
         description="Keyword or regex pattern to search for in files."
     )
-    file_pattern: Optional[str] = Field(
+    file_pattern: str | None = Field(
         default=None,
         description="Optional glob pattern to restrict the search (e.g. '*.jl').",
     )
-    use_regex: Optional[bool] = Field(
+    use_regex: bool | None = Field(
         default=False,
         description="Treat the query as a regex pattern.",
     )
@@ -181,8 +170,8 @@ class CodeSearchInput(BaseModel):
 )
 def search_codebase(
     query: str,
-    file_pattern: Optional[str] = None,
-    use_regex: Optional[bool] = False,
+    file_pattern: str | None = None,
+    use_regex: bool | None = False,
 ) -> str:
     try:
         search_root = str(PROJECT_ROOT / "rag" / "judi")
@@ -207,10 +196,7 @@ def search_codebase(
                 else:
                     results.append(line)
 
-            display = (
-                f"Found {len(results)} matches:\n\n"
-                "```text\n" + "\n\n".join(results) + "\n```"
-            )
+            display = f"Found {len(results)} matches:\n\n" + "```text\n" + "\n\n".join(results) + "\n```"
             print_to_console(
                 text=display[:500] + "...",
                 title=f"Search: {query}",

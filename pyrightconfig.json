@@ -1,7 +1,22 @@
 {
-  "include": ["src", "tests", "examples"],
+  "include": [
+    "src",
+    "tests",
+    "examples"
+  ],
   "venvPath": ".",
   "venv": ".venv",
-  "extraPaths": ["src"],
-  "reportMissingTypeStubs": "none"
+  "extraPaths": [
+    "src"
+  ],
+  "reportMissingTypeStubs": "none",
+  "typeCheckingMode": "standard",
+  "reportAny": "none",
+  "reportExplicitAny": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownParameterType": "none",
+  "reportUnknownVariableType": "none",
+  "reportUnusedCallResult": "none",
+  "reportUnusedFunction": "none"
 }

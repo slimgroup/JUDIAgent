@@ -9,12 +9,12 @@ from judiagent.cli import colorscheme, print_to_console
 from judiagent.configuration import BaseConfiguration, cli_mode
 from judiagent.core.julia_code import parse_julia_code_block, wrap_julia_fence
 from judiagent.nodes.validation_models import ValidationConversation
+from judiagent.nodes.validation_quality import run_domain_validation
 from judiagent.nodes.validation_review import (
     PreValidationDecision,
     request_post_validation_review,
     request_pre_validation_review,
 )
-from judiagent.nodes.validation_quality import run_domain_validation
 from judiagent.nodes.validation_runtime import (
     prepare_validation_code,
     run_runtime_validation,
@@ -120,8 +120,7 @@ def verify_code_output(
         conversation.messages.append(
             HumanMessage(
                 content=(
-                    "The code was manually edited to the following. "
-                    "This version will be validated:\n"
+                    "The code was manually edited to the following. This version will be validated:\n"
                     + wrap_julia_fence(conversation.working_code)
                 )
             )

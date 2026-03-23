@@ -1,4 +1,5 @@
 from judiagent.nodes.validation_metrics import (
+    format_metric_plan,
     get_task_metric_plan,
     infer_workflow_family,
     recommend_metrics,
@@ -31,3 +32,9 @@ def test_task_id_overrides_text_in_metric_recommendation():
     names = {metric.name for metric in metrics}
     assert "image_residual_norm" in names
     assert "illumination_balance" in names
+
+
+def test_format_metric_plan_includes_headline_and_metric_names():
+    formatted = format_metric_plan(task_id="fwi_basic")
+    assert "optimization-progress metrics" in formatted
+    assert "objective_decrease" in formatted

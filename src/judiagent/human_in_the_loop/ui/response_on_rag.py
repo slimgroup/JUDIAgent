@@ -1,4 +1,6 @@
-from typing import Callable, List
+from __future__ import annotations
+
+from typing import Callable
 
 from langchain_core.documents import Document
 from langgraph.prebuilt.interrupt import (
@@ -13,56 +15,33 @@ from judiagent.rag.utils import modify_doc_content
 
 
 def response_on_rag(
-    docs: List[Document],
+    docs: list[Document],
     get_file_source: Callable,
     get_section_path: Callable,
     format_doc: Callable,
-    action_name: str = "Modify",
-):
-    """
-    Presents retrieved RAG documents to the user for optional modification before sending them as LLM context.
-
-    This function enables a human-in-the-loop workflow, allowing the user to review and edit the content of each document.
-    If the user deletes all content for a document, that document is removed from the list. The function supports custom
-    formatting and section/file labeling for each document.
-
-    Args:
-        docs (List[Document]): List of documents retrieved by the RAG system.
-        get_file_source (Callable): Function to get the file source of a document (for UI display).
-        get_section_path (Callable): Function to get the section path of a document (for UI display).
-        format_doc (Callable): Function to format a document for display in the UI.
-        action_name (str, optional): Name of the action to be displayed in the UI. Defaults to "Modify".
-
-    Returns:
-        List[Document]: The list of documents after potential modifications by the user. Documents with empty content are removed.
-    """
+    action_name: str = "Review retrieved context",
+) -> list[Document]:
+    """Allow the UI to review, edit, or reject retrieved RAG context."""
     if not docs:
-        return docs  # Nothing to do if no documents
+        return docs
 
-    action_request_args = {}
-    arg_names = []
+    action_request_args: dict[str, str] = {}
+    arg_names: list[str] = []
 
-    # Build the arguments for the UI, ensuring unique names for each document
-    for _, doc in enumerate(docs):
+    for doc in docs:
         section_path = get_section_path(doc)
         file_source = get_file_source(doc)
         arg_name = f"{file_source} - {section_path}"
-        # Ensure arg_name is unique by appending a suffix if needed
         original_arg_name = arg_name
         suffix = 1
         while arg_name in action_request_args:
             arg_name = f"{original_arg_name} ({suffix})"
             suffix += 1
         arg_names.append(arg_name)
-        content = format_doc(doc)
-        action_request_args[arg_name] = content
+        action_request_args[arg_name] = format_doc(doc)
 
-    # Prepare the human-in-the-loop UI request
-    request = HumanInterrupt(  # type: ignore
-        action_request=ActionRequest(
-            action=action_name,
-            args=action_request_args,
-        ),
+    request = HumanInterrupt(  # type: ignore[arg-type]
+        action_request=ActionRequest(action=action_name, args=action_request_args),
         config=HumanInterruptConfig(
             allow_ignore=True,
             allow_accept=True,
@@ -71,42 +50,20 @@ def response_on_rag(
         ),
     )
 
-    # Wait for the user's response from the UI
     human_response: HumanResponse = interrupt([request])[0]
     response_type = human_response.get("type")
-    # if response_type == "edit":
-    #     # User edited one or more documents
-    #     args_dics = human_response.get("args", {}).get("args", {})
-    #     for arg_name, new_content in args_dics.items():
-    #         if not new_content or not new_content.strip():
-    #             # Remove the document if new_content is empty or only whitespace
-    #             docs.pop(arg_names.index(arg_name))
-    #             arg_names.pop(arg_names.index(arg_name))
-    #             continue
-    #         # Update the document with the new content
-    #         doc = docs[arg_names.index(arg_name)]
-    #         docs[arg_names.index(arg_name)] = modify_doc_content(doc, new_content)
+
     if response_type == "edit":
-        # User edited one or more documents
-        args_dics = human_response.get("args", {}) or {}  # type: ignore[union-attr]
-        args_dics = args_dics.get("args", {}) if isinstance(args_dics, dict) else {}
-        new_docs = []
-        for i, (arg_name, doc) in enumerate(zip(arg_names, docs)):
-            new_content = args_dics.get(arg_name, None)
+        args_dict = human_response.get("args", {}) or {}
+        args_dict = args_dict.get("args", {}) if isinstance(args_dict, dict) else {}
+        new_docs: list[Document] = []
+        for arg_name, doc in zip(arg_names, docs):
+            new_content = args_dict.get(arg_name)
             if new_content and new_content.strip():
-                # Keep and update the document if content is not empty/whitespace
                 new_docs.append(modify_doc_content(doc, new_content))
-            # else: skip (remove) the doc
-        docs = new_docs
-
-    elif response_type == "accept":
-        # If accepted, no changes to documents
-        pass
-    elif response_type == "ignore":
-        # If ignores, all retrieved documents are removed
-        docs = []
-    else:
-        # Unexpected response type
-        raise TypeError(f"Interrupt value of type {response_type} is not supported.")
-
-    return docs
+        return new_docs
+    if response_type == "accept":
+        return docs
+    if response_type == "ignore":
+        return []
+    raise TypeError(f"Interrupt value of type {response_type} is not supported.")

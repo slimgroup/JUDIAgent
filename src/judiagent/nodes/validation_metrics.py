@@ -111,3 +111,17 @@ def recommend_metrics(text: str, task_id: str = "") -> tuple[MetricRecommendatio
     if workflow is None:
         return ()
     return METRIC_CATALOG.get(workflow, ())
+
+
+def format_metric_plan(task_id: str = "", text_hint: str = "") -> str:
+    """Return a compact, paper-friendly description of the metric bundle."""
+    plan = get_task_metric_plan(task_id) if task_id else None
+    metrics = plan.metrics if plan is not None else recommend_metrics(text_hint, task_id=task_id)
+    if not metrics:
+        return ""
+
+    headline = plan.headline if plan is not None else "Use lightweight task-aware metrics to assess scientific quality."
+    lines = [headline]
+    for metric in metrics:
+        lines.append(f"- {metric.name}: {metric.rationale}")
+    return "\n".join(lines)

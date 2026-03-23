@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from langgraph.prebuilt.interrupt import (
     ActionRequest,
     HumanInterrupt,
@@ -8,16 +10,13 @@ from langgraph.types import interrupt
 
 
 def response_on_file_write(file_path: str) -> tuple[bool, str]:
-    """
-    Returns:
-        bool: True if user wants to write to file
-        str: Potentially a new filename
-    """
-
-    # Prepare the human-in-the-loop UI request
-    request = HumanInterrupt(  # type: ignore
+    """Ask whether JUDIAgent may overwrite or rename an output file."""
+    request = HumanInterrupt(  # type: ignore[arg-type]
         action_request=ActionRequest(
-            action="Agents tries to write to a file, but the filepath already exists. Accept to overwrite, ignore to skip writing, and edit to specify a new path.",
+            action=(
+                "JUDIAgent wants to write a file, but the path already exists. "
+                "Accept to overwrite it, ignore to skip writing, or edit to provide a new path."
+            ),
             args={"Filepath": file_path},
         ),
         config=HumanInterruptConfig(
@@ -28,23 +27,15 @@ def response_on_file_write(file_path: str) -> tuple[bool, str]:
         ),
     )
 
-    # Wait for the user's response from the UI
     human_response: HumanResponse = interrupt([request])[0]
     response_type = human_response.get("type")
 
     if response_type == "accept":
         return True, file_path
-
-    elif response_type == "edit":
-        args_dics = human_response.get("args", {}) or {}  # type: ignore[union-attr]
-        args_dics = args_dics.get("args", {}) if isinstance(args_dics, dict) else {}
-
-        # Get the updated code
-        file_path = args_dics.get("Filepath", file_path)
-
-        return True, file_path
-
-    elif response_type == "ignore":
+    if response_type == "edit":
+        args_dict = human_response.get("args", {}) or {}
+        args_dict = args_dict.get("args", {}) if isinstance(args_dict, dict) else {}
+        return True, args_dict.get("Filepath", file_path)
+    if response_type == "ignore":
         return False, file_path
-    else:
-        raise TypeError(f"Interrupt value of type {response_type} is not supported.")
+    raise TypeError(f"Interrupt value of type {response_type} is not supported.")

@@ -10,7 +10,7 @@ larger LLMs and open-ended / Copilot-style interactions.
 
 from __future__ import annotations
 
-from typing import Any, Callable, Optional, Sequence, Union
+from typing import Any, Callable, Sequence, Union
 
 from langchain_core.language_models import LanguageModelLike
 from langchain_core.messages import AIMessage
@@ -25,17 +25,19 @@ from judiagent.core.julia_code import parse_julia_code_block
 from judiagent.core.messages import get_message_text
 from judiagent.state import AgentState, MCPInputState, MCPOutputState
 from judiagent.tools import (
+    execute_julia_snippet,
     execute_shell_command,
     fetch_working_directory,
-    search_codebase,
-    list_files_in_directory,
-    read_from_file,
-    lookup_function_docs,
-    search_judi_examples,
-    execute_julia_snippet,
     lint_julia_code,
+    list_files_in_directory,
+    lookup_function_docs,
+    read_from_file,
+    search_codebase,
+    search_judi_examples,
     write_to_file,
 )
+
+
 class ReActAgent(AgentCore):
     """
     Tool-augmented autonomous agent following a ReAct (Reason + Act) loop.
@@ -47,9 +49,7 @@ class ReActAgent(AgentCore):
 
     def __init__(
         self,
-        tools: Optional[
-            Union[Sequence[Union[BaseTool, Callable, dict[str, Any]]], ToolNode]
-        ] = None,
+        tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]] | ToolNode | None = None,
         stream_output: bool = True,
     ):
         if tools is None:

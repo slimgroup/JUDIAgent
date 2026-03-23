@@ -16,11 +16,17 @@ import os
 import re
 import time
 from abc import ABC, abstractmethod
-from typing import Any, Callable, List, Literal, Optional, Sequence, Union, cast
+from typing import Any, Callable, Literal, Sequence, Union, cast
 
 from langchain_core.language_models import BaseChatModel, LanguageModelLike
 from langchain_core.language_models.base import LanguageModelInput
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, ToolMessage
+from langchain_core.messages import (
+    AIMessage,
+    BaseMessage,
+    HumanMessage,
+    SystemMessage,
+    ToolMessage,
+)
 from langchain_core.runnables import (
     Runnable,
     RunnableBinding,
@@ -55,9 +61,9 @@ class AgentCore(ABC):
     def __init__(
         self,
         tools: Union[Sequence[Union[BaseTool, Callable, dict[str, Any]]], ToolNode],
-        name: Optional[str] = None,
-        display_name: Optional[str] = "",
-        is_sub_agent: Optional[bool] = False,
+        name: str | None = None,
+        display_name: str | None = "",
+        is_sub_agent: bool | None = False,
         stream_output: bool = True,
     ):
         if name is not None and (" " in name or not name):
@@ -175,7 +181,7 @@ class AgentCore(ABC):
         self,
         state: state_mod.AgentState,
         config: RunnableConfig,
-        messages_list: Optional[List] = None,
+        messages_list: list | None = None,
     ) -> AIMessage:
         """
         Core LLM invocation with rate-limit retry and streaming support.
@@ -282,7 +288,7 @@ class AgentCore(ABC):
     @staticmethod
     def _strip_orphaned_tool_messages(
         messages: Sequence[BaseMessage],
-    ) -> List[BaseMessage]:
+    ) -> list[BaseMessage]:
         """
         Drop leading ToolMessages whose parent AIMessage was trimmed away.
 
@@ -341,7 +347,7 @@ class AgentCore(ABC):
     # ------------------------------------------------------------------
 
     def _build_prompt_chain(
-        self, prompt: Optional[Union[SystemMessage, str]]
+        self, prompt: SystemMessage | str | None
     ) -> Runnable:
         """Create a Runnable that prepends a system prompt to state messages."""
         if prompt is None:

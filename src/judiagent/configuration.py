@@ -9,7 +9,7 @@ and are re-exported here for backwards compatibility.
 from __future__ import annotations
 
 from dataclasses import dataclass, field, fields
-from typing import Annotated, Any, Literal, Optional, Type, TypeVar
+from typing import Annotated, Any, Literal, Type, TypeVar
 
 from langchain_core.runnables import RunnableConfig, ensure_config
 from pydantic import BaseModel, ConfigDict
@@ -26,6 +26,19 @@ from judiagent.settings import (
     mcp_mode,
 )
 
+__all__ = [
+    "BaseConfiguration",
+    "DomainValidation",
+    "HumanInteraction",
+    "EMBEDDING_MODEL_NAME",
+    "LLM_MODEL_NAME",
+    "LLM_TEMPERATURE",
+    "LOCAL_MODELS",
+    "PROJECT_ROOT",
+    "RECURSION_LIMIT",
+    "cli_mode",
+    "mcp_mode",
+]
 
 # =============================================================================
 # Human-in-the-Loop Configuration
@@ -300,7 +313,7 @@ class BaseConfiguration:
     # =========================================================================
     @classmethod
     def from_runnable_config(
-        cls: Type[T], config: Optional[RunnableConfig] = None
+        cls: Type[T], config: RunnableConfig | None = None
     ) -> T:
         """
         Create configuration instance from LangGraph RunnableConfig.

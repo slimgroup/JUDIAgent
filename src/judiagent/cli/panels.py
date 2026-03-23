@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from rich.markdown import Markdown
 from rich.panel import Panel
 
@@ -12,9 +14,9 @@ def print_to_console(
     text: str,
     title: str = "JUDIAgent",
     border_style: str = "steel_blue3",
-    panel_kwargs: dict | None = None,
+    panel_kwargs: dict[str, Any] | None = None,
     with_markdown: bool = True,
-):
+) -> None:
     """Display content inside a consistently styled Rich panel."""
     panel_kwargs = (panel_kwargs or {}).copy()
     panel_kwargs.setdefault("border_style", border_style)

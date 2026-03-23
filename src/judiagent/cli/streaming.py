@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 import time
-from typing import List, Optional
+from typing import List
 
 from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableConfig
@@ -23,7 +23,7 @@ def _retry_with_exponential_backoff(
     error_msg_prefix: str = "Rate limit error",
 ) -> AIMessage:
     """Retry a function with exponential backoff for rate-limit failures."""
-    last_exception: Optional[Exception] = None
+    last_exception: Exception | None = None
 
     for attempt in range(max_retries):
         try:
@@ -76,13 +76,13 @@ def stream_to_console(
     llm,
     message_list: List,
     config: RunnableConfig,
-    title: Optional[str] = "JUDIAgent",
+    title: str | None = "JUDIAgent",
     border_style: str = "steel_blue3",
     panel_kwargs: dict | None = None,
     with_markdown: bool = True,
 ) -> AIMessage:
     """Stream model output into a live-updating Rich panel."""
-    ai_message: Optional[AIMessage] = None
+    ai_message: AIMessage | None = None
     streamed_text = ""
     panel_kwargs = (panel_kwargs or {}).copy()
     panel_kwargs.setdefault("border_style", border_style)

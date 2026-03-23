@@ -15,7 +15,7 @@ focused tasks such as setting up a single JUDI simulation.
 
 from __future__ import annotations
 
-from typing import Any, Callable, Literal, Optional, Sequence, Union
+from typing import Any, Callable, Literal, Sequence, Union
 
 from langchain_core.language_models import LanguageModelLike
 from langchain_core.messages import AIMessage
@@ -31,13 +31,15 @@ from judiagent.core.messages import get_message_text
 from judiagent.nodes import verify_code_output
 from judiagent.state import AgentState, MCPInputState, MCPOutputState
 from judiagent.tools import (
-    search_codebase,
     list_files_in_directory,
-    read_from_file,
     lookup_function_docs,
+    read_from_file,
+    search_codebase,
     search_judi_examples,
     write_to_file,
 )
+
+
 class IterativeCodeAgent(AgentCore):
     """
     Iterative JUDI.jl code agent with a dual-stage evaluation loop.
@@ -56,9 +58,7 @@ class IterativeCodeAgent(AgentCore):
 
     def __init__(
         self,
-        tools: Optional[
-            Union[Sequence[Union[BaseTool, Callable, dict[str, Any]]], ToolNode]
-        ] = None,
+        tools: Sequence[Union[BaseTool, Callable, dict[str, Any]]] | ToolNode | None = None,
         stream_output: bool = True,
     ):
         if tools is None:

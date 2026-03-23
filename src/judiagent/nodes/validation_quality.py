@@ -5,9 +5,8 @@ from __future__ import annotations
 import re
 
 from judiagent.configuration import DomainValidation
-from judiagent.nodes.validation_metrics import recommend_metrics
+from judiagent.nodes.validation_metrics import format_metric_plan, recommend_metrics
 from judiagent.nodes.validation_models import ValidationFinding
-
 
 IMAGING_HINTS = (
     "rtm",
@@ -118,21 +117,22 @@ def run_domain_validation(
         task_id=settings.benchmark_task_id,
     )
     metric_lines = ""
+    metric_plan = format_metric_plan(settings.benchmark_task_id, code)
     if recommended_metrics:
         metric_lines = "\n- Recommended lightweight metrics: " + ", ".join(
             metric.name for metric in recommended_metrics
         )
-    report = (
-        "## JUDI domain-quality review:\n"
-        "The code passes syntax/runtime checks but does not yet look like a complete "
-        "seismic imaging or inversion workflow.\n"
-        f"- Scientific readiness score: {score:.2f}\n"
-        f"- Present categories: {matched_text}\n"
-        f"- Missing categories: {missing_text}\n"
-        f"{metric_lines}\n"
-        "Please revise the solution so it includes the missing scientific pieces "
-        "or explicitly explains why they are intentionally omitted."
-    )
+    if metric_plan:
+        metric_lines += "\n- Metric bundle summary:\n" + metric_plan
+    report = "".join([
+        "## JUDI domain-quality review:\n",
+        "The code passes syntax/runtime checks but does not yet look like a complete seismic imaging or inversion workflow.\n",
+        f"- Scientific readiness score: {score:.2f}\n",
+        f"- Present categories: {matched_text}\n",
+        f"- Missing categories: {missing_text}\n",
+        f"{metric_lines}\n",
+        "Please revise the solution so it includes the missing scientific pieces or explicitly explains why they are intentionally omitted.",
+    ])
     return ValidationFinding(
         stage="domain_quality",
         report=report,

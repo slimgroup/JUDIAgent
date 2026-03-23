@@ -7,7 +7,6 @@ import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
 from langchain_core.tools import tool
 from pydantic import BaseModel, Field
@@ -15,7 +14,6 @@ from pydantic import BaseModel, Field
 from judiagent.cli import colorscheme, print_to_console
 from judiagent.core.julia_code import normalize_julia_imports, reduce_simulation_steps
 from judiagent.nodes.check_code import _run_code_execution, _run_lint_check
-
 
 # -----------------------------------------------------------------------
 # Julia code execution
@@ -178,7 +176,7 @@ def switch_working_directory(directory_path: str) -> str:
 
 
 @tool
-def scaffold_julia_workspace(task_name: str, base_directory: Optional[str] = None) -> str:
+def scaffold_julia_workspace(task_name: str, base_directory: str | None = None) -> str:
     """
     Create a timestamped ``.jl`` file inside the project ``scripts/`` folder.
 
