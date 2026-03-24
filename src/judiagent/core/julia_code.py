@@ -7,16 +7,59 @@ import re
 from judiagent.state import JuliaCodeBlock
 
 _JULIA_FENCE_RE = re.compile(r"```julia\s*([\s\S]*?)```", re.IGNORECASE)
+_INDENTED_CODE_LINE_RE = re.compile(
+    r"^(?:using\s+|import\s+|#|[A-Za-z_][A-Za-z0-9_]*\s*=|println\(|print\(|for\s+|if\s+|while\s+|function\s+|end\b|[A-Za-z_][A-Za-z0-9_]*\()"
+)
 
 
-def _score_julia_block(block: str) -> tuple[int, int, int]:
-    """Heuristically score fenced Julia blocks by how script-like they are."""
+def _score_julia_block(block: str) -> tuple[int, int, int, int]:
+    """Heuristically score candidate Julia blocks by how script-like they are."""
     lines = [line.rstrip() for line in block.splitlines()]
     non_empty = [line for line in lines if line.strip()]
     non_comment = [line for line in non_empty if not line.lstrip().startswith("#")]
     using_lines = [line for line in non_comment if line.lstrip().startswith("using ")]
-    executable = [line for line in non_comment if not line.lstrip().startswith("using ")]
-    return (len(executable), len(non_comment), len(using_lines))
+    code_like = [line for line in non_empty if _INDENTED_CODE_LINE_RE.match(line.lstrip())]
+    executable = [
+        line
+        for line in code_like
+        if not line.lstrip().startswith(("using ", "import ", "#"))
+    ]
+    return (len(executable), len(code_like), len(non_comment), len(using_lines))
+
+
+def _extract_indented_julia(response: str) -> str:
+    """Fallback parser for markdown-style indented code blocks."""
+    blocks: list[str] = []
+    current: list[str] = []
+
+    for raw_line in response.splitlines():
+        line = raw_line.rstrip("\n")
+        stripped = line.strip()
+        is_code = False
+        if line.startswith("  ") or line.startswith("\t"):
+            candidate = line[2:] if line.startswith("  ") else line.lstrip("\t")
+            if not stripped or _INDENTED_CODE_LINE_RE.match(candidate.lstrip()):
+                is_code = True
+                current.append(candidate.rstrip())
+        if not is_code:
+            if current:
+                block = "\n".join(current).strip()
+                if block:
+                    blocks.append(block)
+                current = []
+    if current:
+        block = "\n".join(current).strip()
+        if block:
+            blocks.append(block)
+
+    if not blocks:
+        return ""
+
+    ranked = [(index, block, _score_julia_block(block)) for index, block in enumerate(blocks)]
+    _, best_block, best_score = max(ranked, key=lambda item: (item[2], item[0]))
+    if best_score[1] == 0:
+        return ""
+    return best_block
 
 
 def extract_fenced_julia(response: str) -> str:
@@ -28,17 +71,17 @@ def extract_fenced_julia(response: str) -> str:
     blindly picking the final fenced snippet.
     """
     blocks = [match.strip() for match in _JULIA_FENCE_RE.findall(response) if match.strip()]
-    if not blocks:
-        return ""
-    ranked = [
-        (index, block, _score_julia_block(block))
-        for index, block in enumerate(blocks)
-    ]
-    _, best_block, _ = max(
-        ranked,
-        key=lambda item: (item[2], item[0]),
-    )
-    return best_block
+    if blocks:
+        ranked = [
+            (index, block, _score_julia_block(block))
+            for index, block in enumerate(blocks)
+        ]
+        _, best_block, _ = max(
+            ranked,
+            key=lambda item: (item[2], item[0]),
+        )
+        return best_block
+    return _extract_indented_julia(response)
 
 
 def parse_julia_code_block(

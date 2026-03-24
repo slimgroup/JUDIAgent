@@ -71,3 +71,27 @@ Optional note:
 
     assert "peak_frequency = 0.015f0" in extracted
     assert "# q = judiVector(src_geometry, wavelet)" not in extracted
+
+
+def test_parse_julia_code_block_falls_back_to_indented_markdown_code():
+    response = """
+Here is the exact minimal code:
+
+  using JUDI
+  recording_time = 2000f0
+  dt = 4f0
+  f0 = 0.015f0
+  wavelet = ricker_wavelet(recording_time, dt, f0)
+  println(length(wavelet))
+
+Important notes:
+
+  1 Time units are in milliseconds.
+  2 Frequency is in kHz.
+"""
+
+    code_block = parse_julia_code_block(response)
+
+    assert code_block.imports == 'using JUDI'
+    assert 'wavelet = ricker_wavelet(recording_time, dt, f0)' in code_block.body
+    assert '1 Time units are in milliseconds.' not in code_block.body
