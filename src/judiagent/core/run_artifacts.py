@@ -60,7 +60,14 @@ def build_task_slug(prompt: str, code: str) -> str:
     """Derive a compact task slug from outputs, code, or the user prompt."""
     output_paths = extract_output_paths(code)
     if output_paths:
-        return Path(output_paths[0]).stem.lower()
+        figure_paths = [p for p in output_paths if "/figures/" in p]
+        preferred = figure_paths[0] if figure_paths else output_paths[0]
+        stem = Path(preferred).stem.lower()
+        for suffix in ("_shot", "_figure", "_plot", "_data"):
+            if stem.endswith(suffix):
+                stem = stem[: -len(suffix)]
+                break
+        return stem or Path(preferred).stem.lower()
 
     if "ricker_wavelet" in code:
         return "ricker_wavelet"

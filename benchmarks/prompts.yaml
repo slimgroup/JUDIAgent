@@ -11,7 +11,13 @@ basic_modeling:
 
     Create a two-layer velocity model (1.5 km/s on top, 3.5 km/s on bottom),
 
-    set up 5 sources and 100 receivers at the surface, and generate synthetic data.
+    set up 5 sources and 100 receivers at the surface, generate synthetic data,
+
+    save the main data object under outputs/data/basic_2d_forward_data.jld2,
+
+    and save one shot-gather figure under outputs/figures/basic_2d_forward_shot.png.
+
+    Use a JUDI-example plotting style.
 
     '
   required_components: &id001
@@ -22,7 +28,7 @@ basic_modeling:
   acceptance_criteria:
   - Defines a two-layer velocity model with the requested top and bottom velocities.
   - Creates 5 sources and about 100 receivers at the surface.
-  - Runs forward modeling and exposes the resulting synthetic data object.
+  - Runs forward modeling, saves the main synthetic data object, and produces one shot-gather figure.
   metric_bundle:
   - trace_energy_consistency
   - runtime_and_memory_budget

@@ -41,7 +41,7 @@ def test_build_task_slug_prefers_output_stem():
         'savefig("outputs/figures/basic_2d_forward_shot.png")',
     )
 
-    assert slug == "basic_2d_forward_shot"
+    assert slug == "basic_2d_forward"
 
 
 def test_persist_validated_run_writes_script_and_metadata(tmp_path: Path):
@@ -62,3 +62,14 @@ def test_persist_validated_run_writes_script_and_metadata(tmp_path: Path):
     assert metadata_path.parent == tmp_path / "outputs" / "data"
     assert "ricker_wavelet" in script_path.stem
     assert "How do I create a Ricker wavelet" in metadata_path.read_text(encoding="utf-8")
+
+
+
+def test_build_task_slug_prefers_figure_output_over_data_output():
+    code = """
+using JUDI
+savefig("outputs/figures/basic_2d_forward_shot.png")
+@save "outputs/data/basic_2d_forward_data.jld2" dobs
+"""
+
+    assert build_task_slug("basic 2d forward", code) == "basic_2d_forward"
