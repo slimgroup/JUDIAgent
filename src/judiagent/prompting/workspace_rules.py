@@ -36,6 +36,8 @@ Imaging / RTM figure standard:
 - Keep RTM titles short, e.g. `Basic RTM Image`, and save with `dpi=300` and `bbox_inches="tight"`.
 - For benchmark RTM tasks, keep one main script only and avoid generating extra `test_*.jl` sidecar scripts unless the user explicitly asks for them.
 - For shared-cluster validation, prefer a compact validation-scale RTM setup over a sprawling survey, but keep the full RTM path intact: true model, migration model, synthetic observed data, Jacobian adjoint RTM, one saved RTM image, and one saved imaging artifact.
+- For simple layered RTM benchmarks, prefer acquisition geometry and model dimensions that still leave enough reflector area beneath the source/receiver line so the interface response is visible in the migrated image.
+- When plotting a migration or velocity model for RTM context, prefer the simpler SLIM/JUDI style: `imshow(...)` with physical extent, minimal annotations, and no dense acquisition overlay unless the figure is specifically a geometry figure.
 
 Geometry/setup figure standard:
 - For acquisition layouts, keep the figure minimal: source positions, receiver positions, and water/surface reference only if needed.
