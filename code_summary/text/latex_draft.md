@@ -1,5 +1,32 @@
 # LaTeX Draft Snippets
 
+## Abstract Draft
+
+```tex
+\begin{abstract}
+We present JUDIAgent, a domain-grounded scientific coding agent for JUDI.jl workflows in seismic modeling, imaging, and inversion. Unlike generic code assistants, JUDIAgent is designed for a setting in which executable code is not enough: a usable seismic script must also encode a scientifically coherent workflow, including model construction, acquisition geometry, operator composition, and task-appropriate diagnostics or artifacts. JUDIAgent therefore combines retrieval-augmented generation with a dual-validation pipeline that separates software correctness from seismic workflow adequacy.
+
+Given a natural-language request, the agent retrieves relevant JUDI documentation and examples, generates candidate Julia code, and validates it in two stages. The first stage checks executable correctness through preprocessing, static analysis when feasible, and runtime validation in the target Julia environment. The second stage performs a domain-quality review that asks whether the generated script is scientifically complete for the inferred task family. The framework also attaches task-aware metric guidance, such as trace-energy consistency for forward modeling and image residual or illumination balance for migration, creating a bridge between interactive repair, benchmark design, and future learning-based supervision.
+
+We demonstrate the approach with validated case studies in 2D forward modeling and compact RTM on a PACE compute environment. These results show that JUDIAgent can produce not only runnable Julia scripts, but reusable scientific artifacts and publication-ready figures for representative JUDI workflows. We argue that retrieval grounding, dual validation, and metric-aware repair provide a practical foundation for benchmark-driven evaluation and future SFT or RLHF for scientific coding agents in computational geophysics.
+\end{abstract}
+```
+
+## Introduction Draft
+
+```tex
+\section{Introduction}
+\label{sec:introduction}
+
+Wave-equation-based seismic computing is an unusually demanding target for coding assistance. In this setting, syntactically correct code is often still unusable if it omits the model parameterization, acquisition geometry, source description, operator composition, or diagnostics required by the intended scientific task. Many important failure cases are therefore not parser failures or import errors. Instead, code may execute while still being scientifically incomplete, misleading, or insufficient for modeling, migration, or inversion.
+
+JUDI.jl provides a powerful abstraction layer for seismic computing in Julia, but effective use of JUDI still requires familiarity with workflow structure. Users must know how to construct physical models, define source and receiver geometries, assemble forward and Jacobian operators, manage units, and generate interpretable artifacts. Large language models can help with this process, but naive prompting is not enough. Domain-specific APIs are easy to misuse, Julia syntax can be confused with Python syntax, and superficially plausible code can still omit essential workflow ingredients such as the migration model, the inversion objective, or quality-control outputs.
+
+The goal of JUDIAgent is not simply to autocomplete Julia code. The goal is to translate natural-language requests into workflows that are both executable and scientifically adequate. This motivates a scientific coding agent rather than a generic coding assistant. JUDIAgent addresses the problem with three linked design choices: retrieval-grounded generation from JUDI documentation and examples, dual validation that separates executable correctness from domain adequacy, and task-aware metric guidance that exposes meaningful quality signals for different workflow families.
+
+Our central claim is modest but important. We do not claim that JUDIAgent produces globally optimal seismic images or replaces numerical expertise. Instead, we claim that it improves the reliability of code generation for JUDI workflows in a domain where executable correctness alone is insufficient. This framing is supported by validated case studies in forward modeling and compact RTM, where the agent produced runnable workflows, saved scientific artifacts, and publication-style figures suitable for qualitative analysis.
+```
+
 ## Method Section Draft
 
 ```tex
@@ -34,5 +61,27 @@ We organize evaluation around three axes. The first is executable correctness, m
 
 We also recommend ablations that isolate the impact of the main architectural choices: retrieval versus no retrieval, correctness-only validation versus dual validation, and generic repair feedback versus task-aware metric guidance. The benchmark prompt catalog used in our study includes required components, acceptance criteria, and task-specific metric bundles, which enables structured evaluation beyond anecdotal examples. A central hypothesis for the present codebase is that dual validation improves the rate of scientifically complete JUDI workflows relative to correctness-only generation, especially for imaging and inversion tasks.
 
-As concrete examples, the current repo already contains two validated benchmark case studies that are suitable for qualitative analysis. The first is a 2D forward-modeling case that produces a saved synthetic dataset, a layered-velocity setup panel, and a central-shot gather with physically plausible direct and reflected arrivals. The second is a compact RTM case that produces a saved imaging artifact and a migrated image from a true model, a smoother migration model, and synthetic observed data. In both cases, the benchmark outputs were preserved, and separate paper-style figure copies were generated for the manuscript under `code_summary/figures/`. These cases support the claim that the agent is capable of generating not only executable Julia scripts, but scientifically structured workflows with reusable artifacts for later inspection and reporting.
+As concrete examples, the current repo already contains two validated benchmark case studies that are suitable for qualitative analysis. The first is a 2D forward-modeling case that produces a saved synthetic dataset, a layered-velocity setup panel, and a central-shot gather with physically plausible direct and reflected arrivals. The second is a compact RTM case that produces a saved imaging artifact and a migrated image from a true model, a smoother migration model, and synthetic observed data. In both cases, the benchmark outputs were preserved, and separate paper-style figure copies were generated for the manuscript under \texttt{code\_summary/figures/}. These cases support the claim that the agent is capable of generating not only executable Julia scripts, but scientifically structured workflows with reusable artifacts for later inspection and reporting.
+```
+
+## Discussion / Limitations Draft
+
+```tex
+\section{Discussion and Limitations}
+\label{sec:discussion}
+
+The current results are promising, but they should be interpreted carefully. JUDIAgent is strongest today on validation-scale workflows, where the goal is to generate executable and scientifically structured scripts rather than state-of-the-art subsurface images. This distinction matters most for imaging tasks. For example, the compact RTM benchmark demonstrates that the full imaging chain can be assembled and validated, but the resulting image should be interpreted as a proof-of-capability artifact rather than a competitive migration result.
+
+Another limitation is that figure quality is partly data-dependent. Prompt engineering and plotting defaults can improve consistency, but some display choices such as clipping strength or shallow-depth cropping remain dependent on the actual generated artifact. We therefore view paper-style redraw from saved artifacts as a practical and reproducible final presentation step rather than a failure of the generation process.
+
+Finally, the current evaluation remains small-scale and qualitative. A natural next step is to run the full benchmark prompt catalog across multiple models, compare correctness-only and dual-validation settings, and measure not just execution success but structured workflow completeness.
+```
+
+## Conclusion Draft
+
+```tex
+\section{Conclusion}
+\label{sec:conclusion}
+
+JUDIAgent reframes LLM-based code generation for computational geophysics as a scientific workflow generation problem rather than a pure syntax or API-completion task. By combining retrieval-grounded generation, executable correctness checks, domain-quality review, and task-aware metric guidance, the system can produce JUDI workflows that are more structured, inspectable, and reusable than what correctness-only prompting would typically provide. The validated forward-modeling and compact RTM case studies in the current repo provide concrete evidence that this approach is practical today and can serve as a foundation for future benchmark-driven evaluation, supervised fine-tuning, and reward-model design for scientific coding agents.
 ```
