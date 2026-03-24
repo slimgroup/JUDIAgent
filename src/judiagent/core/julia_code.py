@@ -9,17 +9,36 @@ from judiagent.state import JuliaCodeBlock
 _JULIA_FENCE_RE = re.compile(r"```julia\s*([\s\S]*?)```", re.IGNORECASE)
 
 
-def extract_fenced_julia(response: str) -> str:
-    """Pull Julia source from the final non-empty markdown fence.
+def _score_julia_block(block: str) -> tuple[int, int, int]:
+    """Heuristically score fenced Julia blocks by how script-like they are."""
+    lines = [line.rstrip() for line in block.splitlines()]
+    non_empty = [line for line in lines if line.strip()]
+    non_comment = [line for line in non_empty if not line.lstrip().startswith("#")]
+    using_lines = [line for line in non_comment if line.lstrip().startswith("using ")]
+    executable = [line for line in non_comment if not line.lstrip().startswith("using ")]
+    return (len(executable), len(non_comment), len(using_lines))
 
-    Models sometimes emit multiple Julia snippets, for example a debug probe
-    followed by the final recommended solution. Validation should execute the
-    last fenced block rather than concatenating incompatible alternatives.
+
+def extract_fenced_julia(response: str) -> str:
+    """Pull Julia source from the most script-like markdown fence.
+
+    Models sometimes emit multiple Julia snippets, for example a debug probe,
+    a main solution, and then a tiny follow-up example. Validation should run
+    the primary solution block rather than concatenating alternatives or
+    blindly picking the final fenced snippet.
     """
     blocks = [match.strip() for match in _JULIA_FENCE_RE.findall(response) if match.strip()]
     if not blocks:
         return ""
-    return blocks[-1]
+    ranked = [
+        (index, block, _score_julia_block(block))
+        for index, block in enumerate(blocks)
+    ]
+    _, best_block, _ = max(
+        ranked,
+        key=lambda item: (item[2], item[0]),
+    )
+    return best_block
 
 
 def parse_julia_code_block(

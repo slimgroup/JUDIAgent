@@ -45,3 +45,29 @@ wavelet = ricker_wavelet(recording_time, dt, f0)
     assert code_block.imports == 'using JUDI'
     assert 'println("debug")' not in code_block.body
     assert 'wavelet = ricker_wavelet(recording_time, dt, f0)' in code_block.body
+
+
+def test_extract_fenced_julia_ignores_trailing_example_only_block():
+    response = """
+Main solution:
+```julia
+using JUDI
+recording_time = 2000f0
+dt = 4f0
+peak_frequency = 0.015f0
+wavelet = ricker_wavelet(recording_time, dt, peak_frequency)
+println(length(wavelet))
+```
+
+Optional note:
+```julia
+# Example of using the wavelet in a source vector
+# (assuming you have a source geometry defined)
+# q = judiVector(src_geometry, wavelet)
+```
+"""
+
+    extracted = extract_fenced_julia(response)
+
+    assert "peak_frequency = 0.015f0" in extracted
+    assert "# q = judiVector(src_geometry, wavelet)" not in extracted
