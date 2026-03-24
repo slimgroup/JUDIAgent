@@ -7,7 +7,7 @@ basic_modeling:
 - id: basic_2d_forward
   difficulty: easy
   category: forward_modeling
-  prompt: 'Write a simple 2D acoustic forward modeling example using JUDI.jl with a slightly richer but still lightweight two-layer velocity model (1.5 km/s on top, 3.5 km/s on bottom), 5 sources, 100 surface receivers, synthetic data saved to outputs/data/basic_2d_forward_data.jld2, one central-shot gather figure saved to outputs/figures/basic_2d_forward_shot.png, and one velocity-model figure saved to outputs/figures/basic_2d_forward_model.png. Keep the velocity-model figure close to JUDI/SLIM style: a simple model image with physical extents and minimal clutter, without a dense source/receiver overlay unless it is essential.'
+  prompt: 'Write a simple 2D acoustic forward modeling example using JUDI.jl with a slightly richer but still lightweight two-layer velocity model (1.5 km/s on top, 3.5 km/s on bottom), 5 sources, 100 surface receivers, synthetic data saved to outputs/data/basic_2d_forward_data.jld2, one central-shot gather figure saved to outputs/figures/basic_2d_forward_shot.png, and one velocity-model figure saved to outputs/figures/basic_2d_forward_model.png. Keep the velocity-model figure close to JUDI/SLIM style: use a simple model image with physical extents, minimal clutter, and a restrained palette rather than a flashy default; if an acquisition reference is helpful, keep it sparse and unobtrusive instead of using a dense source/receiver overlay.'
   required_components: &id001
   - model_setup
   - acquisition_geometry

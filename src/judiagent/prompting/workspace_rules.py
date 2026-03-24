@@ -46,8 +46,9 @@ Geometry/setup figure standard:
 
 Benchmark defaults:
 - For forward-modeling benchmarks that request figures, save one main shot-gather figure and, when the model setup matters visually, save one velocity-model figure.
-- For velocity-model figures, prefer the simpler JUDI / SLIM style: image of the model with physical extents and minimal clutter; avoid overlaying dense source/receiver markers on the model unless the task explicitly asks for a geometry figure.
-- When a source/receiver reference is still useful, keep it sparse and unobtrusive rather than plotting a dense acquisition overlay on top of the model.
+- For velocity-model figures, prefer the simpler JUDI / SLIM style: image of the model with physical extents, minimal clutter, and a restrained palette (often `gray` or another subdued map rather than a flashy default) unless a retrieved JUDI example clearly suggests otherwise.
+- Avoid overlaying dense source/receiver markers on the model unless the task explicitly asks for a geometry figure.
+- When a source/receiver reference is still useful, keep it sparse and unobtrusive, or use a lightweight acquisition cue instead of plotting a dense overlay on top of the model.
 - For RTM or imaging benchmarks, save one main image figure and one main imaging artifact file unless the benchmark explicitly asks for a different bundle.
 - For runtime-heavy imaging benchmarks on shared clusters, prefer a compact validation-scale setup over a sprawling survey, but keep the full RTM path intact: true model, migration model, synthetic data, Jacobian adjoint, saved RTM image, and saved imaging artifact.
 - Do not create extra test scripts or sidecar Julia programs unless the user explicitly asks for them; prefer one main script per benchmark.

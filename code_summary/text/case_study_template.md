@@ -213,21 +213,122 @@ close(fig_shot)
 
 ## Output Artifacts
 
-- Figure path: `outputs/figures/basic_2d_forward_shot.png`; `outputs/figures/basic_2d_forward_model.png`
+- Figure path: `code_summary/figures/basic_2d_forward_shot_paper.png`; `code_summary/figures/basic_2d_forward_model_paper.png`
 - Data path: `outputs/data/basic_2d_forward_data.jld2`
-- Log path: interactive CLI output plus `outputs/data/basic_2d_forward_model_20260324_010038_run.json`
-- Script path: `scripts/basic_2d_forward.jl` and archived validated script `scripts/basic_2d_forward_model_20260324_010038.jl`
+- Log path: interactive CLI output plus `outputs/data/basic_2d_forward_model_20260324_031831_run.json`
+- Script path: `scripts/basic_2d_forward_model_20260324_031831.jl` and redraw helper `scripts/redraw_paper_figures.jl`
 
 ## Scientific Interpretation
 
-This case demonstrates that JUDIAgent can produce a scientifically meaningful end-to-end 2D forward-modeling workflow, not just a syntactically valid Julia snippet. The generated shot gather contains a strong direct arrival and a weaker later reflection, which is consistent with the requested two-layer velocity model and confirms that the acquisition geometry, source wavelet, and forward operator are working together coherently. The workflow also saved a reusable synthetic data object and a model-setup visualization, which makes the result easier to inspect and reproduce. While the shot-gather figure is the stronger paper-facing artifact, the velocity-model figure is still useful as a setup illustration even though its visual style is more generic than typical SLIM/JUDI publication figures.
+This case demonstrates that JUDIAgent can produce a scientifically meaningful end-to-end 2D forward-modeling workflow, not just a syntactically valid Julia snippet. The generated shot gather contains a strong direct arrival and a weaker later reflection, which is consistent with the requested two-layer velocity model and confirms that the acquisition geometry, source wavelet, and forward operator are working together coherently. The workflow also saved a reusable synthetic data object and a model-setup visualization, which makes the result easier to inspect and reproduce. For the paper bundle, the figure set was redrawn into cleaner publication-style versions while keeping the original benchmark outputs unchanged; the shot-gather figure remains the stronger scientific artifact, while the velocity-model figure serves as a compact setup panel.
 
 ## Paper-Ready Caption
 
-**Case Study 2.** JUDIAgent generated and validated a complete 2D JUDI.jl forward-modeling workflow on a PACE compute node, producing both a synthetic shot gather and saved benchmark artifacts for a two-layer acoustic model.
+**Case Study 2.** JUDIAgent generated and validated a complete 2D JUDI.jl forward-modeling workflow on a PACE compute node, producing a physically plausible shot gather plus publication-style setup and result figures for a two-layer acoustic model.
 
 ## Notes for Experiments Section
 
 - Did retrieval help? yes; the plotting and operator choices aligned more closely with JUDI examples after the prompt/context rules were tightened around local RAG examples
 - Did dual validation catch anything correctness-only checks would have missed? yes; runtime validation remained decisive when Julia linting timed out, and the saved figures made it easier to judge whether the workflow was scientifically plausible rather than merely executable
 - Which metric signals would be reusable for SFT or RLHF? execution success, artifact creation, physically plausible shot-gather structure, and benchmark-specific output completeness are all reusable signals for this task family
+
+
+---
+
+# Filled Example: rtm_basic
+
+## Case Metadata
+
+- Prompt ID: `rtm_basic`
+- Category: imaging / RTM
+- Difficulty: medium
+- Agent mode: iterative
+- Runtime environment: PACE compute node
+- Date: 2026-03-24
+
+## User Prompt
+
+```text
+Write a basic RTM (Reverse Time Migration) example using JUDI.jl with a compact validation-scale setup, a simple two-layer true model, a slightly smoother migration model, synthetic observed data, RTM formed with the adjoint of the Jacobian operator, one main RTM script, an RTM figure saved to outputs/figures/rtm_basic_image.png, and the migrated image or main imaging artifact saved to outputs/data/rtm_basic_image.jld2. Keep the RTM figure close to JUDI/SLIM style: gray colormap, physical extents, tighter symmetric clipping that reveals reflector-scale structure, and no unnecessary extra visualizations.
+```
+
+## Generated Julia Workflow
+
+```julia
+using JUDI, JLD2, PythonPlot, LinearAlgebra
+
+n = (151, 76)
+d = (12.5f0, 12.5f0)
+o = (0f0, 0f0)
+
+v_true = ones(Float32, n) .* 1.5f0
+for iz = 1:n[2], ix = 1:n[1]
+    interface_depth = 40 + div(ix, 4)
+    if iz >= interface_depth
+        v_true[ix, iz] = 2.0f0
+    end
+end
+
+v_mig = copy(v_true)
+for iz = 2:n[2]-1, ix = 2:n[1]-1
+    v_mig[ix, iz] = 0.2f0 * v_true[ix, iz] +
+                    0.2f0 * (v_true[ix-1, iz] + v_true[ix+1, iz] +
+                            v_true[ix, iz-1] + v_true[ix, iz+1])
+end
+
+model_true = Model(n, d, o, (1f0 ./ v_true).^2)
+model_mig = Model(n, d, o, (1f0 ./ v_mig).^2)
+
+nsrc = 4
+nrec = 80
+source_depth = 25f0
+receiver_depth = 30f0
+recording_time = 1500f0
+dt = 4f0
+
+xsrc = convertToCell(collect(150f0 .+ 300f0 .* Float32.(0:nsrc-1)))
+ysrc = convertToCell(fill(0f0, nsrc))
+zsrc = convertToCell(fill(source_depth, nsrc))
+src_geometry = Geometry(xsrc, ysrc, zsrc; dt=fill(dt, nsrc), t=fill(recording_time, nsrc))
+
+xrec = collect(range(0f0, step=15f0, length=nrec))
+yrec = fill(0f0, nrec)
+zrec = fill(receiver_depth, nrec)
+rec_geometry = Geometry(xrec, yrec, zrec; dt=dt, t=recording_time, nsrc=nsrc)
+
+q = judiVector(src_geometry, ricker_wavelet(recording_time, dt, 0.015f0))
+d_obs = judiModeling(model_true, src_geometry, rec_geometry) * q
+J = judiJacobian(judiModeling(model_mig, src_geometry, rec_geometry), q)
+rtm = adjoint(J) * d_obs
+rtm_image = reshape(rtm, n)
+
+jldsave("outputs/data/rtm_basic_image.jld2"; rtm_image=rtm_image, model_true=(1f0 ./ v_true).^2, model_mig=(1f0 ./ v_mig).^2, n=n, d=d, o=o)
+```
+
+## Validation Summary
+
+- Correctness validation result: passed via runtime execution on a PACE compute node in 101.73 s
+- Domain-quality review result: successful compact RTM workflow with a true model, smoother migration model, synthetic observed data, Jacobian-adjoint imaging path, saved RTM artifact, and saved RTM figure
+- Metric bundle used: `image_residual_norm`, `illumination_balance`
+- Key diagnostics or repair notes: earlier RTM attempts failed due to Julia syntax issues, oversized scripts, and an overly short runtime budget; after tightening the prompt defaults and extending heavy-task timeouts, the compact RTM benchmark became stable
+
+## Output Artifacts
+
+- Figure path: `code_summary/figures/rtm_basic_image_paper.png`
+- Data path: `outputs/data/rtm_basic_image.jld2`
+- Log path: interactive CLI output plus `outputs/data/rtm_basic_image_20260324_023452_run.json`
+- Script path: `scripts/rtm_basic_image_20260324_023452.jl` and redraw helper `scripts/redraw_paper_figures.jl`
+
+## Scientific Interpretation
+
+This case shows that JUDIAgent can assemble and validate a complete compact RTM workflow rather than stopping at forward modeling. The resulting migrated image is not yet a strong final imaging result, but it is scientifically meaningful as a proof-of-capability benchmark because it preserves the full RTM chain: true model, migration model, synthetic data generation, and adjoint-Jacobian imaging. The paper-style redraw tightens the display clip and removes a thin shallow strip from the displayed image to reduce source imprint, which makes the deeper reflector-scale structure easier to inspect without altering the saved RTM artifact itself. This makes the case appropriate for a methods or experiments section that emphasizes successful workflow generation under constrained compute settings.
+
+## Paper-Ready Caption
+
+**Case Study 3.** JUDIAgent generated and validated a compact JUDI.jl RTM workflow on a PACE compute node, then produced a paper-style RTM figure from the saved imaging artifact to reduce shallow source imprint and highlight reflector-scale structure.
+
+## Notes for Experiments Section
+
+- Did retrieval help? yes; the agent converged only after the prompting rules explicitly anchored RTM structure and plotting conventions to JUDI examples
+- Did dual validation catch anything correctness-only checks would have missed? yes; runtime validation surfaced Julia syntax issues, workflow bloat, and timeout problems that would not have been obvious from static prompting alone
+- Which metric signals would be reusable for SFT or RLHF? execution success, artifact completeness, compact-yet-complete imaging workflow structure, and improved figure readability after redraw are useful signals for this task family
