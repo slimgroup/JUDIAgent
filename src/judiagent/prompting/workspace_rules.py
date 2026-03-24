@@ -14,6 +14,29 @@ For seismic plots, always anchor the plotting style to retrieved JUDI examples f
 - Keep benchmark plots minimal and reproducible: one main figure per requested artifact unless the user asks for extras.
 - Use physical axis labels when available (`Time (ms)`, `Receiver position (m)`, `Depth (m)`) rather than generic sample indices.
 
+Forward-result figure standard:
+- Prefer `PythonPlot` for shot gathers when JUDI examples use `imshow`.
+- Use `imshow(shot_data, cmap="seismic", aspect="auto")`.
+- Use symmetric clipping around zero: `vmin=-A`, `vmax=A`.
+- Choose `A` from the data range rather than leaving scaling completely automatic.
+- Keep titles short, e.g. `2D Acoustic Shot Gather`.
+- Save publication-leaning benchmark figures with `dpi=300` and `bbox_inches="tight"`.
+
+Imaging / RTM figure standard:
+- Follow the closest JUDI RTM or LS-RTM example before inventing a new style.
+- Prefer `PythonPlot` with `imshow(...)` for RTM and migration images.
+- Use `cmap="gray"` for RTM / LS-RTM images unless a retrieved JUDI example clearly uses another palette.
+- Reshape the image to model dimensions before plotting, and transpose/adjoint it in the same orientation as the closest example.
+- Use physical extents when available, e.g. lateral position and depth in km or m, rather than pixel indices.
+- Use symmetric clipping around zero: `vmin=-A`, `vmax=A`.
+- Choose `A` from the image magnitude (for example from `maximum(abs.(rtm))` or a stable percentile clip) rather than leaving it fully automatic.
+- Keep RTM titles short, e.g. `Basic RTM Image`, and save with `dpi=300` and `bbox_inches="tight"`.
+
+Geometry/setup figure standard:
+- For acquisition layouts, keep the figure minimal: source positions, receiver positions, and water/surface reference only if needed.
+- Prefer a clean 2D layout figure over a full modeling workflow.
+- Use one geometry figure per task unless the user asks for extras.
+
 Preferred JUDI-style plotting patterns:
 
 ### SlimPlotting
@@ -27,11 +50,27 @@ plot_simage(rtm; name="RTM Image")
 ### PythonPlot
 ```julia
 using PythonPlot
+A = 0.8f0 * maximum(abs.(dobs.data[1]))
 fig = figure(figsize=(8, 5))
-imshow(dobs.data[1], aspect="auto", cmap="seismic", origin="upper")
+imshow(dobs.data[1], aspect="auto", cmap="seismic", origin="upper", vmin=-A, vmax=A)
 xlabel("Receiver position (m)")
 ylabel("Time (ms)")
+title("2D Acoustic Shot Gather")
 savefig("outputs/figures/example_shot_gather.png", dpi=300, bbox_inches="tight")
+close(fig)
+```
+
+### PythonPlot RTM / Imaging
+```julia
+using PythonPlot
+rtm_img = reshape(rtm, model0.n)
+A = 0.8f0 * maximum(abs.(rtm_img))
+fig = figure(figsize=(7, 5))
+imshow(adjoint(rtm_img), cmap="gray", vmin=-A, vmax=A, extent=(x0, x1, z1, z0))
+xlabel("Lateral position (km)")
+ylabel("Depth (km)")
+title("Basic RTM Image")
+savefig("outputs/figures/example_rtm.png", dpi=300, bbox_inches="tight")
 close(fig)
 ```
 
