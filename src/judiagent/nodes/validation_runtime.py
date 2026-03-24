@@ -51,10 +51,10 @@ def run_static_validation(code: str, show_code: bool = False) -> ValidationFindi
 
 def run_runtime_validation(code: str, show_code: bool = False) -> ValidationFinding | None:
     """Execute Julia code and return a finding when runtime errors occur."""
+    preview = f"```julia\n{code}\n```"
+    if len(preview) > 500:
+        preview = preview[:500] + "..."
     if show_code:
-        preview = f"```julia\n{code}\n```"
-        if len(preview) > 500:
-            preview = preview[:500] + "..."
         print_to_console(
             text="Executing code:\n" + preview,
             title="Runtime Execution",
@@ -65,16 +65,17 @@ def run_runtime_validation(code: str, show_code: bool = False) -> ValidationFind
     if result.has_error:
         error_text = format_runtime_error(result)
         print_to_console(
-            text=f"Execution failed!\n\n{error_text}",
+            text=f"Execution failed!\n\nCode preview:\n{preview}\n\n{error_text}",
             title="Runtime Result",
             border_style=colorscheme.error,
         )
         report = (
             "## Runtime error:\n"
             "Executing the generated code produced the following error:\n"
-            f"{error_text}"
+            f"Code preview:\n{preview}\n\n{error_text}"
         )
         return ValidationFinding(stage="runtime", report=report)
+
 
     elapsed_str = f"{result.elapsed_seconds:.2f}"
     output = result.stdout.strip()

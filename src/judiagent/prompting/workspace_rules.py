@@ -41,6 +41,25 @@ CondaPkg setup messages for plotting backends are normal on first use.
 """
 
 
+MINIMAL_TASKS_SECTION = """
+---
+
+## Minimal Tasks
+
+For simple helper tasks such as creating a wavelet, computing a small geometry object, or demonstrating a single JUDI helper function:
+
+- Prefer the smallest runnable Julia snippet that answers the question directly.
+- Do not add plotting, file output, `JLD2`, `Plots`, `PythonPlot`, or directory creation unless the user explicitly asks for them.
+- Do not turn a helper-function question into a full seismic workflow.
+- Avoid optional extras after the main answer when they increase validation risk.
+
+Examples of minimal tasks:
+- `ricker_wavelet(...)`
+- creating a `Geometry(...)` object
+- building a `judiVector(...)` from an existing wavelet and source geometry
+"""
+
+
 WORKSPACE_MANAGEMENT = """
 ---
 
