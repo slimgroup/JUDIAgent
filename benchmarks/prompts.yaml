@@ -125,7 +125,7 @@ imaging:
 - id: rtm_basic
   difficulty: medium
   category: imaging
-  prompt: 'Write a basic RTM (Reverse Time Migration) example using JUDI.jl with a compact validation-scale setup, a simple two-layer true model, a slightly smoother migration model, synthetic observed data, RTM formed with the adjoint of the Jacobian operator, an RTM figure saved to outputs/figures/rtm_basic_image.png, and the migrated image or main imaging artifact saved to outputs/data/rtm_basic_image.jld2.'
+  prompt: 'Write a basic RTM (Reverse Time Migration) example using JUDI.jl with a compact validation-scale setup, a simple two-layer true model, a slightly smoother migration model, synthetic observed data, RTM formed with the adjoint of the Jacobian operator, one main RTM script, an RTM figure saved to outputs/figures/rtm_basic_image.png, and the migrated image or main imaging artifact saved to outputs/data/rtm_basic_image.jld2.'
   required_components: &id006
   - model_setup
   - acquisition_geometry

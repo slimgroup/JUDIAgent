@@ -32,6 +32,8 @@ Imaging / RTM figure standard:
 - Use symmetric clipping around zero: `vmin=-A`, `vmax=A`.
 - Choose `A` from the image magnitude (for example from `maximum(abs.(rtm))` or a stable percentile clip) rather than leaving it fully automatic.
 - Keep RTM titles short, e.g. `Basic RTM Image`, and save with `dpi=300` and `bbox_inches="tight"`.
+- For benchmark RTM tasks, keep one main script only and avoid generating extra `test_*.jl` sidecar scripts unless the user explicitly asks for them.
+- For shared-cluster validation, prefer a compact validation-scale RTM setup over a sprawling survey, but keep the full RTM path intact: true model, migration model, synthetic observed data, Jacobian adjoint RTM, one saved RTM image, and one saved imaging artifact.
 
 Geometry/setup figure standard:
 - For acquisition layouts, keep the figure minimal: source positions, receiver positions, and water/surface reference only if needed.
