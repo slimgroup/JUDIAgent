@@ -51,6 +51,15 @@ def execute_and_capture(code: str) -> JuliaExecutionResult:
         )
         has_real_error = any(token in stderr_lc for token in REAL_ERROR_TOKENS)
 
+        if return_code in (None, 0) and not has_real_error:
+            return JuliaExecutionResult(
+                stdout=stdout,
+                has_error=False,
+                elapsed_seconds=elapsed,
+                return_code=return_code,
+                command=command,
+            )
+
         if has_condapkg and not has_real_error:
             if any(hint in stderr for hint in SUCCESS_HINTS):
                 return JuliaExecutionResult(

@@ -68,3 +68,19 @@ def test_format_runtime_error_includes_return_code_and_command():
 
     assert "Return code: 127" in formatted
     assert "Julia executable: /usr/bin/julia" in formatted
+
+
+def test_execute_and_capture_treats_zero_exit_with_non_error_stderr_as_success(monkeypatch):
+    from judiagent.julia import execution_bridge
+
+    def fake_execute_julia_inline(*, code: str):
+        return ("ok\n", "Warning: using fallback cache\n", 0, "/usr/bin/julia")
+
+    monkeypatch.setattr(execution_bridge, "execute_julia_inline", fake_execute_julia_inline)
+
+    result = execution_bridge.execute_and_capture("println(1)")
+
+    assert result.has_error is False
+    assert result.stdout == "ok\n"
+    assert result.return_code == 0
+    assert result.command == "/usr/bin/julia"
