@@ -14,3 +14,5 @@ class JuliaExecutionResult:
     error_summary: str = ""
     error_trace: str | None = None
     elapsed_seconds: float = 0.0
+    return_code: int | None = None
+    command: str = ""

@@ -38,8 +38,11 @@ REAL_ERROR_TOKENS = [
 def execute_and_capture(code: str) -> JuliaExecutionResult:
     """Run Julia code inline and return a structured execution result."""
     t0 = time.time()
-    stdout, stderr = execute_julia_inline(code=code)
+    stdout, stderr, return_code, command = execute_julia_inline(code=code)
     elapsed = time.time() - t0
+
+    if return_code not in (None, 0) and not stderr.strip():
+        stderr = f"Julia exited with return code {return_code}."
 
     if stderr:
         stderr_lc = stderr.lower()
@@ -54,6 +57,8 @@ def execute_and_capture(code: str) -> JuliaExecutionResult:
                     stdout=stdout,
                     has_error=False,
                     elapsed_seconds=elapsed,
+                    return_code=return_code,
+                    command=command,
                 )
 
         err_msg, err_trace = parse_error_and_trace(stderr)
@@ -63,10 +68,14 @@ def execute_and_capture(code: str) -> JuliaExecutionResult:
             error_summary=err_msg,
             error_trace=err_trace,
             elapsed_seconds=elapsed,
+            return_code=return_code,
+            command=command,
         )
 
     return JuliaExecutionResult(
         stdout=stdout,
         has_error=False,
         elapsed_seconds=elapsed,
+        return_code=return_code,
+        command=command,
     )

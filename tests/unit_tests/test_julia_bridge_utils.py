@@ -54,3 +54,17 @@ def test_format_runtime_error_combines_message_and_trace():
     assert "ERROR: failure" in formatted
     assert "Stacktrace:" in formatted
     assert "[1] top-level scope" in formatted
+
+
+def test_format_runtime_error_includes_return_code_and_command():
+    result = JuliaExecutionResult(
+        has_error=True,
+        error_summary="Error running Julia: [Errno 2] No such file or directory: 'julia'",
+        return_code=127,
+        command="/usr/bin/julia",
+    )
+
+    formatted = format_runtime_error(result)
+
+    assert "Return code: 127" in formatted
+    assert "Julia executable: /usr/bin/julia" in formatted

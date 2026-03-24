@@ -31,7 +31,7 @@ CONDAPKG_NOISE = [
 
 
 def parse_error_and_trace(raw: str) -> tuple[str, str | None]:
-    """Separate a Julia error blob into ``(message, stacktrace-or-None)``."""
+    """Separate a Julia error blob into a message and optional stacktrace."""
     if STACKTRACE_MARKER in raw:
         msg, trace = raw.split(STACKTRACE_MARKER, 1)
         return msg.strip(), trace.strip()
@@ -82,6 +82,10 @@ def format_runtime_error(result: JuliaExecutionResult) -> str:
     """Render a readable runtime error string from a Julia execution result."""
     message = strip_condapkg_noise(result.error_summary)
     parts = [message] if message else []
+    if result.return_code not in (None, 0):
+        parts.append(f"\n(Return code: {result.return_code})")
+    if result.command:
+        parts.append(f"\n(Julia executable: {result.command})")
     if result.error_trace is not None:
         trace = strip_condapkg_noise(result.error_trace)
         if trace:

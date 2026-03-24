@@ -1,10 +1,4 @@
-"""
-Static analysis of Julia code via the ``judiagent_lint_driver.jl`` driver.
-
-The linter driver uses Julia's ``StaticLint`` / ``CSTParser`` to flag
-potential issues.  This module invokes the driver, parses the structured
-output, and returns the diagnostic text (empty string if clean).
-"""
+"""Static analysis of Julia code via the judiagent lint driver."""
 
 from __future__ import annotations
 
@@ -15,14 +9,9 @@ from judiagent.julia.execution_bridge import execute_julia_script
 
 
 def perform_lint_analysis(code: str) -> str:
-    """
-    Run static analysis on *code* and return a diagnostic string.
-
-    Returns an empty string when no issues are found or the linter
-    times out (JUDI package loading can be slow).
-    """
+    """Run static analysis on code and return diagnostics when present."""
     try:
-        stdout, stderr = execute_julia_script(
+        stdout, stderr, _return_code = execute_julia_script(
             code=code, driver_script="judiagent_lint_driver.jl"
         )
 

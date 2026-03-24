@@ -44,7 +44,7 @@ def fetch_julia_docstrings(code: str) -> tuple[list[str], str]:
     ``(function_names, documentation_text)``.
     """
     try:
-        stdout, _stderr = execute_julia_script(
+        stdout, _stderr, _return_code = execute_julia_script(
             code=code, driver_script="judiagent_doc_lookup.jl"
         )
         names, docstring = _extract_docstring_sections(stdout)
