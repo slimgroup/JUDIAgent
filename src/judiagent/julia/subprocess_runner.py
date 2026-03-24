@@ -8,7 +8,19 @@ import subprocess
 import tempfile
 
 LINT_TIMEOUT_SECS = 120
-CODE_TIMEOUT_SECS = 180
+DEFAULT_CODE_TIMEOUT_SECS = 180
+HEAVY_CODE_TIMEOUT_SECS = 600
+HEAVY_RUNTIME_MARKERS = (
+    "judijacobian",
+    "adjoint(j",
+    "lsrtm",
+    "rtm",
+    "illumination",
+    "fwi",
+    "twri",
+    "nlopt",
+    "gradient descent",
+)
 
 
 def resolve_julia_executable() -> str:
@@ -23,6 +35,27 @@ def resolve_julia_executable() -> str:
         return resolved
 
     return "julia"
+
+def _parse_timeout_env(name: str, default: int) -> int:
+    raw = os.environ.get(name, "").strip()
+    if not raw:
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        return default
+    return value if value > 0 else default
+
+
+def determine_code_timeout_secs(code: str) -> int:
+    """Choose a Julia runtime timeout from env and simple task heuristics."""
+    base_timeout = _parse_timeout_env("JUDIAgent_JULIA_CODE_TIMEOUT_SECS", DEFAULT_CODE_TIMEOUT_SECS)
+    heavy_timeout = _parse_timeout_env("JUDIAgent_JULIA_HEAVY_CODE_TIMEOUT_SECS", HEAVY_CODE_TIMEOUT_SECS)
+
+    code_lc = code.lower()
+    is_heavy = any(marker in code_lc for marker in HEAVY_RUNTIME_MARKERS)
+    return max(base_timeout, heavy_timeout) if is_heavy else base_timeout
+
 
 
 def execute_julia_script(
@@ -85,10 +118,12 @@ def execute_julia_script(
 def execute_julia_inline(
     code: str,
     project_dir: str | None = None,
+    timeout_secs: int | None = None,
 ) -> tuple[str, str, int | None, str]:
     """Execute a Julia code snippet via ``julia -e``."""
     project_dir = project_dir or os.getcwd()
     julia_bin = resolve_julia_executable()
+    timeout_secs = timeout_secs or determine_code_timeout_secs(code)
     try:
         proc = subprocess.run(
             [julia_bin, f"--project={project_dir}", "-e", code],
@@ -96,14 +131,14 @@ def execute_julia_inline(
             stderr=subprocess.PIPE,
             text=True,
             cwd=project_dir,
-            timeout=CODE_TIMEOUT_SECS,
+            timeout=timeout_secs,
         )
         return proc.stdout, proc.stderr, proc.returncode, julia_bin
     except subprocess.TimeoutExpired as exc:
         _try_kill(exc)
         return (
             "",
-            f"Error: Julia code execution timed out after {CODE_TIMEOUT_SECS} seconds. "
+            f"Error: Julia code execution timed out after {timeout_secs} seconds. "
             + "This may happen with complex simulations or when loading large packages.",
             None,
             julia_bin,

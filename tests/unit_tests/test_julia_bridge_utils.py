@@ -84,3 +84,29 @@ def test_execute_and_capture_treats_zero_exit_with_non_error_stderr_as_success(m
     assert result.stdout == "ok\n"
     assert result.return_code == 0
     assert result.command == "/usr/bin/julia"
+
+
+def test_determine_code_timeout_secs_uses_longer_budget_for_heavy_rtm(monkeypatch):
+    from judiagent.julia import subprocess_runner
+
+    monkeypatch.delenv("JUDIAgent_JULIA_CODE_TIMEOUT_SECS", raising=False)
+    monkeypatch.delenv("JUDIAgent_JULIA_HEAVY_CODE_TIMEOUT_SECS", raising=False)
+
+    timeout = subprocess_runner.determine_code_timeout_secs(
+        "using JUDI\nJ = judiJacobian(F, q)\nrtm = adjoint(J) * d_obs\n"
+    )
+
+    assert timeout == 600
+
+
+def test_determine_code_timeout_secs_keeps_shorter_budget_for_small_tasks(monkeypatch):
+    from judiagent.julia import subprocess_runner
+
+    monkeypatch.delenv("JUDIAgent_JULIA_CODE_TIMEOUT_SECS", raising=False)
+    monkeypatch.delenv("JUDIAgent_JULIA_HEAVY_CODE_TIMEOUT_SECS", raising=False)
+
+    timeout = subprocess_runner.determine_code_timeout_secs(
+        "using JUDI\nwavelet = ricker_wavelet(2000f0, 4f0, 0.015f0)\n"
+    )
+
+    assert timeout == 180
