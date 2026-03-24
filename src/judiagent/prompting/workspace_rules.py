@@ -13,6 +13,7 @@ For seismic plots, always anchor the plotting style to retrieved JUDI examples f
 - Avoid `Plots` for seismic outputs unless the user explicitly asks for it or the closest JUDI examples use it.
 - Keep benchmark plots minimal and reproducible: one main figure per requested artifact unless the user asks for extras.
 - Use physical axis labels when available (`Time (ms)`, `Receiver position (m)`, `Depth (m)`) rather than generic sample indices.
+- Treat benchmark prompts as task specs. Unless a benchmark prompt overrides them, apply the default plotting and artifact conventions below automatically rather than requiring the user to restate them.
 
 Forward-result figure standard:
 - Prefer `PythonPlot` for shot gathers when JUDI examples use `imshow`.
@@ -36,6 +37,12 @@ Geometry/setup figure standard:
 - For acquisition layouts, keep the figure minimal: source positions, receiver positions, and water/surface reference only if needed.
 - Prefer a clean 2D layout figure over a full modeling workflow.
 - Use one geometry figure per task unless the user asks for extras.
+
+Benchmark defaults:
+- For forward-modeling benchmarks that request figures, save one main shot-gather figure and, when the model setup matters visually, save one velocity-model figure.
+- For RTM or imaging benchmarks, save one main image figure and one main imaging artifact file unless the benchmark explicitly asks for a different bundle.
+- When the benchmark names the output path, honor it; otherwise, use descriptive names under `outputs/figures/` and `outputs/data/`.
+- Do not restate these defaults verbosely in the final Julia answer unless the user asks for an explanation.
 
 Preferred JUDI-style plotting patterns:
 
