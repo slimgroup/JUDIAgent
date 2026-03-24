@@ -31,6 +31,8 @@ Imaging / RTM figure standard:
 - Use physical extents when available, e.g. lateral position and depth in km or m, rather than pixel indices.
 - Use symmetric clipping around zero: `vmin=-A`, `vmax=A`.
 - Choose `A` from the image magnitude (for example from `maximum(abs.(rtm))` or a stable percentile clip) rather than leaving it fully automatic.
+- For compact RTM benchmarks, it is acceptable to use a tighter display clip (for example `A = 0.3` to `0.5 * maximum(abs.(rtm_img))`) when it better reveals the reflector-scale structure.
+- If shallow source imprint dominates the displayed RTM figure, it is acceptable to crop only a thin shallow strip from the plotted image while keeping the full saved imaging artifact unchanged.
 - Keep RTM titles short, e.g. `Basic RTM Image`, and save with `dpi=300` and `bbox_inches="tight"`.
 - For benchmark RTM tasks, keep one main script only and avoid generating extra `test_*.jl` sidecar scripts unless the user explicitly asks for them.
 - For shared-cluster validation, prefer a compact validation-scale RTM setup over a sprawling survey, but keep the full RTM path intact: true model, migration model, synthetic observed data, Jacobian adjoint RTM, one saved RTM image, and one saved imaging artifact.
@@ -43,6 +45,7 @@ Geometry/setup figure standard:
 Benchmark defaults:
 - For forward-modeling benchmarks that request figures, save one main shot-gather figure and, when the model setup matters visually, save one velocity-model figure.
 - For velocity-model figures, prefer the simpler JUDI / SLIM style: image of the model with physical extents and minimal clutter; avoid overlaying dense source/receiver markers on the model unless the task explicitly asks for a geometry figure.
+- When a source/receiver reference is still useful, keep it sparse and unobtrusive rather than plotting a dense acquisition overlay on top of the model.
 - For RTM or imaging benchmarks, save one main image figure and one main imaging artifact file unless the benchmark explicitly asks for a different bundle.
 - For runtime-heavy imaging benchmarks on shared clusters, prefer a compact validation-scale setup over a sprawling survey, but keep the full RTM path intact: true model, migration model, synthetic data, Jacobian adjoint, saved RTM image, and saved imaging artifact.
 - Do not create extra test scripts or sidecar Julia programs unless the user explicitly asks for them; prefer one main script per benchmark.
