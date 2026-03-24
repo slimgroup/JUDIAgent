@@ -1,4 +1,12 @@
 <svg width="1680" height="920" viewBox="0 0 1680 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-navy" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#243B53"/>
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#B26A00"/>
+    </marker>
+  </defs>
   <rect width="1680" height="920" rx="36" fill="#F7F3EA"/>
   <text x="800" y="92" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1F2933">JUDIAgent Autonomous Workflow</text>
   <text x="800" y="138" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#52606D">ReAct-style tool loop for open-ended JUDI development assistance</text>
@@ -30,20 +38,13 @@
   <rect x="1224" y="628" width="122" height="94" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
   <text x="1285" y="686" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#102A43">DONE</text>
 
-  <path d="M324 385 L384 385" stroke="#243B53" stroke-width="4"/>
-  <polygon points="384,385 369,377 369,393" fill="#243B53"/>
-  <path d="M676 385 L738 275" stroke="#243B53" stroke-width="4"/>
-  <polygon points="738,275 725,280 733,291" fill="#243B53"/>
-  <path d="M676 385 L738 459" stroke="#243B53" stroke-width="4"/>
-  <polygon points="738,459 724,455 731,444" fill="#243B53"/>
-  <path d="M1054 275 L1110 338" stroke="#243B53" stroke-width="4"/>
-  <polygon points="1110,338 1096,336 1106,327" fill="#243B53"/>
-  <path d="M1054 459 L1110 432" stroke="#243B53" stroke-width="4"/>
-  <polygon points="1110,432 1094,430 1102,442" fill="#243B53"/>
-  <path d="M1280 502 L1280 628" stroke="#243B53" stroke-width="4"/>
-  <polygon points="1280,628 1272,613 1288,613" fill="#243B53"/>
-  <path d="M1190 542 C1090 700 760 726 602 552" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
-  <polygon points="602,552 608,567 619,557" fill="#B26A00"/>
+  <path d="M324 385 H384" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M676 385 L738 275" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M676 385 L738 459" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1054 275 L1110 338" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1054 459 L1110 432" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1280 502 V628" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1190 542 C1090 700 760 726 602 552" stroke="#B26A00" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 10" fill="none" marker-end="url(#arrow-gold)"/>
 
   <text x="840" y="812" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#7C5E10">Tool observations and failures feed back into reasoning until the agent decides the task is complete.</text>
 </svg>

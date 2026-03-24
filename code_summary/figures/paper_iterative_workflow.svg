@@ -1,4 +1,12 @@
 <svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-navy" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#243B53"/>
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#B26A00"/>
+    </marker>
+  </defs>
   <rect width="1600" height="900" rx="36" fill="#F7F3EA"/>
   <text x="800" y="92" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" fill="#1F2933">JUDIAgent Standard Workflow</text>
   <text x="800" y="138" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#52606D">Iterative coding loop with correctness and domain-specific review</text>
@@ -34,18 +42,12 @@
   <rect x="984" y="612" width="196" height="90" rx="20" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
   <text x="1082" y="668" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#102A43">REFINE</text>
 
-  <path d="M328 317 L392 317" stroke="#243B53" stroke-width="4"/>
-  <polygon points="392,317 377,309 377,325" fill="#243B53"/>
-  <path d="M690 317 L754 317" stroke="#243B53" stroke-width="4"/>
-  <polygon points="754,317 739,309 739,325" fill="#243B53"/>
-  <path d="M1052 317 L1124 250" stroke="#243B53" stroke-width="4"/>
-  <polygon points="1124,250 1110,252 1118,264" fill="#243B53"/>
-  <path d="M1052 317 L1124 437" stroke="#243B53" stroke-width="4"/>
-  <polygon points="1124,437 1112,428 1108,441" fill="#243B53"/>
-  <path d="M1277 516 L1277 612" stroke="#243B53" stroke-width="4"/>
-  <polygon points="1277,612 1269,597 1285,597" fill="#243B53"/>
-  <path d="M1124 437 C1060 470 1008 516 1000 560 C994 592 1018 612 1062 612" stroke="#B26A00" stroke-width="4" stroke-dasharray="12 10" fill="none"/>
-  <polygon points="1062,612 1048,603 1048,621" fill="#B26A00"/>
+  <path d="M328 317 H392" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M690 317 H754" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1052 317 L1124 250" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1052 317 L1124 437" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1277 516 V612" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1124 437 C1060 470 1008 516 1000 560 C994 592 1018 612 1062 612" stroke="#B26A00" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 10" fill="none" marker-end="url(#arrow-gold)"/>
 
   <text x="800" y="790" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#7C5E10">Failed validation returns targeted diagnostics and metric hints to the next repair iteration.</text>
 </svg>
