@@ -177,14 +177,32 @@ class IterativeCodeAgent(AgentCore):
     def _complete_interaction(
         self, state: AgentState, config: RunnableConfig
     ) -> dict:
-        """Terminal node: signal that validation passed."""
+        """Terminal node: persist validated artifacts and signal completion."""
         from judiagent.cli import colorscheme, print_to_console
-        from judiagent.configuration import cli_mode
+        from judiagent.configuration import BaseConfiguration, cli_mode
+        from judiagent.core.run_artifacts import persist_validated_run
+
+        saved_note = ""
+        code = state.code_block.to_string(omit_if_empty=True)
+        if code:
+            configuration = BaseConfiguration.from_runnable_config(config)
+            script_path, metadata_path = persist_validated_run(
+                base_directory=".",
+                messages=state.messages,
+                code=code,
+                agent_mode="iterative",
+                model_name=configuration.agent_model,
+            )
+            saved_note = (
+                f"\n\nSaved validated script: {script_path}"
+                f"\nSaved run metadata: {metadata_path}"
+            )
 
         if cli_mode:
             print_to_console(
                 text=(
-                    "Code validated successfully!\n\n"
+                    "Code validated successfully!"
+                    f"{saved_note}\n\n"
                     "You can:\n"
                     "- Ask a new question\n"
                     "- Request modifications to the code\n"
@@ -195,7 +213,6 @@ class IterativeCodeAgent(AgentCore):
                 border_style=colorscheme.success,
             )
         return {}
-
     @staticmethod
     def _handle_validation_result(
         state: AgentState, config: RunnableConfig

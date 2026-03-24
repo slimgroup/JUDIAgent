@@ -75,7 +75,8 @@ FINALIZATION_AGENT = """
 
 ## Finalization
 
-Only write Julia code to a file when the user explicitly asks for it.
+Validated Julia code is persisted automatically after successful checks.
+Only write extra ad-hoc files beyond the standard scripts/outputs layout when the user explicitly asks for them.
 """
 
 

@@ -5,6 +5,12 @@ VISUALIZATION_SECTION = """
 
 ## Visualization And Plotting
 
+For seismic plots, prefer JUDI example conventions first:
+
+- Start with `SlimPlotting` helpers when the matching JUDI examples use them.
+- If `SlimPlotting` fails because of backend or colormap issues, fall back to `PythonPlot` or `Plots` with a simple `imshow` / `heatmap` workflow.
+- Keep benchmark plots minimal and reproducible: one main figure per requested artifact unless the user asks for extras.
+
 For seismic plots, prefer:
 
 ### SlimPlotting
@@ -77,5 +83,7 @@ Examples:
 - Default saved Julia scripts to `scripts/{task}_{model}.jl`.
 - Save figures under `outputs/figures/`.
 - Save `.jld2` and `.segy` data under `outputs/data/`.
+- For benchmark-style runs, save at least one primary figure and save the main generated data object when feasible.
+- Keep experiment settings recoverable from saved scripts and a metadata sidecar.
 - Avoid generic names like `output.png` or `result.jld2`.
 """
