@@ -32,25 +32,32 @@ def _extract_indented_julia(response: str) -> str:
     blocks: list[str] = []
     current: list[str] = []
 
+    def _flush_current() -> None:
+        nonlocal current
+        if current:
+            block = "\n".join(current).strip()
+            if block:
+                blocks.append(block)
+            current = []
+
     for raw_line in response.splitlines():
         line = raw_line.rstrip("\n")
         stripped = line.strip()
-        is_code = False
+
+        if not stripped:
+            if current:
+                current.append("")
+            continue
+
         if line.startswith("  ") or line.startswith("\t"):
             candidate = line[2:] if line.startswith("  ") else line.lstrip("\t")
-            if not stripped or _INDENTED_CODE_LINE_RE.match(candidate.lstrip()):
-                is_code = True
+            if _INDENTED_CODE_LINE_RE.match(candidate.lstrip()):
                 current.append(candidate.rstrip())
-        if not is_code:
-            if current:
-                block = "\n".join(current).strip()
-                if block:
-                    blocks.append(block)
-                current = []
-    if current:
-        block = "\n".join(current).strip()
-        if block:
-            blocks.append(block)
+                continue
+
+        _flush_current()
+
+    _flush_current()
 
     if not blocks:
         return ""
