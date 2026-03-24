@@ -5,13 +5,16 @@ VISUALIZATION_SECTION = """
 
 ## Visualization And Plotting
 
-For seismic plots, prefer JUDI example conventions first:
+For seismic plots, always anchor the plotting style to retrieved JUDI examples first:
 
-- Start with `SlimPlotting` helpers when the matching JUDI examples use them.
-- If `SlimPlotting` fails because of backend or colormap issues, fall back to `PythonPlot` or `Plots` with a simple `imshow` / `heatmap` workflow.
+- Search the JUDI examples in RAG before choosing a plotting approach.
+- Prefer the plotting package and calling pattern that appears in the closest matching JUDI examples.
+- Default to `SlimPlotting` or `PythonPlot` for seismic figures when examples support them.
+- Avoid `Plots` for seismic outputs unless the user explicitly asks for it or the closest JUDI examples use it.
 - Keep benchmark plots minimal and reproducible: one main figure per requested artifact unless the user asks for extras.
+- Use physical axis labels when available (`Time (ms)`, `Receiver position (m)`, `Depth (m)`) rather than generic sample indices.
 
-For seismic plots, prefer:
+Preferred JUDI-style plotting patterns:
 
 ### SlimPlotting
 ```julia
@@ -21,22 +24,18 @@ plot_sdata(dobs.data[1]; name="Shot Gather")
 plot_simage(rtm; name="RTM Image")
 ```
 
-### Plots.jl
+### PythonPlot
 ```julia
-using Plots
-heatmap(v', xlabel="X (grid)", ylabel="Z (grid)", title="Velocity Model", color=:seismic)
-heatmap(dobs.data[1], xlabel="Receiver", ylabel="Time Sample", title="Shot Gather")
-savefig("outputs/figures/example_velocity.png")
+using PythonPlot
+fig = figure(figsize=(8, 5))
+imshow(dobs.data[1], aspect="auto", cmap="seismic", origin="upper")
+xlabel("Receiver position (m)")
+ylabel("Time (ms)")
+savefig("outputs/figures/example_shot_gather.png", dpi=300, bbox_inches="tight")
+close(fig)
 ```
 
-### PyPlot
-```julia
-using PyPlot
-imshow(v', aspect="auto", cmap="seismic", origin="upper")
-savefig("outputs/figures/example_velocity.png")
-close()
-```
-
+Only use generic `Plots` recipes as a fallback of last resort.
 CondaPkg setup messages for plotting backends are normal on first use.
 """
 
@@ -49,7 +48,8 @@ MINIMAL_TASKS_SECTION = """
 For simple helper tasks such as creating a wavelet, computing a small geometry object, or demonstrating a single JUDI helper function:
 
 - Prefer the smallest runnable Julia snippet that answers the question directly.
-- Do not add plotting, file output, `JLD2`, `Plots`, `PythonPlot`, or directory creation unless the user explicitly asks for them.
+- Do not add plotting, file output, `JLD2`, `Plots`, `PythonPlot`, `SlimPlotting`, or directory creation unless the user explicitly asks for them.
+- Even when optional plotting is requested, keep it minimal and consistent with retrieved JUDI examples rather than expanding into a larger workflow.
 - Do not turn a helper-function question into a full seismic workflow.
 - Avoid optional extras after the main answer when they increase validation risk.
 
