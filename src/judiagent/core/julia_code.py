@@ -10,9 +10,16 @@ _JULIA_FENCE_RE = re.compile(r"```julia\s*([\s\S]*?)```", re.IGNORECASE)
 
 
 def extract_fenced_julia(response: str) -> str:
-    """Pull Julia source from one or more markdown fences."""
+    """Pull Julia source from the final non-empty markdown fence.
+
+    Models sometimes emit multiple Julia snippets, for example a debug probe
+    followed by the final recommended solution. Validation should execute the
+    last fenced block rather than concatenating incompatible alternatives.
+    """
     blocks = [match.strip() for match in _JULIA_FENCE_RE.findall(response) if match.strip()]
-    return "\n\n".join(blocks)
+    if not blocks:
+        return ""
+    return blocks[-1]
 
 
 def parse_julia_code_block(
