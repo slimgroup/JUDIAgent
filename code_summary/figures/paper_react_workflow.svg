@@ -1,4 +1,4 @@
-<svg width="1720" height="920" viewBox="0 0 1720 920" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="1820" height="980" viewBox="0 0 1820 980" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="arrow-navy" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
       <path d="M 0 0 L 12 6 L 0 12 z" fill="#243B53"/>
@@ -7,44 +7,44 @@
       <path d="M 0 0 L 12 6 L 0 12 z" fill="#B26A00"/>
     </marker>
   </defs>
-  <rect width="1720" height="920" rx="32" fill="#F7F3EA"/>
-  <text x="860" y="78" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="60" font-weight="700" fill="#1F2933">JUDIAgent Autonomous Workflow</text>
-  <text x="860" y="122" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="31" fill="#52606D">ReAct-style tool loop for open-ended development help</text>
+  <rect width="1820" height="980" rx="32" fill="#F7F3EA"/>
+  <text x="910" y="84" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700" fill="#1F2933">JUDIAgent Autonomous Workflow</text>
+  <text x="910" y="132" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="35" fill="#52606D">ReAct-style tool loop for open-ended development help</text>
 
-  <rect x="54" y="312" width="248" height="132" rx="24" fill="#E6EEF5" stroke="#243B53" stroke-width="3"/>
-  <text x="178" y="378" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#102A43">User Goal</text>
-  <text x="178" y="418" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#486581">question or task</text>
+  <rect x="60" y="338" width="270" height="144" rx="24" fill="#E6EEF5" stroke="#243B53" stroke-width="3"/>
+  <text x="195" y="411" text-anchor="middle" font-family="Arial, sans-serif" font-size="45" font-weight="700" fill="#102A43">User Goal</text>
+  <text x="195" y="454" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#486581">question or task</text>
 
-  <rect x="346" y="246" width="356" height="262" rx="26" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
-  <text x="524" y="322" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#102A43">Reason + Plan</text>
-  <text x="524" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#243B53">next action</text>
-  <text x="524" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#243B53">tool choice</text>
-  <text x="524" y="460" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#486581">ReAct node</text>
+  <rect x="382" y="256" width="384" height="286" rx="26" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="574" y="341" text-anchor="middle" font-family="Arial, sans-serif" font-size="49" font-weight="700" fill="#102A43">Reason + Plan</text>
+  <text x="574" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#243B53">next action</text>
+  <text x="574" y="449" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#243B53">tool choice</text>
+  <text x="574" y="493" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#486581">ReAct node</text>
 
-  <rect x="758" y="162" width="360" height="164" rx="24" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
-  <text x="938" y="232" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#102A43">Retrieval Tools</text>
-  <text x="938" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#243B53">examples + docs</text>
+  <rect x="826" y="164" width="382" height="182" rx="24" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="1017" y="243" text-anchor="middle" font-family="Arial, sans-serif" font-size="47" font-weight="700" fill="#102A43">Retrieval Tools</text>
+  <text x="1017" y="302" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#243B53">examples + docs</text>
 
-  <rect x="758" y="428" width="360" height="164" rx="24" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
-  <text x="938" y="498" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#102A43">Execution Tools</text>
-  <text x="938" y="552" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#243B53">Julia, shell, files</text>
+  <rect x="826" y="458" width="382" height="182" rx="24" fill="#FCE7D8" stroke="#243B53" stroke-width="3"/>
+  <text x="1017" y="537" text-anchor="middle" font-family="Arial, sans-serif" font-size="47" font-weight="700" fill="#102A43">Execution Tools</text>
+  <text x="1017" y="596" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#243B53">Julia, shell, files</text>
 
-  <rect x="1174" y="246" width="398" height="278" rx="26" fill="#F2E8F5" stroke="#243B53" stroke-width="3"/>
-  <text x="1373" y="328" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#102A43">Observe + Update</text>
-  <text x="1373" y="390" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#243B53">read tool outputs</text>
-  <text x="1373" y="432" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#243B53">continue or stop</text>
-  <text x="1373" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#486581">control loop</text>
+  <rect x="1268" y="256" width="428" height="302" rx="26" fill="#F2E8F5" stroke="#243B53" stroke-width="3"/>
+  <text x="1482" y="346" text-anchor="middle" font-family="Arial, sans-serif" font-size="49" font-weight="700" fill="#102A43">Observe + Update</text>
+  <text x="1482" y="412" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#243B53">read tool outputs</text>
+  <text x="1482" y="457" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#243B53">continue or stop</text>
+  <text x="1482" y="502" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#486581">control loop</text>
 
-  <rect x="1306" y="648" width="138" height="102" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
-  <text x="1375" y="714" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#102A43">DONE</text>
+  <rect x="1398" y="706" width="172" height="116" rx="20" fill="#E7F4EC" stroke="#243B53" stroke-width="3"/>
+  <text x="1484" y="781" text-anchor="middle" font-family="Arial, sans-serif" font-size="45" font-weight="700" fill="#102A43">DONE</text>
 
-  <path d="M302 378 H346" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
-  <path d="M702 378 L758 244" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
-  <path d="M702 378 L758 510" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
-  <path d="M1118 244 L1174 336" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
-  <path d="M1118 510 L1174 430" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
-  <path d="M1373 524 V648" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
-  <path d="M1274 572 C1186 742 834 760 658 552" stroke="#B26A00" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 10" fill="none" marker-end="url(#arrow-gold)"/>
+  <path d="M330 410 H382" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M766 410 L826 256" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M766 410 L826 548" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1208 256 L1268 358" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1208 548 L1268 458" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1484 558 V706" stroke="#243B53" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <path d="M1382 612 C1280 816 882 836 700 600" stroke="#B26A00" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 10" fill="none" marker-end="url(#arrow-gold)"/>
 
-  <text x="860" y="850" text-anchor="middle" font-family="Arial, sans-serif" font-size="31" fill="#7C5E10">Observations feed back into reasoning until the agent decides the task is done.</text>
+  <text x="910" y="908" text-anchor="middle" font-family="Arial, sans-serif" font-size="35" fill="#7C5E10">Observations feed back into reasoning until the agent decides the task is done.</text>
 </svg>

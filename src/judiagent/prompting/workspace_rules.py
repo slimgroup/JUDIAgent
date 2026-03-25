@@ -33,6 +33,7 @@ Imaging / RTM figure standard:
 - Choose `A` from the image magnitude (for example from `maximum(abs.(rtm))` or a stable percentile clip) rather than leaving it fully automatic.
 - For compact RTM benchmarks, it is acceptable to use a tighter display clip (for example `A = 0.3` to `0.5 * maximum(abs.(rtm_img))`) when it better reveals the reflector-scale structure.
 - If shallow source imprint dominates the displayed RTM figure, it is acceptable to crop only a thin shallow strip from the plotted image while keeping the full saved imaging artifact unchanged.
+- If shallow source imprint or water-column artifacts dominate an RTM result, it is standard practice to apply a shallow top mute to the water column in the improved image product while keeping the original unmuted RTM artifact available for comparison.
 - Keep RTM titles short, e.g. `Basic RTM Image`, and save with `dpi=300` and `bbox_inches="tight"`.
 - For benchmark RTM tasks, keep one main script only and avoid generating extra `test_*.jl` sidecar scripts unless the user explicitly asks for them.
 - For shared-cluster validation, prefer a compact validation-scale RTM setup over a sprawling survey, but keep the full RTM path intact: true model, migration model, synthetic observed data, Jacobian adjoint RTM, one saved RTM image, and one saved imaging artifact.
