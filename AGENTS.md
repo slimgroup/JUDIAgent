@@ -15,6 +15,8 @@ This repository contains a Python + Julia agent stack. When working here with Co
 - `examples/`: thin entry scripts that should stay runnable after refactors.
 - `tests/`: pytest coverage for Python behavior, imports, graph wiring, and smoke tests.
 - `docs/devel-pace.md`: PACE / SSH / cluster development workflow and cost-saving guidance.
+- `docs/reproducibility.md`: public-release setup and reproducibility checklist.
+- `src/judiagent/rag/THIRD_PARTY.md`: provenance notes for vendored JUDI retrieval material.
 
 ## Testing expectations
 
@@ -35,7 +37,9 @@ This repository contains a Python + Julia agent stack. When working here with Co
 - Preserve public entry points such as `examples/agent.py`, `examples/autonomous_agent.py`, and `langgraph.json` targets unless the user requests a breaking change.
 - When splitting modules, prefer compatibility shims or re-exports so imports stay stable.
 - Preserve the Python/Julia boundary in `src/judiagent/julia/` and the `.jl` driver scripts unless the user is aware of the interface change.
-- Treat `src/judiagent/rag/`, `src/judiagent/prompts.py`, and `rag/judi/` as behavior-sensitive areas. Prefer additive or clearly scoped edits.
+- Treat `src/judiagent/rag/`, `src/judiagent/prompts.py`, and
+  `src/judiagent/rag/judi/` as behavior-sensitive areas. Prefer additive or
+  clearly scoped edits.
 
 ## Safety
 
@@ -43,6 +47,8 @@ This repository contains a Python + Julia agent stack. When working here with Co
 - Do not rewrite git history, run aggressive cleanup, or touch recovery-impacting git operations without explicit permission.
 - Do not modify local-only runtime state such as `.env`, `.venv/`, `.CondaPkg/`, `outputs/`, or user-generated `scripts/` content unless the user asks.
 - Prefer reversible changes and explain intentional breakage clearly.
+- Before public-release edits, preserve attribution in `NOTICE`, `CITATION.cff`,
+  and third-party corpus notes. Do not remove upstream JutulGPT or JUDI credits.
 
 ## Commit workflow
 

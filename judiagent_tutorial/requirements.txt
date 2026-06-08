@@ -1,9 +1,12 @@
-# Python dependencies for JUDIAgent Tutorial
-# This file ensures reproducible Python environment
-# 
-# Installation:
-#   pip install -r requirements.txt
-#   pip install -e ../  # Install JUDIAgent from parent directory
+# Optional pip fallback for standalone tutorial copies.
+#
+# The public release path uses the parent repository environment:
+#   cd ..
+#   uv venv
+#   uv sync
+#
+# Use this file only when the tutorial is copied away from the repository and
+# `uv.lock` is not available.
 
 # Core dependencies (minimal set for tutorial)
 # Note: JUDIAgent will install additional dependencies, but these are the essentials

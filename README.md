@@ -36,6 +36,7 @@ For public-release provenance and third-party corpus notes, see
 - Julia 1.11.x
 - `uv` for reproducible Python environments
 - `graphviz` system libraries when building graph visualization dependencies
+  (for example `apt install graphviz graphviz-dev` or `dnf install graphviz graphviz-devel`)
 - Optional: `ollama` for local model experiments
 
 ### Local Workstation Setup
@@ -112,8 +113,9 @@ uv run pytest tests/integration_tests/test_entrypoints.py
 uv run pytest
 ```
 
-For a full reproducibility checklist, see
-[docs/reproducibility.md](docs/reproducibility.md).
+For a full reproducibility checklist and documentation map, see
+[docs/reproducibility.md](docs/reproducibility.md) and
+[docs/README.md](docs/README.md).
 
 ## Usage
 
@@ -174,7 +176,7 @@ The `BaseConfiguration` class provides additional runtime settings:
 
 ### CLI Mode
 
-Enable CLI mode in `src/judiagent/configuration.py`:
+Enable CLI mode in `src/judiagent/settings.py`:
 
 ```python
 cli_mode = True
@@ -223,12 +225,13 @@ JUDIAgent/
 │   ├── rag/               # Retrieval and JUDI source material
 │   ├── tools/             # Tool surface exposed to the agents
 │   └── configuration.py   # Runtime settings
-├── media/                 # README assets
 ├── benchmarks/            # Prompt catalog and acceptance criteria
 ├── code_summary/          # Paper-facing notes and generated figure assets
 ├── docs/                  # Development and reproducibility guides
+├── env/                   # Optional local/PACE environment helpers
 ├── examples/              # Launch scripts
 ├── judiagent_tutorial/    # Tutorial materials
+├── media/                 # README assets
 └── tests/                 # Test suite
 ```
 
@@ -244,6 +247,12 @@ Retrieval indexes are also built locally on first use under
 `src/judiagent/rag/retriever_store/` and `src/judiagent/rag/loaded_store/`.
 With the default remote embedding model, that first build requires
 `OPENAI_API_KEY`.
+
+## Tutorial
+
+The tutorial notebook lives in `judiagent_tutorial/` and uses the parent
+repository environment. Start with
+[`judiagent_tutorial/README.md`](judiagent_tutorial/README.md).
 
 ## Third-Party Material
 
@@ -266,6 +275,11 @@ uv run pytest
 The JUDIAgent code is distributed under the MIT License; see
 [LICENSE](LICENSE). Third-party retrieval material keeps its upstream notices
 and license terms.
+
+## Citing
+
+If you use JUDIAgent in academic work, cite the repository using
+[`CITATION.cff`](CITATION.cff) and cite JUDI.jl where appropriate.
 
 ## Acknowledgments
 

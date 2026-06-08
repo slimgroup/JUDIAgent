@@ -1,13 +1,22 @@
-# Codex Setup for JUDIAgent
+# Codex / Agent Setup Notes
 
-This repository now includes two Codex-oriented layers:
+This note is for maintainers who use Codex or similar coding agents on
+JUDIAgent. It is not required for normal users who only want to install or run
+the package; those users should start with the root `README.md` and
+`docs/reproducibility.md`.
+
+The repository includes two Codex-oriented layers:
 
 - `AGENTS.md`: repo-local default instructions for Codex and similar coding agents
 - `.codex/skills/judiagent-dev/`: a reusable skill version of the same workflow
 
 ## Recommended usage
 
-If you open this repository directly in Codex, the root `AGENTS.md` is the most important file. It gives the agent the repo-specific workflow, testing, and safety rules that were previously stored in Cursor rules.
+If you open this repository directly in Codex, the root `AGENTS.md` is the
+canonical file. It gives agents the repo-specific workflow, testing, public
+release, attribution, and safety rules. Cursor-specific rules remain in
+`.cursor/rules/`; `.cursorrules` is only a short fallback for older Cursor
+setups.
 
 ## Optional: install the reusable skill globally
 

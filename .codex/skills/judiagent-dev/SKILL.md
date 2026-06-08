@@ -22,7 +22,8 @@ Use this skill when the task is inside JUDIAgent or clearly follows the same wor
 
 - Keep `examples/agent.py`, `examples/autonomous_agent.py`, and `langgraph.json` targets working.
 - Preserve the interface between `src/judiagent/julia/*.py` and the Julia driver scripts unless the user is aware of the change.
-- Treat changes under `src/judiagent/rag/`, `src/judiagent/prompts.py`, and `rag/judi/` as behavior-sensitive.
+- Treat changes under `src/judiagent/rag/`, `src/judiagent/prompts.py`, and
+  `src/judiagent/rag/judi/` as behavior-sensitive.
 - Use `tmp_path` for test filesystem side effects and avoid writing into tracked runtime output directories unless needed.
 
 ## Safety and git

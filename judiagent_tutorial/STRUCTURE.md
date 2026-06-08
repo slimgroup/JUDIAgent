@@ -2,15 +2,16 @@
 
 ## Overview
 
-This directory contains a self-contained, reproducible tutorial for JUDIAgent.
+This directory contains the JUDIAgent tutorial notebook and helper scripts. It
+uses the parent repository environment by default so the tutorial, package code,
+lockfile, and retrieval corpus stay aligned.
 
 ## Files
 
 ```
 judiagent_tutorial/
-├── Project.toml              # Julia dependencies (minimal set)
-├── Manifest.toml             # Auto-generated: exact Julia package versions
-├── requirements.txt          # Python dependencies
+├── Project.toml              # Optional tutorial-local Julia project
+├── requirements.txt          # Optional pip fallback notes
 ├── judiagent_tutorial.ipynb # Main tutorial notebook
 ├── README.md                 # User-facing setup guide
 ├── DEPLOYMENT.md             # Server deployment guide
@@ -25,9 +26,10 @@ judiagent_tutorial/
 
 ### Configuration Files
 
-- **Project.toml**: Julia package dependencies (JUDI.jl, LinearAlgebra, etc.)
-- **Manifest.toml**: Auto-generated after `Pkg.instantiate()`, contains exact versions
-- **requirements.txt**: Python package dependencies (LangChain, Jupyter, etc.)
+- **Project.toml**: Optional tutorial-local Julia package list. The public
+  release path uses the root `Project.toml`.
+- **requirements.txt**: Optional fallback notes for standalone pip-based use.
+  The public release path uses the root `pyproject.toml` and `uv.lock`.
 
 ### Documentation
 
@@ -38,8 +40,9 @@ judiagent_tutorial/
 
 ### Scripts
 
-- **setup.sh**: Automated setup (creates venv, installs dependencies)
-- **launch.sh**: Quick launch script for Jupyter
+- **setup.sh**: Sets up the parent repository environment and registers a
+  Jupyter kernel.
+- **launch.sh**: Launches the notebook from the parent repository environment.
 
 ### Tutorial
 
@@ -53,10 +56,10 @@ judiagent_tutorial/
 - Random: Standard library  
 - Statistics: Standard library
 
-### Python Packages (requirements.txt)
-- Core: langchain, langgraph, pydantic
-- Jupyter: ipykernel, jupyter, notebook
-- JUDIAgent: Must be installed separately (`pip install -e ../`)
+### Python Packages
+
+Use the root `uv.lock` through `uv sync`. `requirements.txt` is only a fallback
+for standalone tutorial copies.
 
 ## Setup Workflow
 
@@ -71,12 +74,11 @@ judiagent_tutorial/
    ```
 
 3. **For Reproducibility**:
-   - Julia: `Manifest.toml` is auto-generated with exact versions
-   - Python: Can generate `requirements-lock.txt` with `pip freeze`
+   - Julia: root `Project.toml` with local `Manifest.toml` generated as needed
+   - Python: root `uv.lock`
 
 ## Notes
 
-- Each tutorial directory is self-contained
-- Julia environment is isolated via `Project.toml`
-- Python environment is isolated via virtual environment
-- JUDIAgent must be installed from parent directory or via pip
+- Keep the tutorial in the parent repository when possible.
+- Do not commit tutorial `.env`, `.venv`, or generated notebook outputs.
+- JUDIAgent is installed from the parent repository.

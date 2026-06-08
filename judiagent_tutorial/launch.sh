@@ -1,21 +1,23 @@
-#!/bin/bash
-# Launch script for JUDIAgent Tutorial
+#!/usr/bin/env bash
+# Launch the tutorial notebook from the parent JUDIAgent environment.
 
-# Activate virtual environment
-if [ -d ".venv" ]; then
+set -euo pipefail
+
+SCRIPT_DIR="$({ cd "$(dirname "${BASH_SOURCE[0]}")" && pwd; })"
+REPO_ROOT="$({ cd "$SCRIPT_DIR/.." && pwd; })"
+
+cd "$REPO_ROOT"
+
+if command -v uv >/dev/null 2>&1; then
+    exec uv run jupyter notebook judiagent_tutorial/judiagent_tutorial.ipynb
+fi
+
+if [ -f ".venv/bin/activate" ]; then
+    # shellcheck disable=SC1091
     source .venv/bin/activate
-else
-    echo "ERROR: Virtual environment not found. Run ./setup.sh first."
-    exit 1
+    exec jupyter notebook judiagent_tutorial/judiagent_tutorial.ipynb
 fi
 
-# Check if Jupyter is installed
-if ! command -v jupyter &> /dev/null; then
-    echo "ERROR: Jupyter not found. Install with: pip install jupyter"
-    exit 1
-fi
-
-# Launch Jupyter
-echo "Launching Jupyter Notebook..."
-jupyter notebook judiagent_tutorial.ipynb
+echo "ERROR: JUDIAgent environment not found. Run judiagent_tutorial/setup.sh first." >&2
+exit 1
 

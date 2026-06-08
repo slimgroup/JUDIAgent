@@ -29,10 +29,13 @@ alwaysApply: true
 ## Codebase-specific expectations
 
 - **Python/Julia boundary**: Preserve the **interface and calling conventions** between `src/judiagent/julia/*.py` and the `.jl` driver scripts (i.e. how Python invokes Julia, which script paths and arguments are used, and what stdout/stderr mean); do not change subprocess calling conventions or script paths without good reason and user awareness.
-- **RAG and prompts**: Changes to `src/judiagent/rag/`, `src/judiagent/prompts.py`, or `rag/judi/` content affect retrieval and agent behaviour; prefer additive or clearly scoped edits and avoid silently removing JUDI-specific prompt sections.
+- **RAG and prompts**: Changes to `src/judiagent/rag/`, `src/judiagent/prompts.py`, or `src/judiagent/rag/judi/` content affect retrieval and agent behaviour; prefer additive or clearly scoped edits and avoid silently removing JUDI-specific prompt sections.
 - **Agent entry points**: Keep `examples/agent.py` and `examples/autonomous_agent.py` (and their imports from `judiagent`) working; any rename or move of the main agents should update these and `langgraph.json`.
 - When reorganizing code or config, preserve existing behaviour unless the user explicitly asks for a breaking change; document any intentional breakage.
 
 ## Traceability
 
 - When doing feedback-driven or multi-step changes, keep the scope of each change understandable (e.g. one logical change per commit when the user requests commits), so history stays useful for the JUDIAgent project and possible publication.
+- For public-release edits, preserve attribution in `NOTICE`, `CITATION.cff`,
+  and third-party corpus notes. Do not remove upstream JutulGPT or JUDI credits
+  without explicit user approval.

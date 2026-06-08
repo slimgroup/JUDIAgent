@@ -27,7 +27,7 @@ Never commit `.venv` (it is gitignored). Do commit `uv.lock` when dependencies c
 
 ## SSH, Cursor/VS Code, and the Python environment
 
-- Open the **repository root** (`JUDIAgent/`) as the workspace folder so `pyproject.toml`, `uv.lock`, and `.venv` line up with editor settings (e.g. `.vscode/settings.json` uses `${workspaceFolder}/.venv`).
+- Open the **repository root** (`JUDIAgent/`) as the workspace folder so `pyproject.toml`, `uv.lock`, and `.venv` line up with editor settings. The repository ships `.vscode.example/` for optional editor integration.
 - After `uv sync`, pick the interpreter **`./.venv/bin/python`** if the IDE still shows missing imports.
 - Use **`tmux`** or **`screen`** on the cluster so disconnects do not kill long interactive sessions.
 
@@ -52,7 +52,7 @@ Recommended split:
 # Login node: cheap setup and smoke checks
 source .venv/bin/activate
 source env/pace-local.sh
-./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+uv run pytest tests/integration_tests/test_entrypoints.py
 
 # Interactive compute node: first Julia/JUDI setup
 source .venv/bin/activate
@@ -60,9 +60,6 @@ source env/pace-local.sh
 module load julia/1.11.3
 julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
-
-- `UV_CACHE` — uv download cache  
-- `JULIA_DEPOT_PATH` — Julia artifacts (if you use Julia on the cluster)
 
 Check your center’s documentation for recommended paths (`$WORK`, `$SCRATCH`, etc.).
 
@@ -77,7 +74,7 @@ On the login node:
 
 ```bash
 uv sync
-./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+uv run pytest tests/integration_tests/test_entrypoints.py
 ```
 
 On an interactive compute node, you can then do the first Julia setup and any real agent run:
@@ -87,7 +84,7 @@ module load julia/1.11.3
 export JUDIAgent_PACE_SHARED_DEPOT=off
 source env/pace-local.sh
 julia --project=. -e 'import Pkg; Pkg.Registry.update(); Pkg.instantiate()'
-./.venv/bin/python examples/agent.py
+uv run python examples/agent.py
 ```
 
 For a smoke check of entrypoints without a long agent loop, rely on tests under `tests/` first; use full `examples/agent.py` when you intentionally spend time/API quota on an interactive node or approved session.

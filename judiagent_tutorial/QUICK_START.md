@@ -1,50 +1,45 @@
-# Quick Start Guide
+# JUDIAgent Tutorial Quick Start
 
-## For First-Time Users
+## First-Time Setup
 
-### 1. Setup (One-time)
+From the repository root:
+
+```bash
+uv venv
+uv sync
+cp .env.example .env
+julia --project=. -e 'import Pkg; Pkg.instantiate()'
+```
+
+Then launch:
 
 ```bash
 cd judiagent_tutorial
-chmod +x setup.sh  # Make executable (first time only)
-./setup.sh
-```
-
-### 2. Launch Tutorial
-
-```bash
-chmod +x launch.sh  # Make executable (first time only)
 ./launch.sh
 ```
 
-**Important**: In Jupyter, select kernel: **Kernel → Change Kernel → Python (judiagent_tutorial)**
+In Jupyter, select the **Python (JUDIAgent)** kernel if prompted.
 
-Or manually:
-```bash
-source .venv/bin/activate
-jupyter notebook judiagent_tutorial.ipynb
-```
+## Returning Users
 
-## For Returning Users
+From `judiagent_tutorial/`:
 
 ```bash
-cd judiagent_tutorial
-source .venv/bin/activate
-jupyter notebook judiagent_tutorial.ipynb
+./launch.sh
 ```
 
 ## Requirements
 
 - Python 3.12+
 - Julia 1.11+
-- JUDIAgent installed (via `pip install -e ../`)
+- The parent repository environment created with `uv sync`
+- API keys in the root `.env` for whichever providers you use
 
 ## Troubleshooting
 
-- **"Command not found"**: Make scripts executable: `chmod +x setup.sh launch.sh`
-- **"Module not found"**: Run setup again: `./setup.sh` or install manually: `pip install -e ../`
-- **"Kernel not found"**: Re-run setup script or register manually: `python -m ipykernel install --user --name judiagent_tutorial`
-- **"Julia error"**: Run `julia -e 'import Pkg; Pkg.activate("."); Pkg.instantiate()'`
-- **"Python version error"**: Ensure Python 3.12+ is installed: `python3 --version`
+- **`uv` not found**: Run `./setup.sh`; it falls back to `.venv` + `pip`.
+- **Module not found**: Run `uv sync` from the repository root.
+- **Kernel not found**: Run `./setup.sh` from this directory.
+- **Julia error**: Run `julia --project=. -e 'import Pkg; Pkg.instantiate()'` from the repository root.
 
-See README.md for detailed instructions.
+See [README.md](README.md) for details.

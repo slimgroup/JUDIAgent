@@ -17,6 +17,9 @@ uv sync
 `uv.lock` is committed and should be used for reproducible Python dependency
 resolution.
 
+Graph visualization dependencies may require system packages such as `graphviz`
+and `graphviz-dev` / `graphviz-devel`, depending on the operating system.
+
 ## 2. Configure Julia
 
 JUDIAgent expects Julia to run with this repository as the active project:
@@ -27,6 +30,12 @@ julia --project=. -e 'import Pkg; Pkg.instantiate()'
 
 On shared clusters, run the first Julia/JUDI instantiate or precompile pass on
 an interactive compute node. See `docs/devel-pace.md` for the PACE workflow.
+
+Optional environment helpers are available:
+
+- `source env/desktop-local.sh` for a local workstation with repo-local Julia,
+  CondaPkg, and uv cache paths.
+- `source env/pace-local.sh` for PACE or similar shared clusters.
 
 ## 3. Configure Credentials
 

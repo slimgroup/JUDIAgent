@@ -17,7 +17,7 @@ Configured JUDIAgent local environment for a desktop/workstation:
   UV_CACHE_DIR=$UV_CACHE_DIR
 
 Recommended next steps:
-  source .venv/bin/activate
+  uv sync
   julia --project=. -e 'import Pkg; Pkg.instantiate()'
-  ./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+  uv run pytest tests/integration_tests/test_entrypoints.py
 MSG

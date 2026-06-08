@@ -44,9 +44,9 @@ Behavior:
   - Set JUDIAgent_PACE_SHARED_DEPOT=off to disable shared-depot fallback entirely
 
 Recommended next steps:
-  source .venv/bin/activate
+  uv sync
   module load julia/1.11.3
-  ./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+  uv run pytest tests/integration_tests/test_entrypoints.py
   julia --project=. -e 'import Pkg; Pkg.instantiate()'
-  ./.venv/bin/python examples/agent.py
+  uv run python examples/agent.py
 MSG
