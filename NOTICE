@@ -10,6 +10,7 @@ Provenance and third-party material:
   https://github.com/SINTEF-agentlab/JutulGPT
   JUDIAgent has since been reorganized around JUDI.jl seismic workflows,
   dual-stage validation, domain-quality review, and task-aware metric guidance.
+  This attribution does not change the JUDIAgent copyright notice in `LICENSE`.
 
 - The retrieval corpus under `src/judiagent/rag/judi/` includes JUDI.jl
   documentation and examples used as grounding material for generation and
