@@ -1,88 +1,44 @@
 # JUDIAgent
 
-JUDIAgent is a seismic coding copilot for JUDI.jl. It combines retrieval,
-Julia code generation, validation, and a JUDI-specific workflow contract so
-that generated code is grounded in the package's actual APIs and examples.
+JUDIAgent is a research codebase for generating, validating, and refining
+JUDI.jl seismic workflows with large language models. It is designed for cases
+where executable Julia is not enough: a useful modeling, imaging, or inversion
+script also needs a coherent physical setup, acquisition geometry, operator
+composition, and interpretable diagnostics.
 
 ![JUDIAgent CLI](media/judiagent_cli.svg "JUDIAgent CLI")
 
 ## Overview
 
-JUDIAgent is an intelligent coding assistant specialized in helping users work with the JUDI.jl (Julia Devito Inversion) package. It leverages large language models combined with retrieval-augmented generation (RAG) to provide accurate, context-aware code generation for seismic modeling and inversion tasks.
+The agent combines retrieval-augmented generation over JUDI documentation and
+examples with a two-part validation loop:
+
+1. executable correctness checks for Julia syntax, lint/runtime failures, and
+   expected output artifacts;
+2. JUDI-specific domain review for workflow completeness in modeling, RTM, FWI,
+   and related seismic tasks.
 
 **Key Features**
-- Retrieval-augmented code generation using JUDI.jl examples
-- Dual-stage validation: code correctness plus JUDI-specific scientific review
-- Human-in-the-loop refinement workflow
-- Multiple interfaces: CLI and VSCode integration via LangGraph/MCP
+- Retrieval-grounded Julia generation using JUDI.jl documentation and examples
+- Dual validation: software correctness plus seismic workflow adequacy
+- Task-aware metric guidance for benchmark prompts and repair feedback
+- Standard iterative and autonomous ReAct-style agent variants
+- CLI and LangGraph/MCP integration paths
+
+For public-release provenance and third-party corpus notes, see
+[NOTICE](NOTICE) and [src/judiagent/rag/THIRD_PARTY.md](src/judiagent/rag/THIRD_PARTY.md).
 
 ## Getting Started
 
-### Prerequisites
+### Requirements
 
-This project requires both **Python** and **Julia**, along with some system-level dependencies:
+- Python 3.12 or newer
+- Julia 1.11.x
+- `uv` for reproducible Python environments
+- `graphviz` system libraries when building graph visualization dependencies
+- Optional: `ollama` for local model experiments
 
-- `git`: See [git downloads](https://git-scm.com/downloads)
-- `Python3 >=3.12`: See [Download Python](https://www.python.org/downloads/)
-- `Julia`: Package tested on version 1.11.x. See [Installing Julia](https://julialang.org/install/)
-- `build-essential`
-- `graphviz` and `graphviz-dev`: See [Graphviz download](https://graphviz.org/download/)
-
-Optional:
-
-- `uv`: Recommended package manager. See [Installing uv](https://docs.astral.sh/uv/getting-started/installation/)
-- `ollama`: For running local models. See [Download Ollama](https://ollama.com/download)
-
-> NOTE: See [Installing python](https://docs.astral.sh/uv/guides/install-python/) for installing Python using `uv`.
-
-For **shared clusters / login-node development** (e.g. PACE): how to keep fast tests and syncing off expensive allocations is documented in [docs/devel-pace.md](docs/devel-pace.md).
-
-For **Codex-based development** in this repository: repo-local agent guidance lives in [AGENTS.md](AGENTS.md), and reusable setup notes live in [docs/codex-setup.md](docs/codex-setup.md).
-
-### Choose Your Environment
-
-JUDIAgent supports two common setup modes.
-
-#### Option A: PACE or another shared cluster
-
-Use this when you are working over SSH on a login node plus interactive compute allocations.
-
-1. On the login node, do the cheap setup only:
-
-```bash
-git clone https://github.com/haoyunl2/JUDIAgent.git
-cd JUDIAgent
-uv venv
-source .venv/bin/activate
-uv sync
-source env/pace-local.sh
-cp .env.example .env
-./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
-```
-
-2. When you are ready for Julia/JUDI initialization or a real agent run, move to an interactive compute node:
-
-```bash
-salloc ...
-srun --pty bash
-cd /path/to/JUDIAgent
-source .venv/bin/activate
-export JUDIAgent_PACE_SHARED_DEPOT=off
-source env/pace-local.sh
-module load julia/1.11.3
-julia --project=. -e 'import Pkg; Pkg.Registry.update(); Pkg.instantiate()'
-./.venv/bin/python examples/agent.py
-```
-
-Notes:
-
-- `env/pace-local.sh` uses a dedicated persistent depot at `~/julia-depot-judiagent`, reuses `~/julia-depot` as a fallback layer when present, keeps the JUDIAgent CondaPkg environment at `~/condapkg-env-judiagent`, and still stores uv downloads in `.uv-cache/`.
-- This is useful on shared systems where home-directory quota is limited or where you want all JUDI-related state to stay with the clone.
-- Avoid running the first heavy `Pkg.instantiate()` or large `Pkg.precompile()` pass on the login node; that work belongs on an interactive compute node.
-
-#### Option B: Desktop or workstation with Julia installed directly
-
-Use this on your laptop, desktop, or a dedicated machine where `julia` is already on `PATH`.
+### Local Workstation Setup
 
 ```bash
 git clone https://github.com/haoyunl2/JUDIAgent.git
@@ -93,86 +49,71 @@ uv sync
 source env/desktop-local.sh
 cp .env.example .env
 julia --project=. -e 'import Pkg; Pkg.instantiate()'
-./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+uv run pytest tests/integration_tests/test_entrypoints.py
 ```
 
-Notes:
+If you prefer to use your global Julia depot on a personal machine, skip
+`source env/desktop-local.sh`.
 
-- `env/desktop-local.sh` uses the same repo-local `.julia-depot/`, `.condapkg-env/`, and `.uv-cache/` layout, but does not assume a cluster module system.
-- If you prefer to use your default global Julia depot on a personal machine, you can skip sourcing `env/desktop-local.sh`.
+### Shared Cluster Setup
 
-### Python Setup
-
-The project Python environment is expected to live in `.venv/`.
+For PACE or another login-node plus compute-node environment, keep git, editing,
+`uv sync`, and import smoke tests on the login node:
 
 ```bash
+git clone https://github.com/haoyunl2/JUDIAgent.git
+cd JUDIAgent
 uv venv
 source .venv/bin/activate
 uv sync
+source env/pace-local.sh
+cp .env.example .env
+uv run pytest tests/integration_tests/test_entrypoints.py
 ```
 
-If encountering an error due to the `pygraphviz` package, try:
+Move Julia/JUDI initialization and real agent runs to an interactive allocation:
 
 ```bash
-# Note: Adjust for your OS/package manager
-brew install graphviz  # macOS
-uv add --config-settings="--global-option=build_ext" \
-            --config-settings="--global-option=-I$(brew --prefix graphviz)/include/" \
-            --config-settings="--global-option=-L$(brew --prefix graphviz)/lib/" \
-            pygraphviz
+salloc ...
+srun --pty bash
+cd /path/to/JUDIAgent
+source .venv/bin/activate
+export JUDIAgent_PACE_SHARED_DEPOT=off
+source env/pace-local.sh
+module load julia/1.11.3
+julia --project=. -e 'import Pkg; Pkg.Registry.update(); Pkg.instantiate()'
+uv run python examples/agent.py
 ```
 
-### Julia Setup
+More cluster-specific guidance is in [docs/devel-pace.md](docs/devel-pace.md).
 
-The Julia project should be initialized from the repository root:
+### Environment Variables
 
-```bash
-julia --project=. -e 'import Pkg; Pkg.instantiate()'
-```
-
-This installs the Julia packages from `Project.toml`. In this repository, JUDI may also trigger CondaPkg-managed Python-side dependencies. On PACE, `env/pace-local.sh` stores them in `~/condapkg-env-judiagent` and uses a dedicated `~/julia-depot-judiagent`. If an old shared depot causes registry conflicts, set `JUDIAgent_PACE_SHARED_DEPOT=off` before sourcing the helper.
-
-On a desktop or workstation, running this directly is fine. On PACE or another shared cluster, do the first heavy Julia/JUDI initialization on an interactive compute node rather than on the login node.
-
-### Environment Configuration
-
-Generate and configure the `.env` file:
+Create `.env` from the template and fill only the providers you use:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` to provide:
+- `DEEPSEEK_API_KEY`: needed for the default DeepSeek chat model
+- `OPENAI_API_KEY`: needed for the default OpenAI embedding model
+- `ANTHROPIC_API_KEY`: needed only for Anthropic model configurations
+- `LANGSMITH_API_KEY`: optional, for tracing or GUI/debugging workflows
+- `EDITOR`: CLI editor used during human review steps
 
-- `OPENAI_API_KEY`: Your OpenAI API key
-- `LANGSMITH_API_KEY`: Required for GUI/debugging features; can be left blank for CLI-only usage
-- `LANGSMITH_PROJECT`: Optional tracing project name
-- `LANGSMITH_TRACING_V2`: Enable if you want LangSmith tracing
-- `EDITOR`: Your preferred CLI editor, such as `vim`, `nvim`, or `nano`
+The agent creates `scripts/`, `outputs/figures/`, and `outputs/data/` when it
+saves generated code or artifacts. These are runtime outputs and are ignored by
+git.
 
-The agent will create `scripts/`, `outputs/figures/`, and `outputs/data/` on demand when it saves generated Julia code or artifacts. Those paths are treated as runtime outputs rather than tracked source directories.
-
-### Verify the Installation
-
-For a low-cost smoke check:
+### Verification
 
 ```bash
-./.venv/bin/python -m pytest tests/integration_tests/test_entrypoints.py
+uv run pytest tests/integration_tests/test_entrypoints.py
+uv run pytest
 ```
 
-For the standard agent:
-
-```bash
-./.venv/bin/python examples/agent.py
-```
-
-For the autonomous agent:
-
-```bash
-./.venv/bin/python examples/autonomous_agent.py
-```
-
-On PACE or another shared cluster, prefer running the full agent on an interactive compute allocation rather than on the login node. The login node should mainly be used for editing, syncing, and low-cost smoke checks.
+For a full reproducibility checklist, see
+[docs/reproducibility.md](docs/reproducibility.md).
 
 ## Usage
 
@@ -185,7 +126,7 @@ The standard agent follows a staged scientific coding workflow where code is fir
 ![Iterative workflow](media/iterative_workflow.svg "Iterative workflow")
 
 ```bash
-./.venv/bin/python examples/agent.py
+uv run python examples/agent.py
 ```
 
 ### Autonomous Agent
@@ -195,20 +136,21 @@ The autonomous agent has extended tool access and can interact with the environm
 ![Autonomous workflow](media/react_workflow.svg "Autonomous workflow")
 
 ```bash
-./.venv/bin/python examples/autonomous_agent.py
+uv run python examples/autonomous_agent.py
 ```
 
 ## Configuration
 
-Agent settings are defined in `src/judiagent/configuration.py`:
+Static defaults live in `src/judiagent/settings.py`; LangGraph runtime options
+are defined in `src/judiagent/configuration.py`.
 
 ```python
 # Core settings
 cli_mode: bool = True  # Enable CLI interface
 
 # Model selection
-LOCAL_MODELS = False  # Use local Ollama models instead of OpenAI
-LLM_MODEL_NAME = "ollama:qwen3:14b" if LOCAL_MODELS else "openai:gpt-4.1"
+LOCAL_MODELS = False  # Use local Ollama models instead of remote providers
+LLM_MODEL_NAME = "ollama:qwen2.5:7b" if LOCAL_MODELS else "deepseek:deepseek-chat"
 EMBEDDING_MODEL_NAME = (
     "ollama:nomic-embed-text" if LOCAL_MODELS else "openai:text-embedding-3-small"
 )
@@ -263,14 +205,9 @@ langgraph dev
 
 ### GUI
 
-JUDIAgent supports a web-based GUI through the companion [JUDIAgent-GUI](https://github.com/yourusername/JUDIAgent-GUI) project.
-
-To use the GUI:
-
-1. Disable CLI mode: `cli_mode = False`
-2. Start the LangGraph server: `langgraph dev`
-3. Start the GUI from the JUDIAgent-GUI directory: `pnpm dev`
-4. Access at `http://localhost:3000/`
+GUI support is optional and depends on the companion frontend used in your
+deployment. The public repository documents the backend LangGraph/MCP surface;
+frontend setup should be documented in the GUI repository that consumes it.
 
 ## Project Structure
 
@@ -287,10 +224,34 @@ JUDIAgent/
 │   ├── tools/             # Tool surface exposed to the agents
 │   └── configuration.py   # Runtime settings
 ├── media/                 # README assets
+├── benchmarks/            # Prompt catalog and acceptance criteria
+├── code_summary/          # Paper-facing notes and generated figure assets
+├── docs/                  # Development and reproducibility guides
 ├── examples/              # Launch scripts
 ├── judiagent_tutorial/    # Tutorial materials
 └── tests/                 # Test suite
 ```
+
+## Reproducibility
+
+The public release path is documented in
+[docs/reproducibility.md](docs/reproducibility.md). Benchmark prompts are in
+`benchmarks/prompts.yaml` and can be loaded with `judiagent.benchmarks`;
+generated run scripts and artifacts belong in
+`scripts/` and `outputs/`, which are intentionally ignored by git.
+
+Retrieval indexes are also built locally on first use under
+`src/judiagent/rag/retriever_store/` and `src/judiagent/rag/loaded_store/`.
+With the default remote embedding model, that first build requires
+`OPENAI_API_KEY`.
+
+## Third-Party Material
+
+The agent implementation is in `src/judiagent/`. Retrieval corpora under
+`src/judiagent/rag/judi/` include third-party JUDI.jl documentation and examples
+used for grounding. See [NOTICE](NOTICE) and
+[src/judiagent/rag/THIRD_PARTY.md](src/judiagent/rag/THIRD_PARTY.md) before
+redistributing archival bundles or DOI releases.
 
 ## Testing
 
@@ -302,11 +263,13 @@ uv run pytest
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+The JUDIAgent code is distributed under the MIT License; see
+[LICENSE](LICENSE). Third-party retrieval material keeps its upstream notices
+and license terms.
 
 ## Acknowledgments
 
-- [JUDI.jl](https://github.com/slimgroup/JUDI.jl) - Julia Devito Inversion framework
-- [Devito](https://www.devitoproject.org/) - Symbolic finite difference DSL
-- [LangGraph](https://github.com/langchain-ai/langgraph) - Agent orchestration framework
-- [JutulGPT](https://github.com/SINTEF-agentlab/JutulGPT) - upstream inspiration for the original agent framing
+- [JUDI.jl](https://github.com/slimgroup/JUDI.jl) for the seismic modeling and inversion API targeted by this project
+- [Devito](https://www.devitoproject.org/) for the finite-difference engine used by JUDI
+- [LangGraph](https://github.com/langchain-ai/langgraph) for graph-based agent orchestration
+- [JutulGPT](https://github.com/SINTEF-agentlab/JutulGPT) for early inspiration and scaffolding of the original coding-agent framing

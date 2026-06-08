@@ -2,19 +2,10 @@
 
 from __future__ import annotations
 
-import getpass
 import logging
-import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-
-
-def _require_env(var_name: str) -> None:
-    """Prompt for an environment variable if it is missing."""
-    if not os.environ.get(var_name):
-        os.environ[var_name] = getpass.getpass(f"{var_name}: ")
-
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
@@ -41,8 +32,6 @@ RECURSION_LIMIT = 200
 LLM_TEMPERATURE = 0
 
 load_dotenv()
-_require_env("OPENAI_API_KEY")
-_require_env("LANGSMITH_API_KEY")
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("faiss").setLevel(logging.WARNING)

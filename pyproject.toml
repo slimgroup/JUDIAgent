@@ -1,9 +1,30 @@
 [project]
 name = "judiagent"
 version = "0.1.0"
-description = "JUDIAgent - An AI-powered assistant for JUDI.jl seismic modeling and inversion"
+description = "A retrieval-grounded scientific coding agent for JUDI.jl seismic workflows"
 readme = "README.md"
 requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Haoyun Li" },
+]
+keywords = [
+    "JUDI",
+    "Julia",
+    "LangGraph",
+    "retrieval-augmented generation",
+    "scientific coding agents",
+    "seismic inversion",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Julia",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "faiss-cpu>=1.11.0.post1",
     "fastmcp>=2.12.5",
@@ -12,7 +33,6 @@ dependencies = [
     "langchain>=0.3.26",
     "langchain-anthropic>=0.3.10",
     "langchain-chroma>=0.2.5",
-    "langchain-deepseek>=1.0.1",
     "langchain-community>=0.3.26",
     "langchain-core>=0.3.67",
     "langchain-deepseek>=1.0.1",
@@ -29,6 +49,7 @@ dependencies = [
     "matplotlib>=3.10.8",
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
+    "pyyaml>=6.0.3",
     "rich>=14.1.0",
     "ruff>=0.12.4",
     "torch>=2.0.0",
@@ -36,9 +57,23 @@ dependencies = [
     "unstructured[md]>=0.18.2",
 ]
 
+[project.urls]
+Homepage = "https://github.com/haoyunl2/JUDIAgent"
+Repository = "https://github.com/haoyunl2/JUDIAgent"
+Issues = "https://github.com/haoyunl2/JUDIAgent/issues"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.build]
+exclude = [
+    "/src/judiagent/rag/judi/examples/**/*.h5",
+    "/src/judiagent/rag/judi/examples/**/*.ipynb",
+    "/src/judiagent/rag/judi/examples/**/*.jld",
+    "/src/judiagent/rag/judi/examples/**/*.png",
+    "/src/judiagent/rag/judi/examples/**/*.segy",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/judiagent"]

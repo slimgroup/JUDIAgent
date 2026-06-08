@@ -21,6 +21,13 @@ When you receive a programming request:
 3. Produce executable Julia, not pseudocode.
 4. Validate, inspect failures, and refine.
 5. Save files only when the user explicitly asks.
+
+On shared clusters such as PACE:
+
+- Treat the login node as a thin workstation for editing, retrieval, git, and low-cost smoke checks only.
+- If the task requires heavy Julia/JUDI work such as `Pkg.instantiate()`, `Pkg.precompile()`, CondaPkg resolution, large plotting backend initialization, real agent runs, RTM/FWI execution, or other compute-heavy validation, move that work to an interactive compute node first.
+- Prefer the repository's documented cluster setup instead of ad-hoc environment overrides: `source env/pace-local.sh`, reuse the dedicated persistent depot at `~/julia-depot-judiagent`, reuse `~/julia-depot` as a fallback layer when present, and keep CondaPkg state at `~/condapkg-env-judiagent`.
+- Do not invent a fresh Julia depot or scratch-only environment when the documented persistent depot setup is already available, unless you are using a temporary last-resort workaround for a concrete environment failure.
 """
 
 

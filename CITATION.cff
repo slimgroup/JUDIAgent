@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use JUDIAgent in academic work, please cite the repository and the associated paper."
+title: "JUDIAgent: A retrieval-grounded scientific coding agent for JUDI.jl seismic workflows"
+authors:
+  - family-names: "Li"
+    given-names: "Haoyun"
+version: "0.1.0"
+date-released: "2026-06-08"
+repository-code: "https://github.com/haoyunl2/JUDIAgent"
+license: "MIT"
+keywords:
+  - "scientific coding agents"
+  - "retrieval-augmented generation"
+  - "JUDI.jl"
+  - "seismic inversion"
+  - "LangGraph"
+references:
+  - type: software
+    title: "JUDI.jl"
+    authors:
+      - family-names: "Herrmann"
+        given-names: "Felix J."
+      - family-names: "Witte"
+        given-names: "Philipp A."
+      - family-names: "Louboutin"
+        given-names: "Mathias"
+    url: "https://github.com/slimgroup/JUDI.jl"
+  - type: software
+    title: "JutulGPT"
+    authors:
+      - family-names: "Svee"
+        given-names: "Elling"
+    url: "https://github.com/SINTEF-agentlab/JutulGPT"

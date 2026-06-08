@@ -1,0 +1,26 @@
+JUDIAgent
+=========
+
+JUDIAgent is maintained as a research codebase for retrieval-grounded Julia/JUDI
+scientific coding agents.
+
+Provenance and third-party material:
+
+- Early repository scaffolding was informed by JutulGPT:
+  https://github.com/SINTEF-agentlab/JutulGPT
+  JUDIAgent has since been reorganized around JUDI.jl seismic workflows,
+  dual-stage validation, domain-quality review, and task-aware metric guidance.
+
+- The retrieval corpus under `src/judiagent/rag/judi/` includes JUDI.jl
+  documentation and examples used as grounding material for generation and
+  validation. JUDI.jl is developed by the SLIM group and contributors:
+  https://github.com/slimgroup/JUDI.jl
+
+- JUDI.jl is distributed under the MIT License. Keep upstream copyright,
+  author, citation, and license notices when redistributing substantial
+  portions of its documentation, examples, or data-facing scripts.
+
+This notice is not a substitute for legal review. Before a formal archival
+release, confirm that all third-party corpora, examples, notebooks, and data
+files you choose to redistribute are permitted by their upstream licenses and
+data terms.
