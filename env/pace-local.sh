@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 # Source this on PACE or another shared cluster login / interactive node.
 
-if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+if [[ -n "${BASH_VERSION:-}" && "${BASH_SOURCE[0]}" == "$0" ]]; then
   echo "Source this file instead of executing it: source env/pace-local.sh" >&2
   exit 1
+elif [[ -n "${ZSH_VERSION:-}" && "$ZSH_EVAL_CONTEXT" != *:file* ]]; then
+  echo "Source this file instead of executing it: source env/pace-local.sh" >&2
+  return 1 2>/dev/null || exit 1
 fi
 
-source "$(dirname "${BASH_SOURCE[0]}")/common-local.sh"
+if [[ -n "${BASH_VERSION:-}" ]]; then
+  _judiagent_script="${BASH_SOURCE[0]}"
+elif [[ -n "${ZSH_VERSION:-}" ]]; then
+  _judiagent_script="${(%):-%x}"
+else
+  _judiagent_script="$0"
+fi
+_judiagent_script_dir="$({ cd "$(dirname "$_judiagent_script")" && pwd; })"
+
+source "$_judiagent_script_dir/common-local.sh"
+unset _judiagent_script _judiagent_script_dir
 
 _judiagent_pace_depot="${JUDIAgent_PACE_DEPOT_ROOT:-$HOME/julia-depot-judiagent}"
 _judiagent_pace_conda="${JUDIAgent_PACE_CONDAPKG_ENV:-$HOME/condapkg-env-judiagent}"

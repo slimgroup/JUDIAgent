@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 # Source this on a desktop or workstation where Julia is installed directly.
 
-if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+if [[ -n "${BASH_VERSION:-}" && "${BASH_SOURCE[0]}" == "$0" ]]; then
   echo "Source this file instead of executing it: source env/desktop-local.sh" >&2
   exit 1
+elif [[ -n "${ZSH_VERSION:-}" && "$ZSH_EVAL_CONTEXT" != *:file* ]]; then
+  echo "Source this file instead of executing it: source env/desktop-local.sh" >&2
+  return 1 2>/dev/null || exit 1
 fi
 
-source "$(dirname "${BASH_SOURCE[0]}")/common-local.sh"
+if [[ -n "${BASH_VERSION:-}" ]]; then
+  _judiagent_script="${BASH_SOURCE[0]}"
+elif [[ -n "${ZSH_VERSION:-}" ]]; then
+  _judiagent_script="${(%):-%x}"
+else
+  _judiagent_script="$0"
+fi
+_judiagent_script_dir="$({ cd "$(dirname "$_judiagent_script")" && pwd; })"
+
+source "$_judiagent_script_dir/common-local.sh"
+unset _judiagent_script _judiagent_script_dir
 
 cat <<MSG
 Configured JUDIAgent local environment for a desktop/workstation:
