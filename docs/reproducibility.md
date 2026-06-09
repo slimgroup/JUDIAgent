@@ -7,7 +7,7 @@ figures.
 ## 1. Clone And Install Python Dependencies
 
 ```bash
-git clone https://github.com/haoyunl2/JUDIAgent.git
+git clone https://github.com/slimgroup/JUDIAgent.git
 cd JUDIAgent
 uv venv
 source .venv/bin/activate
@@ -27,6 +27,9 @@ JUDIAgent expects Julia to run with this repository as the active project:
 ```bash
 julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
+
+Julia-side requirements are declared in the root `Project.toml`, including
+`JUDI`, and exact Julia package versions are locked by `Manifest.toml`.
 
 On shared clusters, run the first Julia/JUDI instantiate or precompile pass on
 an interactive compute node. See `docs/devel-pace.md` for the PACE workflow.

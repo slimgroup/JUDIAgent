@@ -29,7 +29,8 @@ Use this skill when the task is inside JUDIAgent or clearly follows the same wor
 ## Safety and git
 
 - Never commit secrets or write real API keys into tracked files.
-- `.env`, `.venv/`, `.CondaPkg/`, and `Manifest.toml` are local/runtime artifacts in this workflow and should generally stay out of git.
+- `.env`, `.venv/`, and `.CondaPkg/` are local/runtime artifacts in this workflow and should generally stay out of git.
+- Keep the root `Manifest.toml` when reproducibility depends on pinned Julia packages; update it only when intentionally changing Julia dependencies.
 - Avoid destructive actions, history rewrites, or cleanup operations without explicit user approval.
 - If the user asks for a commit, write a detailed, descriptive commit message.
 

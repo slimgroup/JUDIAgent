@@ -22,7 +22,7 @@ from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableConfig
 from langchain_core.tools import BaseTool
 from langgraph.graph import END, StateGraph
-from langgraph.prebuilt import ToolNode
+from langgraph.prebuilt.tool_node import ToolNode
 
 from judiagent.agents.agent_base import AgentCore
 from judiagent.configuration import BaseConfiguration, cli_mode, mcp_mode

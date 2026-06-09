@@ -58,9 +58,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/haoyunl2/JUDIAgent"
-Repository = "https://github.com/haoyunl2/JUDIAgent"
-Issues = "https://github.com/haoyunl2/JUDIAgent/issues"
+Homepage = "https://github.com/slimgroup/JUDIAgent"
+Repository = "https://github.com/slimgroup/JUDIAgent"
+Issues = "https://github.com/slimgroup/JUDIAgent/issues"
 
 [build-system]
 requires = ["hatchling"]
@@ -89,3 +89,8 @@ dev = [
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:AgentStatePydantic has been moved to `langchain\\.agents`:langgraph.warnings.LangGraphDeprecatedSinceV10",
+]

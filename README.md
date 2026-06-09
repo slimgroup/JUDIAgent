@@ -35,6 +35,8 @@ For public-release provenance and third-party corpus notes, see
 - Python 3.12 or newer
 - Julia 1.11.x
 - `uv` for reproducible Python environments
+- JUDI.jl is a Julia dependency declared in the root `Project.toml`; exact
+  Julia package versions, including JUDI, are locked by `Manifest.toml`
 - `graphviz` system libraries when building graph visualization dependencies
   (for example `apt install graphviz graphviz-dev` or `dnf install graphviz graphviz-devel`)
 - Optional: `ollama` for local model experiments
@@ -42,7 +44,7 @@ For public-release provenance and third-party corpus notes, see
 ### Local Workstation Setup
 
 ```bash
-git clone https://github.com/haoyunl2/JUDIAgent.git
+git clone https://github.com/slimgroup/JUDIAgent.git
 cd JUDIAgent
 uv venv
 source .venv/bin/activate
@@ -53,6 +55,9 @@ julia --project=. -e 'import Pkg; Pkg.instantiate()'
 uv run pytest tests/integration_tests/test_entrypoints.py
 ```
 
+The Julia instantiate step installs the Julia-side requirements from
+`Project.toml`, including `JUDI`, using the pinned versions in `Manifest.toml`.
+
 If you prefer to use your global Julia depot on a personal machine, skip
 `source env/desktop-local.sh`.
 
@@ -62,7 +67,7 @@ For PACE or another login-node plus compute-node environment, keep git, editing,
 `uv sync`, and import smoke tests on the login node:
 
 ```bash
-git clone https://github.com/haoyunl2/JUDIAgent.git
+git clone https://github.com/slimgroup/JUDIAgent.git
 cd JUDIAgent
 uv venv
 source .venv/bin/activate

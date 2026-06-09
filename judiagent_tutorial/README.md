@@ -17,6 +17,9 @@ cp .env.example .env
 julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
 
+The Julia command installs the root `Project.toml` requirements, including
+`JUDI`, with versions pinned by the root `Manifest.toml`.
+
 Then launch the tutorial:
 
 ```bash

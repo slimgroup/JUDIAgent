@@ -6,7 +6,7 @@ authors:
     given-names: "Haoyun"
 version: "0.1.0"
 date-released: "2026-06-08"
-repository-code: "https://github.com/haoyunl2/JUDIAgent"
+repository-code: "https://github.com/slimgroup/JUDIAgent"
 license: "MIT"
 keywords:
   - "scientific coding agents"

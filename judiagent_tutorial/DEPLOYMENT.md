@@ -10,13 +10,16 @@ environment helpers as the public codebase.
 Clone the repository and set up the parent environment:
 
 ```bash
-git clone https://github.com/haoyunl2/JUDIAgent.git
+git clone https://github.com/slimgroup/JUDIAgent.git
 cd JUDIAgent
 uv venv
 uv sync
 cp .env.example .env
 julia --project=. -e 'import Pkg; Pkg.instantiate()'
 ```
+
+The Julia instantiate step installs the root `Project.toml` requirements,
+including `JUDI`, with exact versions pinned by `Manifest.toml`.
 
 Fill only the needed keys in `.env`. Do not commit or share that file.
 
@@ -46,8 +49,8 @@ For JupyterHub or shared access, see [JupyterHub documentation](https://jupyterh
 ## Reproducibility
 
 The parent `uv.lock` pins Python dependencies. The root Julia `Project.toml`
-defines the Julia environment; `Manifest.toml` is intentionally local/runtime
-state in this workflow.
+declares Julia dependencies, including `JUDI`, and `Manifest.toml` pins their
+exact resolved versions.
 
 ## Troubleshooting
 
