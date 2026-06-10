@@ -33,6 +33,7 @@ from judiagent.tools import (
     lookup_function_docs,
     read_from_file,
     search_codebase,
+    search_imagegather_examples,
     search_judi_examples,
     write_to_file,
 )
@@ -169,6 +170,7 @@ react_agent = ReActAgent(
         search_codebase,
         lookup_function_docs,
         search_judi_examples,
+        search_imagegather_examples,
     ],
     stream_output=True,
 )
