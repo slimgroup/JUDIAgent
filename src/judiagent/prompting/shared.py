@@ -38,7 +38,8 @@ GATHER_INTELLIGENCE = """
 
 Always retrieve JUDI.jl examples before generating code.
 
-- Use `search_judi_examples` first for JUDI workflows and API patterns.
+- Use `search_judi_examples` for JUDI.jl workflows and API patterns.
+- Use `search_imagegather_examples` for ImageGather.jl workflows (surface and subsurface common-image gathers, extended Born modeling, extended physical parameters).
 - Use `lookup_function_docs` for specific signatures and function behavior.
 - Use `search_codebase`, `list_files_in_directory`, and `read_from_file` to collect surrounding context.
 - If code fails, retrieve more context before trying another fix.

@@ -12,6 +12,7 @@ from judiagent.tools.other import (
 from judiagent.tools.retrieve import (
     lookup_function_docs,
     search_codebase,
+    search_imagegather_examples,
     search_judi_examples,
 )
 
@@ -26,4 +27,5 @@ __all__ = [
     "lookup_function_docs",
     "search_codebase",
     "search_judi_examples",
+    "search_imagegather_examples",
 ]

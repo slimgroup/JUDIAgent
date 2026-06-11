@@ -59,4 +59,39 @@ RAG_CATALOG = {
             ),
         ),
     },
+    "imagegather": {
+        "docs": CorpusSpec(
+            source_dir=str(PROJECT_ROOT / "rag" / "imagegather" / "docs" / "src"),
+            persist_dir=lambda embedding_family: str(
+                PROJECT_ROOT
+                / "rag"
+                / "retriever_store"
+                / f"retriever_imagegather_docs_{embedding_family}"
+            ),
+            cache_file=str(
+                PROJECT_ROOT / "rag" / "loaded_store" / "loaded_imagegather_docs.pkl"
+            ),
+            collection_name="imagegather_docs",
+            filetypes=("md",),
+            chunk_document=split_markdown_document,
+        ),
+        "examples": CorpusSpec(
+            source_dir=str(PROJECT_ROOT / "rag" / "imagegather" / "examples"),
+            persist_dir=lambda embedding_family: str(
+                PROJECT_ROOT
+                / "rag"
+                / "retriever_store"
+                / f"retriever_imagegather_examples_{embedding_family}"
+            ),
+            cache_file=str(
+                PROJECT_ROOT / "rag" / "loaded_store" / "loaded_imagegather_examples.pkl"
+            ),
+            collection_name="imagegather_examples",
+            filetypes=("jl",),
+            chunk_document=partial(
+                split_julia_example_document,
+                header_to_split_on=1,
+            ),
+        ),
+    },
 }

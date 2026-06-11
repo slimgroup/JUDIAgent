@@ -118,6 +118,18 @@ search_judi_examples = _build_retrieval_tool(
     input_schema=JudiQueryInput,
 )
 
+
+class ImageGatherQueryInput(BaseModel):
+    query: str = Field(description="Semantic query for ImageGather.jl examples and docs.")
+
+
+search_imagegather_examples = _build_retrieval_tool(
+    tool_name="search_imagegather_examples",
+    doc_key="imagegather",
+    doc_label="ImageGather.jl",
+    input_schema=ImageGatherQueryInput,
+)
+
 # -----------------------------------------------------------------------
 # Function documentation lookup
 # -----------------------------------------------------------------------
@@ -163,7 +175,7 @@ class CodeSearchInput(BaseModel):
 @tool(
     "search_codebase",
     description=(
-        "Keyword search across JUDI.jl docs and examples. "
+        "Keyword search across JUDI.jl and ImageGather.jl docs and examples. "
         "Returns up to 20 matches with file paths and line numbers."
     ),
     args_schema=CodeSearchInput,
@@ -174,7 +186,10 @@ def search_codebase(
     use_regex: bool | None = False,
 ) -> str:
     try:
-        search_root = str(PROJECT_ROOT / "rag" / "judi")
+        search_roots = [
+            str(PROJECT_ROOT / "rag" / "judi"),
+            str(PROJECT_ROOT / "rag" / "imagegather"),
+        ]
         cmd = ["grep", "-r", "-n"]
         cmd.append("-E" if use_regex else "-F")
 
@@ -183,7 +198,8 @@ def search_codebase(
         else:
             cmd.extend(["--include=*.jl", "--include=*.md"])
 
-        cmd.extend([query, search_root])
+        cmd.append(query)
+        cmd.extend(search_roots)
         proc = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
 
         if proc.stdout:
