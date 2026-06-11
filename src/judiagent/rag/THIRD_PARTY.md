@@ -37,11 +37,12 @@ project:
   for the referenced method papers (Giboli et al., SEG 2012; Dafni & Symes,
   GJI 2019) and the Zenodo DOI badge for software citation.
 
-The example scripts at `src/judiagent/rag/imagegather/examples/` reference
-figures under `docs/img/` and a notebook under `examples/notebooks/` that are
-kept alongside the corpus for context but are not themselves ingested by the
-retriever (the `imagegather` catalog entries only index `.md` files in
-`docs/src/` and `.jl` files in `examples/`).
+The vendored snapshot is trimmed to the material needed for retrieval and
+attribution: `docs/src/*.md`, `examples/*.jl`, the upstream `LICENSE`, and
+`README.md` (which links to the upstream repository for the figures,
+notebooks, source code, and tests that were dropped from this snapshot). The
+`imagegather` catalog entries only index `.md` files under `docs/src/` and
+`.jl` files under `examples/`.
 
 ## Distribution Notes
 

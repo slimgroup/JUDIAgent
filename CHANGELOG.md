@@ -6,8 +6,11 @@
 - **ImageGather.jl as a second retrieval corpus.** The agent can now ground
   generated Julia in ImageGather.jl alongside JUDI.jl.
   - Cloned `slimgroup/ImageGather.jl@ext_PhyParams` into
-    `src/judiagent/rag/imagegather/` (`.git` stripped, upstream `LICENSE`
-    preserved at the corpus root).
+    `src/judiagent/rag/imagegather/` and trimmed it to the material needed
+    for retrieval and attribution: `docs/src/*.md`, `examples/*.jl`, the
+    upstream `LICENSE`, and the upstream `README.md` (which links to the
+    upstream repo for the figures, notebooks, source code, and tests that
+    were dropped from this snapshot).
   - Registered `imagegather/docs` (markdown) and `imagegather/examples`
     (Julia) in `RAG_CATALOG` (`src/judiagent/rag/catalog.py`), reusing the
     existing markdown and Julia-example chunkers.

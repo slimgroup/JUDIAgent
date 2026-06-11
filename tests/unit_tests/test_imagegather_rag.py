@@ -8,16 +8,21 @@ from __future__ import annotations
 
 import os
 import re
+from dataclasses import replace
 from pathlib import Path
 
-from judiagent.rag.catalog import RAG_CATALOG
 from judiagent.rag.cache import load_chunked_documents
+from judiagent.rag.catalog import RAG_CATALOG, CorpusSpec
 from judiagent.settings import PROJECT_ROOT
 from judiagent.tools import search_imagegather_examples
 from judiagent.tools.retrieve import search_codebase
 
-
 IMAGEGATHER_EXAMPLE_FILES = ("layers_cig.jl", "layers_sscig.jl", "offset_map.jl")
+
+
+def _spec_with_tmp_cache(spec: CorpusSpec, tmp_path: Path, filename: str) -> CorpusSpec:
+    """Return a copy of ``spec`` whose pickle cache lives under ``tmp_path``."""
+    return replace(spec, cache_file=str(tmp_path / filename))
 
 
 # ---------------------------------------------------------------------------
@@ -118,8 +123,12 @@ def test_imagegather_example_files_carry_judi_style_headings():
         assert len(headings) >= 3, f"{name}: only {len(headings)} headings (want >= 3)"
 
 
-def test_imagegather_examples_chunk_into_named_sections():
-    spec = RAG_CATALOG["imagegather"]["examples"]
+def test_imagegather_examples_chunk_into_named_sections(tmp_path):
+    spec = _spec_with_tmp_cache(
+        RAG_CATALOG["imagegather"]["examples"],
+        tmp_path,
+        "loaded_imagegather_examples.pkl",
+    )
     chunks = load_chunked_documents(spec)
 
     # 3 example files, each annotated with multiple `# #` sections.
@@ -136,8 +145,12 @@ def test_imagegather_examples_chunk_into_named_sections():
         assert name in chunked_sources, f"{name} contributed no chunks"
 
 
-def test_imagegather_docs_chunk_non_empty():
-    spec = RAG_CATALOG["imagegather"]["docs"]
+def test_imagegather_docs_chunk_non_empty(tmp_path):
+    spec = _spec_with_tmp_cache(
+        RAG_CATALOG["imagegather"]["docs"],
+        tmp_path,
+        "loaded_imagegather_docs.pkl",
+    )
     chunks = load_chunked_documents(spec)
 
     assert chunks, "imagegather docs produced zero chunks"
